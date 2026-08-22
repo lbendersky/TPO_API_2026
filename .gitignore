@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Configuraciones personales ###
+src/main/resources/application.properties
