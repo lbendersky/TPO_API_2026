@@ -1,5 +1,5 @@
 package com.uade.marketplace.entity;
 
-public class A {
-
+public class Rol {
+    
 }

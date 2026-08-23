@@ -1,5 +1,5 @@
 package com.uade.marketplace.repository;
 
-public class A {
-
+public class TurnoRepository {
+    
 }
