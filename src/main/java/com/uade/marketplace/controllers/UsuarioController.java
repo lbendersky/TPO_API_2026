@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.marketplace.entity.Usuario;
+import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.service.UsuarioService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,7 +46,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{usuarioId}")
-    public Usuario actualizar(@PathVariable Long usuarioId, @RequestBody Usuario usuario) {
+    public Usuario actualizar(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws RecursoNoEncontradoException {
         return usuarioService.actualizar(usuarioId, usuario);
     }
 
