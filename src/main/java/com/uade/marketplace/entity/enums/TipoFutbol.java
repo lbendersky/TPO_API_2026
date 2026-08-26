@@ -1,5 +1,8 @@
 package com.uade.marketplace.entity.enums;
 
-public class TipoFutbol {
-    
+public enum TipoFutbol {
+    F5,
+    F7,
+    F8,
+    F11
 }

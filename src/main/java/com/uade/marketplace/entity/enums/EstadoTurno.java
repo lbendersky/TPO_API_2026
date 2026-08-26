@@ -1,5 +1,7 @@
 package com.uade.marketplace.entity.enums;
 
-public class EstadoTurno {
-    
+public enum EstadoTurno {
+    INCOMPLETO,
+    LLENO,
+    EN_PROCESO
 }
