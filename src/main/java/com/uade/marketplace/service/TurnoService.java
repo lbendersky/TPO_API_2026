@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 
 import com.uade.marketplace.entity.DTO.TurnoRequest;
 import com.uade.marketplace.entity.Turno;
+import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 
 public interface TurnoService {
@@ -15,5 +16,9 @@ public interface TurnoService {
 
     Optional<Turno> getTurnoById(Long turnoId);
 
-    Turno createTurno(TurnoRequest turnoRequest) throws TurnoDuplicateException;
+    Turno crearTurno(TurnoRequest turnoRequest) throws TurnoDuplicateException;
+
+    void eliminarTurno(Long turnoId) throws RecursoNoEncontradoException;
+
+    Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest) throws RecursoNoEncontradoException;
 }

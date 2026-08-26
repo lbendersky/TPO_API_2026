@@ -12,6 +12,7 @@ import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.DTO.TurnoRequest;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
+import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
@@ -40,7 +41,7 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public Turno createTurno(TurnoRequest turnoRequest) throws TurnoDuplicateException {
+    public Turno crearTurno(TurnoRequest turnoRequest) throws TurnoDuplicateException {
         Usuario usuario = usuarioRepository.findById(turnoRequest.getIdUsuario())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
@@ -61,4 +62,30 @@ public class TurnoServiceImpl implements TurnoService {
         );
         return turnoRepository.save(turno);
     }
+
+    @Override
+    public void eliminarTurno(Long idTurno) {
+        usuarioRepository.deleteById(idTurno);
+    }
+
+    @Override
+    public Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest) throws RecursoNoEncontradoException {
+        Optional<Turno> turnoExistente = turnoRepository.findById(idTurno);
+        if (turnoExistente.isEmpty())
+            throw new RecursoNoEncontradoException("No existe el turno");
+
+        Usuario usuario = usuarioRepository.findById(turnoRequest.getIdUsuario())
+                .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico un usuario"));
+        Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
+                .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico una cancha"));
+
+        Turno turnoActualizado = turnoExistente.get();
+        turnoActualizado.setFecha_hora(turnoRequest.getFechaHora());
+        turnoActualizado.setTipo_futbol(turnoRequest.getTipoFutbol().name());
+        turnoActualizado.setLugares_disponibles(turnoRequest.getLugaresDisponibles());
+        turnoActualizado.setPrecio_por_jugador(turnoRequest.getPrecioPorJugador());
+        turnoActualizado.setUsuario(usuario);
+        turnoActualizado.setCancha(cancha);
+        return turnoRepository.save(turnoActualizado);
+    }   
 }

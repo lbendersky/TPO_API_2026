@@ -36,7 +36,7 @@ public class Turno {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_turno;
+    private Long idTurno;
 
     @Column
     private LocalDateTime fecha_hora;
