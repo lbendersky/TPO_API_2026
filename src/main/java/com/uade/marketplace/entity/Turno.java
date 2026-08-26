@@ -23,12 +23,12 @@ public class Turno {
 
     public Turno() {}
 
-    public Turno(LocalDateTime fecha_hora, String tipo_futbol, int lugares_disponibles,
-                 float precio_por_jugador, Usuario usuario, Cancha cancha) {
-        this.fecha_hora = fecha_hora;
-        this.tipo_futbol = tipo_futbol;
-        this.lugares_disponibles = lugares_disponibles;
-        this.precio_por_jugador = precio_por_jugador;
+    public Turno(LocalDateTime fechaHora, String tipoFutbol, int lugaresDisponibles,
+                 float precioPorJugador, Usuario usuario, Cancha cancha) {
+        this.fechaHora = fechaHora;
+        this.tipoFutbol = tipoFutbol;
+        this.lugaresDisponibles = lugaresDisponibles;
+        this.precioPorJugador = precioPorJugador;
         this.estado = EstadoTurno.INCOMPLETO;
         this.usuario = usuario;
         this.cancha = cancha;
@@ -38,17 +38,17 @@ public class Turno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTurno;
 
-    @Column
-    private LocalDateTime fecha_hora;
+    @Column(name = "fecha_hora")
+    private LocalDateTime fechaHora;
 
-    @Column
-    private String tipo_futbol;
+    @Column(name = "tipo_futbol")
+    private String tipoFutbol;
 
-    @Column
-    private int lugares_disponibles;
+    @Column(name = "lugares_disponibles")
+    private int lugaresDisponibles;
 
-    @Column
-    private float precio_por_jugador;
+    @Column(name = "precio_por_jugador")
+    private float precioPorJugador;
 
     @Enumerated(EnumType.STRING)
     @Column(check = @CheckConstraint(name = "chequear_estado_turno", constraint = "estado IN ('INCOMPLETO', 'LLENO', 'EN_PROCESO')"))

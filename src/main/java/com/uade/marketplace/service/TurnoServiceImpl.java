@@ -80,10 +80,10 @@ public class TurnoServiceImpl implements TurnoService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico una cancha"));
 
         Turno turnoActualizado = turnoExistente.get();
-        turnoActualizado.setFecha_hora(turnoRequest.getFechaHora());
-        turnoActualizado.setTipo_futbol(turnoRequest.getTipoFutbol().name());
-        turnoActualizado.setLugares_disponibles(turnoRequest.getLugaresDisponibles());
-        turnoActualizado.setPrecio_por_jugador(turnoRequest.getPrecioPorJugador());
+        turnoActualizado.setFechaHora(turnoRequest.getFechaHora());
+        turnoActualizado.setTipoFutbol(turnoRequest.getTipoFutbol().name());
+        turnoActualizado.setLugaresDisponibles(turnoRequest.getLugaresDisponibles());
+        turnoActualizado.setPrecioPorJugador(turnoRequest.getPrecioPorJugador());
         turnoActualizado.setUsuario(usuario);
         turnoActualizado.setCancha(cancha);
         return turnoRepository.save(turnoActualizado);

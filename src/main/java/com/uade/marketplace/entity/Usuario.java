@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.uade.marketplace.entity.enums.NombreRol;
+
 @Entity
 @Data // Genera getters y setters automáticamente
 @NoArgsConstructor // para Hibernate
@@ -31,4 +36,7 @@ public class Usuario {
 
     @Column(nullable = false, unique = true)
     private String telefono;
+
+    @Column(nullable = false)
+    private NombreRol rol;
 }
