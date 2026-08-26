@@ -28,11 +28,10 @@ public class Inscripcion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idInscripcion;
 
-    /*Join con Turnos que no esta hecho tdv(Como seria la logica)
     @ManyToOne
     @JoinColumn (name = "idTurno" , nullable = false)
     private Turno turno;
-    */
+    
    
     @ManyToOne
     @JoinColumn (name = "idUsuario" , nullable = false)
