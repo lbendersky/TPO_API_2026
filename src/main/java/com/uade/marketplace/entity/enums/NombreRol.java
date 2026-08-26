@@ -1,5 +1,5 @@
 package com.uade.marketplace.entity.enums;
 
-public class NombreRol {
+public enum NombreRol {
     
 }
