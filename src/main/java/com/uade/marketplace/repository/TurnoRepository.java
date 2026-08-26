@@ -1,5 +1,15 @@
 package com.uade.marketplace.repository;
 
-public class TurnoRepository {
-    
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.uade.marketplace.entity.Cancha;
+import com.uade.marketplace.entity.Turno;
+
+@Repository
+public interface TurnoRepository extends JpaRepository<Turno, Long> {
+    List<Turno> findByCanchaAndFechaHora(Cancha cancha, LocalDateTime fechaHora);
 }
