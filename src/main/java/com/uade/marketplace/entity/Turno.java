@@ -24,7 +24,7 @@ public class Turno {
     public Turno() {}
 
     public Turno(LocalDateTime fechaHora, String tipoFutbol, int lugaresDisponibles,
-                 float precioPorJugador, Usuario usuario, Cancha cancha) {
+                float precioPorJugador, Usuario usuario, Cancha cancha) {
         this.fechaHora = fechaHora;
         this.tipoFutbol = tipoFutbol;
         this.lugaresDisponibles = lugaresDisponibles;
