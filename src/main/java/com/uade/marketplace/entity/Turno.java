@@ -14,7 +14,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
 import lombok.Data;
 
 @Entity
@@ -23,8 +22,8 @@ public class Turno {
 
     public Turno() {}
 
-    public Turno(LocalDateTime fechaHora, String tipoFutbol, int lugaresDisponibles,
-                float precioPorJugador, Usuario usuario, Cancha cancha) {
+    public Turno(LocalDateTime fechaHora, String tipoFutbol, Integer lugaresDisponibles,
+                Float precioPorJugador, Usuario usuario, Cancha cancha) {
         this.fechaHora = fechaHora;
         this.tipoFutbol = tipoFutbol;
         this.lugaresDisponibles = lugaresDisponibles;
@@ -45,10 +44,10 @@ public class Turno {
     private String tipoFutbol;
 
     @Column(name = "lugares_disponibles")
-    private int lugaresDisponibles;
+    private Integer lugaresDisponibles;
 
     @Column(name = "precio_por_jugador")
-    private float precioPorJugador;
+    private Float precioPorJugador;
 
     @Enumerated(EnumType.STRING)
     @Column(check = @CheckConstraint(name = "chequear_estado_turno", constraint = "estado IN ('INCOMPLETO', 'LLENO', 'EN_PROCESO')"))

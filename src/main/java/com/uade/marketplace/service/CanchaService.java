@@ -11,4 +11,6 @@ public interface CanchaService {
     Optional<Cancha> getById(Long idCancha);
     List<Cancha> buscarPorLocalidad(String localidad);
     Cancha publicar (Cancha cancha) throws RecursoNoEncontradoException;
+    Cancha actualizar(Long idCancha, Cancha cancha) throws RecursoNoEncontradoException;
+    void eliminar(Long idCancha) throws RecursoNoEncontradoException;
 }
