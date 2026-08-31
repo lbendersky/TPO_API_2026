@@ -43,4 +43,24 @@ public class CanchaServiceImpl implements CanchaService {
         return canchaRepository.save(cancha);
     }
     
+    @Override
+    public Cancha actualizar(Long idCancha, Cancha cancha) throws RecursoNoEncontradoException {
+        Cancha existente = canchaRepository.findById(idCancha)
+            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la cancha " + idCancha));
+        existente.setNombre(cancha.getNombre());
+        existente.setDireccion(cancha.getDireccion());
+        existente.setLocalidad(cancha.getLocalidad());
+        existente.setTipoSuperficie(cancha.getTipoSuperficie());
+        existente.setPrecioUnitario(cancha.getPrecioUnitario());
+        existente.setCantidadJugadores(cancha.getCantidadJugadores());
+        return canchaRepository.save(existente);
+    }
+
+    @Override
+    public void eliminar(Long idCancha) throws RecursoNoEncontradoException {
+        if (!canchaRepository.existsById(idCancha))
+            throw new RecursoNoEncontradoException("No existe la cancha " + idCancha);
+        canchaRepository.deleteById(idCancha);
+    }
+
 }

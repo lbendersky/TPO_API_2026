@@ -39,6 +39,7 @@ public class TurnoController {
         return ResponseEntity.ok(turnoService.getTurnos(PageRequest.of(page, size)));
     }
 
+    @GetMapping("/{turnoId}")
     public ResponseEntity<Turno> getTurnoById(@PathVariable Long turnoId) {
         Optional<Turno> result = turnoService.getTurnoById(turnoId);
         if (result.isPresent())

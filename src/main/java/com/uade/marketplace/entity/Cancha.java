@@ -2,6 +2,8 @@ package com.uade.marketplace.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,7 +25,7 @@ public class Cancha {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     //PK que genera MySQL.
-    private long idCancha;
+    private Long idCancha;
 
     @Column(nullable = false) //Campo obligatorio para el negocio.
     private String nombre;
@@ -43,10 +45,11 @@ public class Cancha {
     @Column(nullable = false)
     private Integer cantidadJugadores;
     
-      @ManyToOne                                    // FK hacia usuario, MUCHAS canchas las publica UN usuario
+    @ManyToOne                                    // FK hacia usuario, MUCHAS canchas las publica UN usuario
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario publicador;
 
     @OneToMany(mappedBy = "cancha")               // en una cancha se juegan MUCHOS turnos
+    @JsonIgnore
     private List<Turno> turnos;
 }
