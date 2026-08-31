@@ -64,8 +64,11 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public void eliminarTurno(Long idTurno) {
-        usuarioRepository.deleteById(idTurno);
+    public void eliminarTurno(Long idTurno) throws RecursoNoEncontradoException {
+        if (!turnoRepository.existsById(idTurno))
+            throw new RecursoNoEncontradoException("No existe el turno " + idTurno);
+
+        turnoRepository.deleteById(idTurno);
     }
 
     @Override

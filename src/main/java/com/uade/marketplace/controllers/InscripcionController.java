@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uade.marketplace.entity.Inscripcion;
 import com.uade.marketplace.entity.enums.EstadoPago;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import com.uade.marketplace.exceptions.TurnoSinCuposException;
 import com.uade.marketplace.service.InscripcionService;
 
 @RestController
@@ -38,7 +39,7 @@ public class InscripcionController {
     }
 
     @PostMapping
-    public Inscripcion crear(@RequestBody Inscripcion inscripcion) {
+    public Inscripcion crear(@RequestBody Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {
         return inscripcionService.crear(inscripcion);
     }
 
