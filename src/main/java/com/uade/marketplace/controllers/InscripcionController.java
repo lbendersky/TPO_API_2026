@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.marketplace.dto.response.InscripcionResponse;
 import com.uade.marketplace.entity.Inscripcion;
 import com.uade.marketplace.entity.enums.EstadoPago;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
@@ -24,28 +25,28 @@ import com.uade.marketplace.service.InscripcionService;
 @RequestMapping("/inscripciones")
 public class InscripcionController {
     @Autowired
-    private InscripcionService inscripcionService; 
+    private InscripcionService inscripcionService;
 
     @GetMapping
-    public List<Inscripcion> getAll() {
-        return inscripcionService.getAll();
+    public List<InscripcionResponse> getAll() {
+        return inscripcionService.getAll().stream().map(InscripcionResponse::from).toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Inscripcion> getById(@PathVariable Long id) {
-    return inscripcionService.getById(id)
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<InscripcionResponse> getById(@PathVariable Long id) {
+        return inscripcionService.getById(id)
+                .map(i -> ResponseEntity.ok(InscripcionResponse.from(i)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Inscripcion crear(@RequestBody Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {
-        return inscripcionService.crear(inscripcion);
+    public InscripcionResponse crear(@RequestBody Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {
+        return InscripcionResponse.from(inscripcionService.crear(inscripcion));
     }
 
     @PutMapping("/{id}/estado-pago")
-    public Inscripcion actualizarPago(@PathVariable Long id, @RequestParam EstadoPago nuevoEstado) throws RecursoNoEncontradoException {
-        return inscripcionService.actualizarEstadoPago(id, nuevoEstado);
+    public InscripcionResponse actualizarPago(@PathVariable Long id, @RequestParam EstadoPago nuevoEstado) throws RecursoNoEncontradoException {
+        return InscripcionResponse.from(inscripcionService.actualizarEstadoPago(id, nuevoEstado));
     }
 
     @DeleteMapping("/{id}")

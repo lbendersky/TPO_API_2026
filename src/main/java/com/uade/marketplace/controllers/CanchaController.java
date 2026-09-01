@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.marketplace.dto.response.CanchaResponse;
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.service.CanchaService;
@@ -25,28 +26,30 @@ public class CanchaController {
     private CanchaService canchaService;
 
     @GetMapping
-    public List<Cancha> getAll() {
-        return canchaService.getAll();
+    public List<CanchaResponse> getAll() {
+        return canchaService.getAll().stream().map(CanchaResponse::from).toList();
     }
-    
+
     @GetMapping("/{canchaId}")
-    public ResponseEntity<Cancha> getById(@PathVariable Long canchaId) {
-        return canchaService.getById(canchaId).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<CanchaResponse> getById(@PathVariable Long canchaId) {
+        return canchaService.getById(canchaId)
+                .map(c -> ResponseEntity.ok(CanchaResponse.from(c)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/localidad/{localidad}")
-    public List<Cancha> buscarPorLocalidad(@PathVariable String localidad) {
-        return canchaService.buscarPorLocalidad(localidad);
+    public List<CanchaResponse> buscarPorLocalidad(@PathVariable String localidad) {
+        return canchaService.buscarPorLocalidad(localidad).stream().map(CanchaResponse::from).toList();
     }
 
     @PostMapping
-    public Cancha publicar(@RequestBody Cancha cancha) throws RecursoNoEncontradoException {
-        return canchaService.publicar(cancha);
+    public CanchaResponse publicar(@RequestBody Cancha cancha) throws RecursoNoEncontradoException {
+        return CanchaResponse.from(canchaService.publicar(cancha));
     }
 
     @PutMapping("/{canchaId}")
-    public Cancha actualizar(@PathVariable Long canchaId, @RequestBody Cancha cancha) throws RecursoNoEncontradoException {
-        return canchaService.actualizar(canchaId, cancha);
+    public CanchaResponse actualizar(@PathVariable Long canchaId, @RequestBody Cancha cancha) throws RecursoNoEncontradoException {
+        return CanchaResponse.from(canchaService.actualizar(canchaId, cancha));
     }
 
     @DeleteMapping("/{canchaId}")

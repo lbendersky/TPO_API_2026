@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.marketplace.dto.response.UsuarioResponse;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.service.UsuarioService;
@@ -23,31 +24,32 @@ public class UsuarioController {
     @Autowired private UsuarioService UsuarioService;
 
     @GetMapping("")
-    public List<Usuario> getAll() {
-        return UsuarioService.getAll();
+    public List<UsuarioResponse> getAll() {
+        return UsuarioService.getAll().stream().map(UsuarioResponse::from).toList();
     }
-    
+
     @GetMapping("/{usuarioId}")
-    public ResponseEntity<Usuario> getById(@PathVariable Long usuarioId) {
+    public ResponseEntity<UsuarioResponse> getById(@PathVariable Long usuarioId) {
         return UsuarioService.getById(usuarioId)
-            .map(ResponseEntity::ok)
+            .map(u -> ResponseEntity.ok(UsuarioResponse.from(u)))
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @GetMapping("/email/{email}")
-    public ResponseEntity<Usuario> buscarPorEmail(@PathVariable String email) {
+    public ResponseEntity<UsuarioResponse> buscarPorEmail(@PathVariable String email) {
         return UsuarioService.buscarPorEmail(email)
-            .map(ResponseEntity::ok)
+            .map(u -> ResponseEntity.ok(UsuarioResponse.from(u)))
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
+
     @PostMapping("")
-    public Usuario crear(@RequestBody Usuario usuario) {
-        return UsuarioService.crear(usuario);
+    public UsuarioResponse crear(@RequestBody Usuario usuario) {
+        return UsuarioResponse.from(UsuarioService.crear(usuario));
     }
 
     @PutMapping("/{usuarioId}")
-    public Usuario actualizar(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws RecursoNoEncontradoException {
-        return UsuarioService.actualizar(usuarioId, usuario);
+    public UsuarioResponse actualizar(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws RecursoNoEncontradoException {
+        return UsuarioResponse.from(UsuarioService.actualizar(usuarioId, usuario));
     }
 
     @DeleteMapping("/{usuarioId}")

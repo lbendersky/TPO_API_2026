@@ -8,8 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.uade.marketplace.dto.TurnoRequest;
 import com.uade.marketplace.entity.Cancha;
-import com.uade.marketplace.entity.DTO.TurnoRequest;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;

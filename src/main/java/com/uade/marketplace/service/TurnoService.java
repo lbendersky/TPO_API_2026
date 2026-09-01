@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import com.uade.marketplace.entity.DTO.TurnoRequest;
+import com.uade.marketplace.dto.TurnoRequest;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;

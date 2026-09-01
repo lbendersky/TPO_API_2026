@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uade.marketplace.entity.DTO.TurnoRequest;
+import com.uade.marketplace.dto.TurnoRequest;
+import com.uade.marketplace.dto.response.TurnoResponse;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
@@ -31,33 +32,35 @@ public class TurnoController {
     private TurnoService turnoService;
 
     @GetMapping
-    public ResponseEntity<Page<Turno>> getTurnos(
+    public ResponseEntity<Page<TurnoResponse>> getTurnos(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
-        if (page == null || size == null)
-            return ResponseEntity.ok(turnoService.getTurnos(PageRequest.of(0, Integer.MAX_VALUE)));
-        return ResponseEntity.ok(turnoService.getTurnos(PageRequest.of(page, size)));
+        Page<Turno> result = (page == null || size == null)
+                ? turnoService.getTurnos(PageRequest.of(0, Integer.MAX_VALUE))
+                : turnoService.getTurnos(PageRequest.of(page, size));
+        return ResponseEntity.ok(result.map(TurnoResponse::from));
     }
 
     @GetMapping("/{turnoId}")
-    public ResponseEntity<Turno> getTurnoById(@PathVariable Long turnoId) {
+    public ResponseEntity<TurnoResponse> getTurnoById(@PathVariable Long turnoId) {
         Optional<Turno> result = turnoService.getTurnoById(turnoId);
         if (result.isPresent())
-            return ResponseEntity.ok(result.get());
+            return ResponseEntity.ok(TurnoResponse.from(result.get()));
 
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<Object> createTurno(@RequestBody TurnoRequest turnoRequest)
+    public ResponseEntity<TurnoResponse> createTurno(@RequestBody TurnoRequest turnoRequest)
             throws TurnoDuplicateException {
         Turno result = turnoService.crearTurno(turnoRequest);
-        return ResponseEntity.created(URI.create("/turnos/" + result.getIdTurno())).body(result);
+        return ResponseEntity.created(URI.create("/turnos/" + result.getIdTurno()))
+                .body(TurnoResponse.from(result));
     }
 
     @PutMapping("/{turnoId}")
-    public Turno actualizar(@PathVariable Long turnoId, @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
-        return turnoService.actualizarTurno(turnoId, turno);
+    public TurnoResponse actualizar(@PathVariable Long turnoId, @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
+        return TurnoResponse.from(turnoService.actualizarTurno(turnoId, turno));
     }
 
     @DeleteMapping("/{turnoId}")
