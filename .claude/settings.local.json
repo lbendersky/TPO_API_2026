@@ -6,7 +6,9 @@
       "Bash(./mvnw.cmd compile *)",
       "Bash(./mvnw.cmd clean *)",
       "Bash(./mvnw.cmd -q clean compile)",
-      "Bash(git log *)"
+      "Bash(git log *)",
+      "Bash(git fetch *)",
+      "Bash(git merge *)"
     ]
   }
 }
