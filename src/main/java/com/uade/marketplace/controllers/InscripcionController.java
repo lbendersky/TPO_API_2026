@@ -39,6 +39,16 @@ public class InscripcionController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/usuario/{usuarioId}")
+    public List<Inscripcion> getPorUsuario(@PathVariable Long usuarioId) {
+        return inscripcionService.getPorUsuario(usuarioId);
+    }
+
+    @GetMapping("/turno/{turnoId}")
+    public List<Inscripcion> getPorTurno(@PathVariable Long turnoId) {
+        return inscripcionService.getPorTurno(turnoId);
+    }
+
     @PostMapping
     public InscripcionResponse crear(@RequestBody Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {
         return InscripcionResponse.from(inscripcionService.crear(inscripcion));

@@ -37,6 +37,16 @@ public class InscripcionServiceImpl implements InscripcionService{
         return inscripcionRepository.findById(idInscripcion);
     }
 
+    @Override
+    public List<Inscripcion> getPorUsuario(Long idUsuario) {
+        return inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario);
+    }
+
+    @Override
+    public List<Inscripcion> getPorTurno(Long idTurno) {
+        return inscripcionRepository.findByTurno_IdTurno(idTurno);
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public Inscripcion crear(Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {

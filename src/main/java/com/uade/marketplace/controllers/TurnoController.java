@@ -1,6 +1,7 @@
 package com.uade.marketplace.controllers;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,16 @@ public class TurnoController {
             return ResponseEntity.ok(TurnoResponse.from(result.get()));
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/cancha/{canchaId}")
+    public List<Turno> getTurnosPorCancha(@PathVariable Long canchaId) {
+        return turnoService.getTurnosPorCancha(canchaId);
+    }
+
+    @GetMapping("/disponibles")
+    public List<Turno> getTurnosDisponibles() {
+        return turnoService.getTurnosDisponibles();
     }
 
     @PostMapping
