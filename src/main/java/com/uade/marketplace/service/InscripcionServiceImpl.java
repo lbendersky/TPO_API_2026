@@ -36,7 +36,17 @@ public class InscripcionServiceImpl implements InscripcionService{
         return inscripcionRepository.findById(idInscripcion);
     }
 
-     @Override
+    @Override
+    public List<Inscripcion> getPorUsuario(Long idUsuario) {
+        return inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario);
+    }
+
+    @Override
+    public List<Inscripcion> getPorTurno(Long idTurno) {
+        return inscripcionRepository.findByTurno_IdTurno(idTurno);
+    }
+
+    @Override
     public Inscripcion crear(Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {
         if (inscripcion.getTurno() == null || inscripcion.getTurno().getIdTurno() == null)
             throw new RecursoNoEncontradoException("Falta indicar el turno de la inscripcion");

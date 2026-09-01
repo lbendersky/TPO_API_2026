@@ -1,5 +1,6 @@
 package com.uade.marketplace.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -21,4 +22,8 @@ public interface TurnoService {
     void eliminarTurno(Long turnoId) throws RecursoNoEncontradoException;
 
     Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest) throws RecursoNoEncontradoException;
+
+    List<Turno> getTurnosPorCancha(Long idCancha);
+
+    List<Turno> getTurnosDisponibles();
 }

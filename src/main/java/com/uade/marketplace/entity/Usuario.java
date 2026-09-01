@@ -1,14 +1,16 @@
 package com.uade.marketplace.entity;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.uade.marketplace.entity.enums.NombreRol;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import com.uade.marketplace.entity.enums.NombreRol;
 
 @Entity
 @Data // Genera getters y setters automáticamente
@@ -32,6 +34,7 @@ public class Usuario {
     private String email;
     
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String contrasena;
 
     @Column(nullable = false, unique = true)

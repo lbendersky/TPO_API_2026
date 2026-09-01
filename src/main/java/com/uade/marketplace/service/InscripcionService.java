@@ -15,4 +15,6 @@ public interface InscripcionService {
     Inscripcion crear (Inscripcion inscripcion)throws RecursoNoEncontradoException, TurnoSinCuposException;
     Inscripcion actualizarEstadoPago(Long idInscripcion, EstadoPago nuevoEstado) throws RecursoNoEncontradoException;
     void eliminar(Long idInscripcion);
+    List<Inscripcion> getPorUsuario(Long idUsuario);
+    List<Inscripcion> getPorTurno(Long idTurno);
 }

@@ -41,6 +41,16 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
+    public List<Turno> getTurnosPorCancha(Long idCancha) {
+        return turnoRepository.findByCancha_IdCancha(idCancha);
+    }
+
+    @Override
+    public List<Turno> getTurnosDisponibles() {
+        return turnoRepository.findByLugaresDisponiblesGreaterThan(0);
+    }
+
+    @Override
     public Turno crearTurno(TurnoRequest turnoRequest) throws TurnoDuplicateException {
         Usuario usuario = usuarioRepository.findById(turnoRequest.getIdUsuario())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
@@ -90,5 +100,5 @@ public class TurnoServiceImpl implements TurnoService {
         turnoActualizado.setUsuario(usuario);
         turnoActualizado.setCancha(cancha);
         return turnoRepository.save(turnoActualizado);
-    }   
+    }
 }
