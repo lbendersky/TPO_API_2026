@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.uade.marketplace.dto.TurnoRequest;
+import com.uade.marketplace.dto.request.TurnoRequest;
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
@@ -31,8 +29,8 @@ public class TurnoServiceImpl implements TurnoService {
     private CanchaRepository canchaRepository;
 
     @Override
-    public Page<Turno> getTurnos(PageRequest pageRequest) {
-        return turnoRepository.findAll(pageRequest);
+    public List<Turno> getTurnos() {
+        return turnoRepository.findAll();
     }
 
     @Override

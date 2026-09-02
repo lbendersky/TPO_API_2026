@@ -1,4 +1,4 @@
-package com.uade.marketplace.dto;
+package com.uade.marketplace.dto.request;
 
 import java.time.LocalDateTime;
 
