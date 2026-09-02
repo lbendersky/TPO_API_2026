@@ -40,13 +40,13 @@ public class InscripcionController {
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public List<Inscripcion> getPorUsuario(@PathVariable Long usuarioId) {
-        return inscripcionService.getPorUsuario(usuarioId);
+    public List<InscripcionResponse> getPorUsuario(@PathVariable Long usuarioId) {
+        return inscripcionService.getPorUsuario(usuarioId).stream().map(InscripcionResponse::from).toList();
     }
 
     @GetMapping("/turno/{turnoId}")
-    public List<Inscripcion> getPorTurno(@PathVariable Long turnoId) {
-        return inscripcionService.getPorTurno(turnoId);
+    public List<InscripcionResponse> getPorTurno(@PathVariable Long turnoId) {
+        return inscripcionService.getPorTurno(turnoId).stream().map(InscripcionResponse::from).toList();
     }
 
     @PostMapping

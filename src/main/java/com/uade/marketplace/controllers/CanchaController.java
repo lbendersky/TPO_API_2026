@@ -17,7 +17,6 @@ import com.uade.marketplace.dto.response.CanchaResponse;
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.service.CanchaService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -42,6 +41,11 @@ public class CanchaController {
     @GetMapping("/localidad/{localidad}")
     public List<CanchaResponse> buscarPorLocalidad(@PathVariable String localidad) {
         return canchaService.buscarPorLocalidad(localidad).stream().map(CanchaResponse::from).toList();
+    }
+
+    @GetMapping("/superficie/{tipoSuperficie}")
+    public List<CanchaResponse> buscarPorSuperficie(@PathVariable String tipoSuperficie) {
+        return canchaService.buscarPorSuperficie(tipoSuperficie).stream().map(CanchaResponse::from).toList();
     }
 
     @GetMapping("/usuario/{usuarioId}")
