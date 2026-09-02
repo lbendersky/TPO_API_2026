@@ -36,6 +36,11 @@ public class CanchaServiceImpl implements CanchaService {
     }
 
     @Override
+    public List<Cancha> buscarPorSuperficie(String tipoSuperficie) {
+        return canchaRepository.findByTipoSuperficie(tipoSuperficie);
+    }
+    
+    @Override
     public Cancha publicar(Cancha cancha) throws RecursoNoEncontradoException {
         Usuario publicador = usuarioRepository.findById(cancha.getPublicador().getIdUsuario())
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + cancha.getPublicador().getIdUsuario()));
