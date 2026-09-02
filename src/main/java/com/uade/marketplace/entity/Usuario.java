@@ -1,11 +1,10 @@
 package com.uade.marketplace.entity;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.uade.marketplace.entity.enums.Rol;
@@ -73,7 +72,7 @@ public class Usuario implements UserDetails{
     @Override
     public boolean isAccountNonLocked() {
         return true;
-    }   
+    }
 
     @Override
     public boolean isCredentialsNonExpired() {
