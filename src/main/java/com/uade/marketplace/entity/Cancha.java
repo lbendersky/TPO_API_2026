@@ -45,6 +45,9 @@ public class Cancha {
     @Column(nullable = false)
     private Integer cantidadJugadores;
     
+    @Column
+    private String descripcion;
+    
     @ManyToOne                                    // FK hacia usuario, MUCHAS canchas las publica UN usuario
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario publicador;

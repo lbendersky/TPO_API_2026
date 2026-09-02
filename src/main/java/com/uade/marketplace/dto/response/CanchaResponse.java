@@ -15,6 +15,7 @@ public class CanchaResponse {
     private String tipoSuperficie;
     private Double precioUnitario;
     private Integer cantidadJugadores;
+    private String descripcion;
     private String nombrePublicador;
 
     public static CanchaResponse from(Cancha c) {
@@ -26,6 +27,7 @@ public class CanchaResponse {
                 c.getTipoSuperficie(),
                 c.getPrecioUnitario(),
                 c.getCantidadJugadores(),
+                c.getDescripcion(),
                 c.getPublicador() != null ? c.getPublicador().getNombre() : null
         );
     }

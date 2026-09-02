@@ -10,6 +10,7 @@ import com.uade.marketplace.dto.request.TurnoRequest;
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
+import com.uade.marketplace.entity.enums.EstadoTurno;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
@@ -60,14 +61,16 @@ public class TurnoServiceImpl implements TurnoService {
         if (!turnosExistentes.isEmpty())
             throw new TurnoDuplicateException();
 
-        Turno turno = new Turno(
-                turnoRequest.getFechaHora(),
-                turnoRequest.getTipoFutbol().name(),
-                turnoRequest.getLugaresDisponibles(),
-                turnoRequest.getPrecioPorJugador(),
-                usuario,
-                cancha
-        );
+        Turno turno = Turno.builder()
+            .fechaHora(turnoRequest.getFechaHora())
+            .tipoFutbol(turnoRequest.getTipoFutbol().name())
+            .lugaresDisponibles(turnoRequest.getLugaresDisponibles())
+            .precioPorJugador(turnoRequest.getPrecioPorJugador())
+            .descripcion(turnoRequest.getDescripcion())
+            .estado(EstadoTurno.INCOMPLETO)
+            .usuario(usuario)
+            .cancha(cancha)
+            .build();
         return turnoRepository.save(turno);
     }
 
@@ -94,6 +97,7 @@ public class TurnoServiceImpl implements TurnoService {
         turnoActualizado.setFechaHora(turnoRequest.getFechaHora());
         turnoActualizado.setTipoFutbol(turnoRequest.getTipoFutbol().name());
         turnoActualizado.setLugaresDisponibles(turnoRequest.getLugaresDisponibles());
+        turnoActualizado.setDescripcion(turnoRequest.getDescripcion());
         turnoActualizado.setPrecioPorJugador(turnoRequest.getPrecioPorJugador());
         turnoActualizado.setUsuario(usuario);
         turnoActualizado.setCancha(cancha);
