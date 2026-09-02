@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.marketplace.entity.Cancha;
+import com.uade.marketplace.entity.Localidad;
 import com.uade.marketplace.entity.Usuario;
+import com.uade.marketplace.entity.enums.TipoSuperficie;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.repository.CanchaRepository;
+import com.uade.marketplace.repository.LocalidadRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
 
 
@@ -19,6 +22,8 @@ public class CanchaServiceImpl implements CanchaService {
     private CanchaRepository canchaRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private LocalidadRepository localidadRepository;
 
     @Override
     public List<Cancha> getAll() {
@@ -32,29 +37,34 @@ public class CanchaServiceImpl implements CanchaService {
 
     @Override
     public List<Cancha> buscarPorLocalidad(String localidad) {
-        return canchaRepository.findByLocalidad(localidad);
+        return canchaRepository.findByLocalidad_Nombre(localidad);
     }
 
     @Override
-    public List<Cancha> buscarPorSuperficie(String tipoSuperficie) {
+    public List<Cancha> buscarPorSuperficie(TipoSuperficie tipoSuperficie) {
         return canchaRepository.findByTipoSuperficie(tipoSuperficie);
     }
-    
+
     @Override
     public Cancha publicar(Cancha cancha) throws RecursoNoEncontradoException {
         Usuario publicador = usuarioRepository.findById(cancha.getPublicador().getIdUsuario())
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + cancha.getPublicador().getIdUsuario()));
+        Localidad localidad = localidadRepository.findById(cancha.getLocalidad().getIdLocalidad())
+            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la localidad " + cancha.getLocalidad().getIdLocalidad()));
         cancha.setPublicador(publicador);
+        cancha.setLocalidad(localidad);
         return canchaRepository.save(cancha);
     }
-    
+
     @Override
     public Cancha actualizar(Long idCancha, Cancha cancha) throws RecursoNoEncontradoException {
         Cancha existente = canchaRepository.findById(idCancha)
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe la cancha " + idCancha));
+        Localidad localidad = localidadRepository.findById(cancha.getLocalidad().getIdLocalidad())
+            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la localidad " + cancha.getLocalidad().getIdLocalidad()));
         existente.setNombre(cancha.getNombre());
         existente.setDireccion(cancha.getDireccion());
-        existente.setLocalidad(cancha.getLocalidad());
+        existente.setLocalidad(localidad);
         existente.setTipoSuperficie(cancha.getTipoSuperficie());
         existente.setPrecioUnitario(cancha.getPrecioUnitario());
         existente.setDescripcion(cancha.getDescripcion());

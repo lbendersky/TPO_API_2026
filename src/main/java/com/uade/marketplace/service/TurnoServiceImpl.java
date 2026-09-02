@@ -63,7 +63,7 @@ public class TurnoServiceImpl implements TurnoService {
 
         Turno turno = Turno.builder()
             .fechaHora(turnoRequest.getFechaHora())
-            .tipoFutbol(turnoRequest.getTipoFutbol().name())
+            .tipoFutbol(turnoRequest.getTipoFutbol())
             .lugaresDisponibles(turnoRequest.getLugaresDisponibles())
             .precioPorJugador(turnoRequest.getPrecioPorJugador())
             .descripcion(turnoRequest.getDescripcion())
@@ -95,7 +95,7 @@ public class TurnoServiceImpl implements TurnoService {
 
         Turno turnoActualizado = turnoExistente.get();
         turnoActualizado.setFechaHora(turnoRequest.getFechaHora());
-        turnoActualizado.setTipoFutbol(turnoRequest.getTipoFutbol().name());
+        turnoActualizado.setTipoFutbol(turnoRequest.getTipoFutbol());
         turnoActualizado.setLugaresDisponibles(turnoRequest.getLugaresDisponibles());
         turnoActualizado.setDescripcion(turnoRequest.getDescripcion());
         turnoActualizado.setPrecioPorJugador(turnoRequest.getPrecioPorJugador());

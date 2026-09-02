@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.enums.EstadoTurno;
+import com.uade.marketplace.entity.enums.TipoFutbol;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.Data;
 public class TurnoResponse {
     private Long idTurno;
     private LocalDateTime fechaHora;
-    private String tipoFutbol;
+    private TipoFutbol tipoFutbol;
     private Integer lugaresDisponibles;
     private Float precioPorJugador;
     private String descripcion;
@@ -32,7 +33,7 @@ public class TurnoResponse {
                 t.getDescripcion(),
                 t.getEstado(),
                 t.getCancha() != null ? t.getCancha().getNombre() : null,
-                t.getCancha() != null ? t.getCancha().getLocalidad() : null,
+                t.getCancha() != null && t.getCancha().getLocalidad() != null ? t.getCancha().getLocalidad().getNombre() : null,
                 t.getUsuario() != null ? t.getUsuario().getNombre() : null
         );
     }

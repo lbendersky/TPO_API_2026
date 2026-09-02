@@ -1,6 +1,7 @@
 package com.uade.marketplace.dto.response;
 
 import com.uade.marketplace.entity.Cancha;
+import com.uade.marketplace.entity.enums.TipoSuperficie;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +13,7 @@ public class CanchaResponse {
     private String nombre;
     private String direccion;
     private String localidad;
-    private String tipoSuperficie;
+    private TipoSuperficie tipoSuperficie;
     private Double precioUnitario;
     private Integer cantidadJugadores;
     private String descripcion;
@@ -23,7 +24,7 @@ public class CanchaResponse {
                 c.getIdCancha(),
                 c.getNombre(),
                 c.getDireccion(),
-                c.getLocalidad(),
+                c.getLocalidad() != null ? c.getLocalidad().getNombre() : null,
                 c.getTipoSuperficie(),
                 c.getPrecioUnitario(),
                 c.getCantidadJugadores(),

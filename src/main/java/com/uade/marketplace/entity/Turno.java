@@ -3,6 +3,7 @@ package com.uade.marketplace.entity;
 import java.time.LocalDateTime;
 
 import com.uade.marketplace.entity.enums.EstadoTurno;
+import com.uade.marketplace.entity.enums.TipoFutbol;
 
 import jakarta.persistence.CheckConstraint;
 import jakarta.persistence.Column;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Turno {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTurno;
@@ -33,8 +34,9 @@ public class Turno {
     @Column(name = "fecha_hora")
     private LocalDateTime fechaHora;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_futbol")
-    private String tipoFutbol;
+    private TipoFutbol tipoFutbol;
 
     @Column(name = "lugares_disponibles")
     private Integer lugaresDisponibles;

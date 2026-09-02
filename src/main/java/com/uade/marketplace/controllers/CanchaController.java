@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.marketplace.dto.response.CanchaResponse;
 import com.uade.marketplace.entity.Cancha;
+import com.uade.marketplace.entity.enums.TipoSuperficie;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.service.CanchaService;
 
@@ -44,7 +45,7 @@ public class CanchaController {
     }
 
     @GetMapping("/superficie/{tipoSuperficie}")
-    public List<CanchaResponse> buscarPorSuperficie(@PathVariable String tipoSuperficie) {
+    public List<CanchaResponse> buscarPorSuperficie(@PathVariable TipoSuperficie tipoSuperficie) {
         return canchaService.buscarPorSuperficie(tipoSuperficie).stream().map(CanchaResponse::from).toList();
     }
 
