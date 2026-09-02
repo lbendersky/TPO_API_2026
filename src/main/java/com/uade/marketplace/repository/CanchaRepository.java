@@ -9,4 +9,5 @@ import com.uade.marketplace.entity.Cancha;
 @Repository
 public interface CanchaRepository extends JpaRepository<Cancha, Long>{
     List<Cancha> findByLocalidad (String localidad);
+    List<Cancha> findByPublicador_IdUsuario(Long idUsuario);
 }

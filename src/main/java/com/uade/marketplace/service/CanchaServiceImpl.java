@@ -63,4 +63,8 @@ public class CanchaServiceImpl implements CanchaService {
         canchaRepository.deleteById(idCancha);
     }
 
+    @Override
+    public List<Cancha> getCanchasPorPublicador(Long idUsuario) {
+        return canchaRepository.findByPublicador_IdUsuario(idUsuario);
+    }
 }

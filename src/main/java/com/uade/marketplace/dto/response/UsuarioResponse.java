@@ -1,7 +1,7 @@
 package com.uade.marketplace.dto.response;
 
 import com.uade.marketplace.entity.Usuario;
-import com.uade.marketplace.entity.enums.NombreRol;
+import com.uade.marketplace.entity.enums.Rol;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class UsuarioResponse {
     private String nombre;
     private String email;
     private String telefono;
-    private NombreRol rol;
+    private Rol rol;
 
     public static UsuarioResponse from(Usuario u) {
         return new UsuarioResponse(

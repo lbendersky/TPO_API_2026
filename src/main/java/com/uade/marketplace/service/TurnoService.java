@@ -26,4 +26,6 @@ public interface TurnoService {
     List<Turno> getTurnosPorCancha(Long idCancha);
 
     List<Turno> getTurnosDisponibles();
+
+    List<Turno> getTurnosPorUsuario(Long idUsuario);
 }

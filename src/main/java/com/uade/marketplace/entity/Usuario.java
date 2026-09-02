@@ -1,7 +1,7 @@
 package com.uade.marketplace.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.uade.marketplace.entity.enums.NombreRol;
+import com.uade.marketplace.entity.enums.Rol;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,5 +44,5 @@ public class Usuario {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private NombreRol rol;
+    private Rol rol;
 }

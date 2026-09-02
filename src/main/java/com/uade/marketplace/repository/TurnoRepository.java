@@ -14,4 +14,5 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
     List<Turno> findByCanchaAndFechaHora(Cancha cancha, LocalDateTime fechaHora);
     List<Turno> findByCancha_IdCancha(Long idCancha);
     List<Turno> findByLugaresDisponiblesGreaterThan(Integer lugares);
+    List<Turno> findByUsuario_IdUsuario(Long idUsuario);
 }

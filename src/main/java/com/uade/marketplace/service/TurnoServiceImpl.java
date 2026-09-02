@@ -101,4 +101,9 @@ public class TurnoServiceImpl implements TurnoService {
         turnoActualizado.setCancha(cancha);
         return turnoRepository.save(turnoActualizado);
     }
+
+    @Override
+    public List<Turno> getTurnosPorUsuario(Long idUsuario) {
+        return turnoRepository.findByUsuario_IdUsuario(idUsuario);
+    }
 }

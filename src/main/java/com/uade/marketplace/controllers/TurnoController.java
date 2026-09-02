@@ -52,14 +52,20 @@ public class TurnoController {
     }
 
     @GetMapping("/cancha/{canchaId}")
-    public List<Turno> getTurnosPorCancha(@PathVariable Long canchaId) {
-        return turnoService.getTurnosPorCancha(canchaId);
+    public List<TurnoResponse> getTurnosPorCancha(@PathVariable Long canchaId) {
+        return turnoService.getTurnosPorCancha(canchaId).stream().map(TurnoResponse::from).toList();
     }
 
     @GetMapping("/disponibles")
-    public List<Turno> getTurnosDisponibles() {
-        return turnoService.getTurnosDisponibles();
+    public List<TurnoResponse> getTurnosDisponibles() {
+        return turnoService.getTurnosDisponibles().stream().map(TurnoResponse::from).toList();
     }
+
+    @GetMapping("/usuario/{usuarioId}")
+    public List<TurnoResponse> getTurnosPorUsuario(@PathVariable Long usuarioId) {
+        return turnoService.getTurnosPorUsuario(usuarioId).stream().map(TurnoResponse::from).toList();
+    }
+    
 
     @PostMapping
     public ResponseEntity<TurnoResponse> createTurno(@RequestBody TurnoRequest turnoRequest)
