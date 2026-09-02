@@ -57,6 +57,7 @@ public class CanchaServiceImpl implements CanchaService {
         existente.setLocalidad(cancha.getLocalidad());
         existente.setTipoSuperficie(cancha.getTipoSuperficie());
         existente.setPrecioUnitario(cancha.getPrecioUnitario());
+        existente.setDescripcion(cancha.getDescripcion());
         existente.setCantidadJugadores(cancha.getCantidadJugadores());
         return canchaRepository.save(existente);
     }
