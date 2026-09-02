@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell *)",
+      "Bash(./mvnw.cmd -q compile)",
+      "Bash(./mvnw.cmd compile *)",
+      "Bash(./mvnw.cmd clean *)",
+      "Bash(./mvnw.cmd -q clean compile)",
+      "Bash(git log *)",
+      "Bash(git fetch *)",
+      "Bash(git merge *)",
+      "Bash(./mvnw -q compile)",
+      "Bash(git stash *)",
+      "Bash(git pull *)",
+      "Bash(git rm *)",
+      "Bash(mv .claude/settings.local.json.bak .claude/settings.local.json)",
+      "Bash(git add *)"
+    ]
+  }
+}
