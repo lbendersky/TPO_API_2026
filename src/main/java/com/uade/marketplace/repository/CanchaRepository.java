@@ -15,4 +15,6 @@ public interface CanchaRepository extends JpaRepository<Cancha, Long> {
     List<Cancha> findByTipoSuperficie(TipoSuperficie tipoSuperficie);
     List<Cancha> findByPublicador_IdUsuario(Long idUsuario);
     List<Cancha> findByActivaTrue();
+    long countByActivaTrue();
+
 }
