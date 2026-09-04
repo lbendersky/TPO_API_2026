@@ -51,6 +51,12 @@ public class Cancha {
     @Column
     private String descripcion;
 
+    @Column(nullable = false)
+    private Boolean activa = true;
+
+    @Column(name = "motivo_baja")
+    private String motivoBaja;
+
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario publicador;
