@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Localidad;
 import com.uade.marketplace.entity.Usuario;
+import com.uade.marketplace.entity.enums.Rol;
 import com.uade.marketplace.entity.enums.TipoSuperficie;
+import com.uade.marketplace.exceptions.AccesoDenegadoException;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.LocalidadRepository;
@@ -27,7 +29,7 @@ public class CanchaServiceImpl implements CanchaService {
 
     @Override
     public List<Cancha> getAll() {
-        return canchaRepository.findAll();
+        return canchaRepository.findByActivaTrue();
     }
 
     @Override
@@ -53,6 +55,8 @@ public class CanchaServiceImpl implements CanchaService {
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe la localidad " + cancha.getLocalidad().getIdLocalidad()));
         cancha.setPublicador(publicador);
         cancha.setLocalidad(localidad);
+        if (cancha.getActiva() == null)
+            cancha.setActiva(true);
         return canchaRepository.save(cancha);
     }
 
@@ -73,14 +77,31 @@ public class CanchaServiceImpl implements CanchaService {
     }
 
     @Override
-    public void eliminar(Long idCancha) throws RecursoNoEncontradoException {
-        if (!canchaRepository.existsById(idCancha))
-            throw new RecursoNoEncontradoException("No existe la cancha " + idCancha);
-        canchaRepository.deleteById(idCancha);
+    public void eliminar(Long idCancha, Usuario usuarioActual, String motivo) throws RecursoNoEncontradoException, AccesoDenegadoException {
+        Cancha cancha = canchaRepository.findById(idCancha)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe la cancha " + idCancha));
+
+        boolean esDueño = cancha.getPublicador() != null
+                && cancha.getPublicador().getIdUsuario().equals(usuarioActual.getIdUsuario());
+        boolean esAdmin = usuarioActual.getRol() == Rol.ADMIN;
+
+        if (!esDueño && !esAdmin)
+            throw new AccesoDenegadoException("No tenés permiso para dar de baja esta cancha");
+
+        cancha.setActiva(false);
+        if (esAdmin && !esDueño)
+            cancha.setMotivoBaja(motivo);
+
+        canchaRepository.save(cancha);
     }
 
     @Override
     public List<Cancha> getCanchasPorPublicador(Long idUsuario) {
         return canchaRepository.findByPublicador_IdUsuario(idUsuario);
+    }
+
+    @Override
+    public List<Cancha> getAllAdmin() {
+        return canchaRepository.findAll();
     }
 }

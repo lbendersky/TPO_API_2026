@@ -18,6 +18,8 @@ public class CanchaResponse {
     private Integer cantidadJugadores;
     private String descripcion;
     private String nombrePublicador;
+    private boolean activa;
+    private String motivoBaja;
 
     public static CanchaResponse from(Cancha c) {
         return new CanchaResponse(
@@ -29,7 +31,9 @@ public class CanchaResponse {
                 c.getPrecioUnitario(),
                 c.getCantidadJugadores(),
                 c.getDescripcion(),
-                c.getPublicador() != null ? c.getPublicador().getNombre() : null
+                c.getPublicador() != null ? c.getPublicador().getNombre() : null,
+                c.getActiva(),
+                c.getMotivoBaja()
         );
     }
 }

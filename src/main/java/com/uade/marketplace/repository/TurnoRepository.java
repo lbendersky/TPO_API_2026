@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Turno;
+import com.uade.marketplace.entity.enums.EstadoTurno;
 
 @Repository
 public interface TurnoRepository extends JpaRepository<Turno, Long> {
@@ -15,4 +16,5 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
     List<Turno> findByCancha_IdCancha(Long idCancha);
     List<Turno> findByLugaresDisponiblesGreaterThan(Integer lugares);
     List<Turno> findByUsuario_IdUsuario(Long idUsuario);
+    long countByEstado(EstadoTurno estado);
 }
