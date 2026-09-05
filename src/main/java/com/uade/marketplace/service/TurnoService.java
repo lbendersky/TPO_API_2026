@@ -4,15 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import com.uade.marketplace.dto.request.TurnoRequest;
+import com.uade.marketplace.dto.response.TurnoResponse;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 
 public interface TurnoService {
 
-    List<Turno> getTurnos();
+    List<TurnoResponse> getTurnos();
 
-    Optional<Turno> getTurnoById(Long turnoId);
+    Optional<TurnoResponse> getTurnoById(Long turnoId);
 
     Turno crearTurno(TurnoRequest turnoRequest) throws TurnoDuplicateException;
 
@@ -20,9 +21,9 @@ public interface TurnoService {
 
     Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest) throws RecursoNoEncontradoException;
 
-    List<Turno> getTurnosPorCancha(Long idCancha);
+    List<TurnoResponse> getTurnosPorCancha(Long idCancha);
 
-    List<Turno> getTurnosDisponibles();
+    List<TurnoResponse> getTurnosDisponibles();
 
-    List<Turno> getTurnosPorUsuario(Long idUsuario);
+    List<TurnoResponse> getTurnosPorUsuario(Long idUsuario);
 }

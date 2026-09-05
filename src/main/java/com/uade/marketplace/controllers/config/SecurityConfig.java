@@ -35,10 +35,15 @@ public class SecurityConfig {
                         // Navegar el catalogo sin loguearse
                         .requestMatchers(HttpMethod.GET, "/turnos/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/canchas/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/ofertas/**").permitAll()
 
                         // Solo ADMIN
                         .requestMatchers("/admin/**").hasAnyAuthority(Rol.ADMIN.name())
-
+                        .requestMatchers("/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
+                        
                         // Cualquier usuario autenticado (USUARIO o ADMIN)
                         .anyRequest().authenticated())
                         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

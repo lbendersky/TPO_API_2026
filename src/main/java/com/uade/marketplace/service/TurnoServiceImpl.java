@@ -1,19 +1,25 @@
 package com.uade.marketplace.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.marketplace.dto.request.TurnoRequest;
+import com.uade.marketplace.dto.response.TurnoResponse;
 import com.uade.marketplace.entity.Cancha;
+import com.uade.marketplace.entity.Oferta;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoTurno;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
+import com.uade.marketplace.repository.OfertaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
 
@@ -29,24 +35,69 @@ public class TurnoServiceImpl implements TurnoService {
     @Autowired
     private CanchaRepository canchaRepository;
 
-    @Override
-    public List<Turno> getTurnos() {
-        return turnoRepository.findAll();
+    @Autowired
+    private OfertaRepository ofertaRepository;
+
+    private TurnoResponse convertirATurnoResponse(Turno t, Map<Long, Oferta> mapaOfertas) {
+        // La validación de fechas DESAPARECE. Si está en el mapa, está activa.
+        Oferta ofertaActiva = mapaOfertas.get(t.getIdTurno());
+
+        Double porcentaje = null;
+        Float precioConDescuento = null;
+        boolean tieneOferta = false;
+
+        if (ofertaActiva != null) {
+            porcentaje = ofertaActiva.getPorcentajeDescuento();
+            precioConDescuento = t.getPrecioPorJugador() - (t.getPrecioPorJugador() * (porcentaje.floatValue() / 100.0f));
+            tieneOferta = true;
+        } else {
+            precioConDescuento = t.getPrecioPorJugador();
+        }
+
+        return TurnoResponse.from(t, porcentaje, precioConDescuento, tieneOferta);
+    }
+
+    private List<TurnoResponse> mapear(List<Turno> turnos) {
+        if (turnos.isEmpty()) return List.of();
+        LocalDate hoy = LocalDate.now(); 
+        List<Oferta> ofertasActivas = ofertaRepository.findActivas(hoy);
+        Map<Long, Oferta> mapaOfertas = ofertasActivas.stream()
+                .filter(o -> o.getTurno() != null)
+                .collect(Collectors.toMap(
+                        o -> o.getTurno().getIdTurno(), 
+                        o -> o, 
+                        (o1, o2) -> o1.getPorcentajeDescuento() >= o2.getPorcentajeDescuento() ? o1 : o2
+                ));
+
+        return turnos.stream()
+                .map(t -> convertirATurnoResponse(t, mapaOfertas))
+                .toList();
     }
 
     @Override
-    public Optional<Turno> getTurnoById(Long turnoId) {
-        return turnoRepository.findById(turnoId);
+    public List<TurnoResponse> getTurnos() {
+        return mapear(turnoRepository.findAll());
     }
 
     @Override
-    public List<Turno> getTurnosPorCancha(Long idCancha) {
-        return turnoRepository.findByCancha_IdCancha(idCancha);
+    public Optional<TurnoResponse> getTurnoById(Long turnoId) {
+        return turnoRepository.findById(turnoId)
+                .map(t -> mapear(List.of(t)).get(0));
     }
 
     @Override
-    public List<Turno> getTurnosDisponibles() {
-        return turnoRepository.findByLugaresDisponiblesGreaterThan(0);
+    public List<TurnoResponse> getTurnosPorCancha(Long idCancha) {
+        return mapear(turnoRepository.findByCancha_IdCancha(idCancha));
+    }
+
+    @Override
+    public List<TurnoResponse> getTurnosDisponibles() {
+        return mapear(turnoRepository.findByLugaresDisponiblesGreaterThan(0));
+    }
+
+    @Override
+    public List<TurnoResponse> getTurnosPorUsuario(Long idUsuario) {
+        return mapear(turnoRepository.findByUsuario_IdUsuario(idUsuario));
     }
 
     @Override
@@ -102,10 +153,5 @@ public class TurnoServiceImpl implements TurnoService {
         turnoActualizado.setUsuario(usuario);
         turnoActualizado.setCancha(cancha);
         return turnoRepository.save(turnoActualizado);
-    }
-
-    @Override
-    public List<Turno> getTurnosPorUsuario(Long idUsuario) {
-        return turnoRepository.findByUsuario_IdUsuario(idUsuario);
     }
 }
