@@ -29,47 +29,48 @@ public class TurnoController {
     @Autowired
     private TurnoService turnoService;
 
+    // Los GET consumen directo del servicio porque ya devuelven el TurnoResponse con descuento
     @GetMapping
     public List<TurnoResponse> getTurnos() {
-        return turnoService.getTurnos().stream().map(TurnoResponse::from).toList();
+        return turnoService.getTurnos();
     }
 
     @GetMapping("/{turnoId}")
     public ResponseEntity<TurnoResponse> getTurnoById(@PathVariable Long turnoId) {
-        Optional<Turno> result = turnoService.getTurnoById(turnoId);
+        Optional<TurnoResponse> result = turnoService.getTurnoById(turnoId);
         if (result.isPresent())
-            return ResponseEntity.ok(TurnoResponse.from(result.get()));
+            return ResponseEntity.ok(result.get());
 
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/cancha/{canchaId}")
     public List<TurnoResponse> getTurnosPorCancha(@PathVariable Long canchaId) {
-        return turnoService.getTurnosPorCancha(canchaId).stream().map(TurnoResponse::from).toList();
+        return turnoService.getTurnosPorCancha(canchaId);
     }
 
     @GetMapping("/disponibles")
     public List<TurnoResponse> getTurnosDisponibles() {
-        return turnoService.getTurnosDisponibles().stream().map(TurnoResponse::from).toList();
+        return turnoService.getTurnosDisponibles();
     }
 
     @GetMapping("/usuario/{usuarioId}")
     public List<TurnoResponse> getTurnosPorUsuario(@PathVariable Long usuarioId) {
-        return turnoService.getTurnosPorUsuario(usuarioId).stream().map(TurnoResponse::from).toList();
+        return turnoService.getTurnosPorUsuario(usuarioId);
     }
-    
 
+    // Métodos de escritura que devuelven la entidad limpiamente
     @PostMapping
-    public ResponseEntity<TurnoResponse> createTurno(@RequestBody TurnoRequest turnoRequest)
+    public ResponseEntity<Turno> createTurno(@RequestBody TurnoRequest turnoRequest)
             throws TurnoDuplicateException {
         Turno result = turnoService.crearTurno(turnoRequest);
         return ResponseEntity.created(URI.create("/turnos/" + result.getIdTurno()))
-                .body(TurnoResponse.from(result));
+                .body(result);
     }
 
     @PutMapping("/{turnoId}")
-    public TurnoResponse actualizar(@PathVariable Long turnoId, @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
-        return TurnoResponse.from(turnoService.actualizarTurno(turnoId, turno));
+    public Turno actualizar(@PathVariable Long turnoId, @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
+        return turnoService.actualizarTurno(turnoId, turno);
     }
 
     @DeleteMapping("/{turnoId}")
