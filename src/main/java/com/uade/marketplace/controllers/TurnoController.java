@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import com.uade.marketplace.dto.request.TurnoRequest;
 import com.uade.marketplace.dto.response.TurnoResponse;
 import com.uade.marketplace.entity.Turno;
+import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.service.TurnoService;
@@ -61,21 +64,47 @@ public class TurnoController {
 
     // Métodos de escritura que devuelven la entidad limpiamente
     @PostMapping
-    public ResponseEntity<Turno> createTurno(@RequestBody TurnoRequest turnoRequest)
+    public ResponseEntity<Turno> createTurno(@AuthenticationPrincipal Usuario actor,
+                                             @RequestBody TurnoRequest turnoRequest)
             throws TurnoDuplicateException {
-        Turno result = turnoService.crearTurno(turnoRequest);
+        Turno result = turnoService.crearTurno(turnoRequest, actor);
         return ResponseEntity.created(URI.create("/turnos/" + result.getIdTurno()))
                 .body(result);
     }
 
     @PutMapping("/{turnoId}")
-    public Turno actualizar(@PathVariable Long turnoId, @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
-        return turnoService.actualizarTurno(turnoId, turno);
+    public Turno actualizar(@AuthenticationPrincipal Usuario actor,
+                            @PathVariable Long turnoId,
+                            @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
+        return turnoService.actualizarTurno(turnoId, turno, actor);
+    }
+
+    @PutMapping("/{turnoId}/imagen")
+    public Turno setImagen(@AuthenticationPrincipal Usuario actor,
+                           @PathVariable Long turnoId,
+                           @RequestBody java.util.Map<String, String> body) throws RecursoNoEncontradoException {
+        return turnoService.setImagen(turnoId, body.get("imagenPath"), actor);
+    }
+
+    @PutMapping("/{turnoId}/stock")
+    public Turno actualizarStock(@AuthenticationPrincipal Usuario actor,
+                                 @PathVariable Long turnoId,
+                                 @RequestBody java.util.Map<String, Integer> body) throws RecursoNoEncontradoException {
+        return turnoService.actualizarStock(turnoId, body.get("lugaresDisponibles"), actor);
+    }
+
+    @GetMapping("/filtrar")
+    public List<TurnoResponse> filtrar(
+            @org.springframework.web.bind.annotation.RequestParam(required = false) com.uade.marketplace.entity.enums.TipoFutbol tipoFutbol,
+            @org.springframework.web.bind.annotation.RequestParam(required = false) Float precioMin,
+            @org.springframework.web.bind.annotation.RequestParam(required = false) Float precioMax) {
+        return turnoService.filtrar(tipoFutbol, precioMin, precioMax);
     }
 
     @DeleteMapping("/{turnoId}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long turnoId) throws RecursoNoEncontradoException {
-        turnoService.eliminarTurno(turnoId);
+    public ResponseEntity<Void> eliminar(@AuthenticationPrincipal Usuario actor,
+                                         @PathVariable Long turnoId) throws RecursoNoEncontradoException {
+        turnoService.eliminarTurno(turnoId, actor);
         return ResponseEntity.noContent().build();
     }
 }

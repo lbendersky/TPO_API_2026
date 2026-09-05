@@ -16,7 +16,10 @@ import com.uade.marketplace.entity.Oferta;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoTurno;
+import com.uade.marketplace.entity.enums.Rol;
+import com.uade.marketplace.entity.enums.TipoFutbol;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import org.springframework.security.access.AccessDeniedException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.OfertaRepository;
@@ -100,9 +103,15 @@ public class TurnoServiceImpl implements TurnoService {
         return mapear(turnoRepository.findByUsuario_IdUsuario(idUsuario));
     }
 
+    private void validarOwnership(Turno turno, Usuario actor) {
+        if (actor.getRol() == Rol.ADMIN) return;
+        if (turno.getUsuario() == null || !turno.getUsuario().getIdUsuario().equals(actor.getIdUsuario()))
+            throw new AccessDeniedException("No sos el dueño de este turno");
+    }
+
     @Override
-    public Turno crearTurno(TurnoRequest turnoRequest) throws TurnoDuplicateException {
-        Usuario usuario = usuarioRepository.findById(turnoRequest.getIdUsuario())
+    public Turno crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException {
+        Usuario usuario = usuarioRepository.findById(actor.getIdUsuario())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
                 .orElseThrow(() -> new IllegalArgumentException("Cancha no encontrada"));
@@ -118,6 +127,7 @@ public class TurnoServiceImpl implements TurnoService {
             .lugaresDisponibles(turnoRequest.getLugaresDisponibles())
             .precioPorJugador(turnoRequest.getPrecioPorJugador())
             .descripcion(turnoRequest.getDescripcion())
+            .imagenPath(turnoRequest.getImagenPath())
             .estado(EstadoTurno.INCOMPLETO)
             .usuario(usuario)
             .cancha(cancha)
@@ -126,32 +136,56 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public void eliminarTurno(Long idTurno) throws RecursoNoEncontradoException {
-        if (!turnoRepository.existsById(idTurno))
-            throw new RecursoNoEncontradoException("No existe el turno " + idTurno);
-
-        turnoRepository.deleteById(idTurno);
+    public void eliminarTurno(Long idTurno, Usuario actor) throws RecursoNoEncontradoException {
+        Turno turno = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        validarOwnership(turno, actor);
+        turnoRepository.delete(turno);
     }
 
     @Override
-    public Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest) throws RecursoNoEncontradoException {
-        Optional<Turno> turnoExistente = turnoRepository.findById(idTurno);
-        if (turnoExistente.isEmpty())
-            throw new RecursoNoEncontradoException("No existe el turno");
+    public Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException {
+        Turno turnoActualizado = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno"));
+        validarOwnership(turnoActualizado, actor);
 
-        Usuario usuario = usuarioRepository.findById(turnoRequest.getIdUsuario())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico un usuario"));
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico una cancha"));
 
-        Turno turnoActualizado = turnoExistente.get();
         turnoActualizado.setFechaHora(turnoRequest.getFechaHora());
         turnoActualizado.setTipoFutbol(turnoRequest.getTipoFutbol());
         turnoActualizado.setLugaresDisponibles(turnoRequest.getLugaresDisponibles());
         turnoActualizado.setDescripcion(turnoRequest.getDescripcion());
+        turnoActualizado.setImagenPath(turnoRequest.getImagenPath());
         turnoActualizado.setPrecioPorJugador(turnoRequest.getPrecioPorJugador());
-        turnoActualizado.setUsuario(usuario);
         turnoActualizado.setCancha(cancha);
         return turnoRepository.save(turnoActualizado);
+    }
+
+    @Override
+    public Turno setImagen(Long idTurno, String imagenPath, Usuario actor) throws RecursoNoEncontradoException {
+        Turno turno = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        validarOwnership(turno, actor);
+        turno.setImagenPath(imagenPath);
+        return turnoRepository.save(turno);
+    }
+
+    @Override
+    public Turno actualizarStock(Long idTurno, Integer lugaresDisponibles, Usuario actor) throws RecursoNoEncontradoException {
+        if (lugaresDisponibles == null || lugaresDisponibles < 0)
+            throw new IllegalArgumentException("lugaresDisponibles debe ser >= 0");
+
+        Turno turno = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        validarOwnership(turno, actor);
+        turno.setLugaresDisponibles(lugaresDisponibles);
+        turno.setEstado(lugaresDisponibles == 0 ? EstadoTurno.LLENO : EstadoTurno.INCOMPLETO);
+        return turnoRepository.save(turno);
+    }
+
+    @Override
+    public List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax) {
+        return mapear(turnoRepository.filtrar(tipoFutbol, precioMin, precioMax));
     }
 }

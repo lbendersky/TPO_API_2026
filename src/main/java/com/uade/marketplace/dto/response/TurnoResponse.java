@@ -16,6 +16,7 @@ public class TurnoResponse {
     private Integer lugaresDisponibles;
     private Float precioPorJugador;
     private String descripcion;
+    private String imagenPath;
     private EstadoTurno estado;
     private String nombreCancha;
     private String localidad;
@@ -32,6 +33,7 @@ public class TurnoResponse {
                 t.getLugaresDisponibles(),
                 t.getPrecioPorJugador(),
                 t.getDescripcion(),
+                t.getImagenPath(),
                 t.getEstado(),
                 t.getCancha() != null ? t.getCancha().getNombre() : null,
                 t.getCancha() != null && t.getCancha().getLocalidad() != null ? t.getCancha().getLocalidad().getNombre() : null,

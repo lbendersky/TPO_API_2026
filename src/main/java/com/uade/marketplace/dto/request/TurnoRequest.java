@@ -13,6 +13,7 @@ public class TurnoRequest {
     private int lugaresDisponibles;
     private float precioPorJugador;
     private String descripcion;
+    private String imagenPath;
     private Long idUsuario;
     private Long idCancha;
 }
