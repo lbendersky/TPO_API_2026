@@ -12,6 +12,7 @@ public class UsuarioResponse {
     private Long idUsuario;
     private String nombreUsuario;
     private String nombre;
+    private String apellido;
     private String email;
     private String telefono;
     private Rol rol;
@@ -21,6 +22,7 @@ public class UsuarioResponse {
                 u.getIdUsuario(),
                 u.getNombreUsuario(),
                 u.getNombre(),
+                u.getApellido(),
                 u.getEmail(),
                 u.getTelefono(),
                 u.getRol()

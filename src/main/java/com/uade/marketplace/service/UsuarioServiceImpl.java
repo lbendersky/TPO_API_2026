@@ -32,6 +32,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioActualizado.setNombreUsuario(usuario.getNombreUsuario());
         usuarioActualizado.setDni(usuario.getDni());
         usuarioActualizado.setNombre(usuario.getNombre());
+        usuarioActualizado.setApellido(usuario.getApellido());
         usuarioActualizado.setEmail(usuario.getEmail());
         usuarioActualizado.setContrasena(usuario.getContrasena());
         usuarioActualizado.setTelefono(usuario.getTelefono());
