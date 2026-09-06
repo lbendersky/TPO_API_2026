@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.marketplace.entity.Inscripcion;
 import com.uade.marketplace.entity.Turno;
@@ -36,7 +37,18 @@ public class InscripcionServiceImpl implements InscripcionService{
         return inscripcionRepository.findById(idInscripcion);
     }
 
-     @Override
+    @Override
+    public List<Inscripcion> getPorUsuario(Long idUsuario) {
+        return inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario);
+    }
+
+    @Override
+    public List<Inscripcion> getPorTurno(Long idTurno) {
+        return inscripcionRepository.findByTurno_IdTurno(idTurno);
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    @Override
     public Inscripcion crear(Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {
         if (inscripcion.getTurno() == null || inscripcion.getTurno().getIdTurno() == null)
             throw new RecursoNoEncontradoException("Falta indicar el turno de la inscripcion");

@@ -1,4 +1,4 @@
-package com.uade.marketplace.entity.DTO;
+package com.uade.marketplace.dto.request;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +12,8 @@ public class TurnoRequest {
     private TipoFutbol tipoFutbol;
     private int lugaresDisponibles;
     private float precioPorJugador;
+    private String descripcion;
+    private String imagenPath;
     private Long idUsuario;
     private Long idCancha;
 }

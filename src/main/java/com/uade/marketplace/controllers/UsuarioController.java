@@ -7,12 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.marketplace.dto.response.UsuarioResponse;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.service.UsuarioService;
@@ -20,39 +21,36 @@ import com.uade.marketplace.service.UsuarioService;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    @Autowired private UsuarioService UsuarioService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("")
-    public List<Usuario> getAll() {
-        return UsuarioService.getAll();
+    public List<UsuarioResponse> getAll() {
+        return usuarioService.getAll().stream().map(UsuarioResponse::from).toList();
     }
-    
+
     @GetMapping("/{usuarioId}")
-    public ResponseEntity<Usuario> getById(@PathVariable Long usuarioId) {
-        return UsuarioService.getById(usuarioId)
-            .map(ResponseEntity::ok)
+    public ResponseEntity<UsuarioResponse> getById(@PathVariable Long usuarioId) {
+        return usuarioService.getById(usuarioId)
+            .map(u -> ResponseEntity.ok(UsuarioResponse.from(u)))
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Usuario> buscarPorEmail(@PathVariable String email) {
-        return UsuarioService.buscarPorEmail(email)
-            .map(ResponseEntity::ok)
+
+    @GetMapping(params = "email")
+    public ResponseEntity<UsuarioResponse> buscarPorEmail(@RequestParam String email) {
+        return usuarioService.buscarPorEmail(email)
+            .map(u -> ResponseEntity.ok(UsuarioResponse.from(u)))
             .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-    
-    @PostMapping("")
-    public Usuario crear(@RequestBody Usuario usuario) {
-        return UsuarioService.crear(usuario);
     }
 
     @PutMapping("/{usuarioId}")
-    public Usuario actualizar(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws RecursoNoEncontradoException {
-        return UsuarioService.actualizar(usuarioId, usuario);
+    public UsuarioResponse actualizar(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws RecursoNoEncontradoException {
+        return UsuarioResponse.from(usuarioService.actualizar(usuarioId, usuario));
     }
 
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<Void> eliminar(@PathVariable Long usuarioId) {
-        UsuarioService.eliminar(usuarioId);
+        usuarioService.eliminar(usuarioId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -3,6 +3,7 @@ package com.uade.marketplace.entity;
 import java.time.LocalDateTime;
 
 import com.uade.marketplace.entity.enums.EstadoTurno;
+import com.uade.marketplace.entity.enums.TipoFutbol;
 
 import jakarta.persistence.CheckConstraint;
 import jakarta.persistence.Column;
@@ -14,24 +15,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Turno {
-
-    public Turno() {}
-
-    public Turno(LocalDateTime fechaHora, String tipoFutbol, Integer lugaresDisponibles,
-                Float precioPorJugador, Usuario usuario, Cancha cancha) {
-        this.fechaHora = fechaHora;
-        this.tipoFutbol = tipoFutbol;
-        this.lugaresDisponibles = lugaresDisponibles;
-        this.precioPorJugador = precioPorJugador;
-        this.estado = EstadoTurno.INCOMPLETO;
-        this.usuario = usuario;
-        this.cancha = cancha;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,14 +34,21 @@ public class Turno {
     @Column(name = "fecha_hora")
     private LocalDateTime fechaHora;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_futbol")
-    private String tipoFutbol;
+    private TipoFutbol tipoFutbol;
 
     @Column(name = "lugares_disponibles")
     private Integer lugaresDisponibles;
 
     @Column(name = "precio_por_jugador")
     private Float precioPorJugador;
+
+    @Column
+    private String descripcion;
+
+    @Column(name = "imagen_path")
+    private String imagenPath;
 
     @Enumerated(EnumType.STRING)
     @Column(check = @CheckConstraint(name = "chequear_estado_turno", constraint = "estado IN ('INCOMPLETO', 'LLENO', 'EN_PROCESO')"))

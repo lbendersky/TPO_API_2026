@@ -1,20 +1,28 @@
 package com.uade.marketplace.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.uade.marketplace.dto.request.TurnoRequest;
+import com.uade.marketplace.dto.response.TurnoResponse;
 import com.uade.marketplace.entity.Cancha;
-import com.uade.marketplace.entity.DTO.TurnoRequest;
+import com.uade.marketplace.entity.Oferta;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
+import com.uade.marketplace.entity.enums.EstadoTurno;
+import com.uade.marketplace.entity.enums.Rol;
+import com.uade.marketplace.entity.enums.TipoFutbol;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import org.springframework.security.access.AccessDeniedException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
+import com.uade.marketplace.repository.OfertaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
 
@@ -30,19 +38,80 @@ public class TurnoServiceImpl implements TurnoService {
     @Autowired
     private CanchaRepository canchaRepository;
 
-    @Override
-    public Page<Turno> getTurnos(PageRequest pageRequest) {
-        return turnoRepository.findAll(pageRequest);
+    @Autowired
+    private OfertaRepository ofertaRepository;
+
+    private TurnoResponse convertirATurnoResponse(Turno t, Map<Long, Oferta> mapaOfertas) {
+        // La validación de fechas DESAPARECE. Si está en el mapa, está activa.
+        Oferta ofertaActiva = mapaOfertas.get(t.getIdTurno());
+
+        Double porcentaje = null;
+        Float precioConDescuento = null;
+        boolean tieneOferta = false;
+
+        if (ofertaActiva != null) {
+            porcentaje = ofertaActiva.getPorcentajeDescuento();
+            precioConDescuento = t.getPrecioPorJugador() - (t.getPrecioPorJugador() * (porcentaje.floatValue() / 100.0f));
+            tieneOferta = true;
+        } else {
+            precioConDescuento = t.getPrecioPorJugador();
+        }
+
+        return TurnoResponse.from(t, porcentaje, precioConDescuento, tieneOferta);
+    }
+
+    private List<TurnoResponse> mapear(List<Turno> turnos) {
+        if (turnos.isEmpty()) return List.of();
+        LocalDate hoy = LocalDate.now(); 
+        List<Oferta> ofertasActivas = ofertaRepository.findActivas(hoy);
+        Map<Long, Oferta> mapaOfertas = ofertasActivas.stream()
+                .filter(o -> o.getTurno() != null)
+                .collect(Collectors.toMap(
+                        o -> o.getTurno().getIdTurno(), 
+                        o -> o, 
+                        (o1, o2) -> o1.getPorcentajeDescuento() >= o2.getPorcentajeDescuento() ? o1 : o2
+                ));
+
+        return turnos.stream()
+                .map(t -> convertirATurnoResponse(t, mapaOfertas))
+                .toList();
     }
 
     @Override
-    public Optional<Turno> getTurnoById(Long turnoId) {
-        return turnoRepository.findById(turnoId);
+    public List<TurnoResponse> getTurnos() {
+        return mapear(turnoRepository.findAll());
     }
 
     @Override
-    public Turno crearTurno(TurnoRequest turnoRequest) throws TurnoDuplicateException {
-        Usuario usuario = usuarioRepository.findById(turnoRequest.getIdUsuario())
+    public Optional<TurnoResponse> getTurnoById(Long turnoId) {
+        return turnoRepository.findById(turnoId)
+                .map(t -> mapear(List.of(t)).get(0));
+    }
+
+    @Override
+    public List<TurnoResponse> getTurnosPorCancha(Long idCancha) {
+        return mapear(turnoRepository.findByCancha_IdCancha(idCancha));
+    }
+
+    @Override
+    public List<TurnoResponse> getTurnosDisponibles() {
+        return mapear(turnoRepository.findByLugaresDisponiblesGreaterThan(0));
+    }
+
+    @Override
+    public List<TurnoResponse> getTurnosPorUsuario(Long idUsuario) {
+        return mapear(turnoRepository.findByUsuario_IdUsuario(idUsuario));
+    }
+
+    private void validarOwnership(Turno turno, Usuario actor) {
+        if (actor.getRol() == Rol.ADMIN) return;
+        if (turno.getUsuario() == null || !turno.getUsuario().getIdUsuario().equals(actor.getIdUsuario()))
+            throw new AccessDeniedException("No sos el dueño de este turno");
+    }
+
+    @Override
+    public Turno crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException {
+        Usuario usuario = usuarioRepository.findById(actor.getIdUsuario())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
                 .orElseThrow(() -> new IllegalArgumentException("Cancha no encontrada"));
@@ -52,43 +121,71 @@ public class TurnoServiceImpl implements TurnoService {
         if (!turnosExistentes.isEmpty())
             throw new TurnoDuplicateException();
 
-        Turno turno = new Turno(
-                turnoRequest.getFechaHora(),
-                turnoRequest.getTipoFutbol().name(),
-                turnoRequest.getLugaresDisponibles(),
-                turnoRequest.getPrecioPorJugador(),
-                usuario,
-                cancha
-        );
+        Turno turno = Turno.builder()
+            .fechaHora(turnoRequest.getFechaHora())
+            .tipoFutbol(turnoRequest.getTipoFutbol())
+            .lugaresDisponibles(turnoRequest.getLugaresDisponibles())
+            .precioPorJugador(turnoRequest.getPrecioPorJugador())
+            .descripcion(turnoRequest.getDescripcion())
+            .imagenPath(turnoRequest.getImagenPath())
+            .estado(EstadoTurno.INCOMPLETO)
+            .usuario(usuario)
+            .cancha(cancha)
+            .build();
         return turnoRepository.save(turno);
     }
 
     @Override
-    public void eliminarTurno(Long idTurno) throws RecursoNoEncontradoException {
-        if (!turnoRepository.existsById(idTurno))
-            throw new RecursoNoEncontradoException("No existe el turno " + idTurno);
-
-        turnoRepository.deleteById(idTurno);
+    public void eliminarTurno(Long idTurno, Usuario actor) throws RecursoNoEncontradoException {
+        Turno turno = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        validarOwnership(turno, actor);
+        turnoRepository.delete(turno);
     }
 
     @Override
-    public Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest) throws RecursoNoEncontradoException {
-        Optional<Turno> turnoExistente = turnoRepository.findById(idTurno);
-        if (turnoExistente.isEmpty())
-            throw new RecursoNoEncontradoException("No existe el turno");
+    public Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException {
+        Turno turnoActualizado = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno"));
+        validarOwnership(turnoActualizado, actor);
 
-        Usuario usuario = usuarioRepository.findById(turnoRequest.getIdUsuario())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico un usuario"));
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico una cancha"));
 
-        Turno turnoActualizado = turnoExistente.get();
         turnoActualizado.setFechaHora(turnoRequest.getFechaHora());
-        turnoActualizado.setTipoFutbol(turnoRequest.getTipoFutbol().name());
+        turnoActualizado.setTipoFutbol(turnoRequest.getTipoFutbol());
         turnoActualizado.setLugaresDisponibles(turnoRequest.getLugaresDisponibles());
+        turnoActualizado.setDescripcion(turnoRequest.getDescripcion());
+        turnoActualizado.setImagenPath(turnoRequest.getImagenPath());
         turnoActualizado.setPrecioPorJugador(turnoRequest.getPrecioPorJugador());
-        turnoActualizado.setUsuario(usuario);
         turnoActualizado.setCancha(cancha);
         return turnoRepository.save(turnoActualizado);
-    }   
+    }
+
+    @Override
+    public Turno setImagen(Long idTurno, String imagenPath, Usuario actor) throws RecursoNoEncontradoException {
+        Turno turno = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        validarOwnership(turno, actor);
+        turno.setImagenPath(imagenPath);
+        return turnoRepository.save(turno);
+    }
+
+    @Override
+    public Turno actualizarStock(Long idTurno, Integer lugaresDisponibles, Usuario actor) throws RecursoNoEncontradoException {
+        if (lugaresDisponibles == null || lugaresDisponibles < 0)
+            throw new IllegalArgumentException("lugaresDisponibles debe ser >= 0");
+
+        Turno turno = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        validarOwnership(turno, actor);
+        turno.setLugaresDisponibles(lugaresDisponibles);
+        turno.setEstado(lugaresDisponibles == 0 ? EstadoTurno.LLENO : EstadoTurno.INCOMPLETO);
+        return turnoRepository.save(turno);
+    }
+
+    @Override
+    public List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax) {
+        return mapear(turnoRepository.filtrar(tipoFutbol, precioMin, precioMax));
+    }
 }

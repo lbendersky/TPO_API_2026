@@ -26,17 +26,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario crear(Usuario usuario) {
-        return usuarioRepository.save(usuario);
-    }
-
-    @Override
     public Usuario actualizar(Long idUsuario, Usuario usuario) throws RecursoNoEncontradoException{
-        Optional<Usuario> usuarioExistente = usuarioRepository.findById(idUsuario);
-        Usuario usuarioActualizado = usuarioExistente.get();
+        Usuario usuarioActualizado = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + idUsuario));
         usuarioActualizado.setNombreUsuario(usuario.getNombreUsuario());
         usuarioActualizado.setDni(usuario.getDni());
         usuarioActualizado.setNombre(usuario.getNombre());
+        usuarioActualizado.setApellido(usuario.getApellido());
         usuarioActualizado.setEmail(usuario.getEmail());
         usuarioActualizado.setContrasena(usuario.getContrasena());
         usuarioActualizado.setTelefono(usuario.getTelefono());
