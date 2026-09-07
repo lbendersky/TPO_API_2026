@@ -1,12 +1,12 @@
 package com.uade.marketplace.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.uade.marketplace.dto.request.TurnoRequest;
@@ -19,10 +19,8 @@ import com.uade.marketplace.entity.enums.EstadoTurno;
 import com.uade.marketplace.entity.enums.Rol;
 import com.uade.marketplace.entity.enums.TipoFutbol;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
-import org.springframework.security.access.AccessDeniedException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
-import com.uade.marketplace.repository.OfertaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
 
@@ -98,7 +96,7 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public Turno crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException {
+    public TurnoResponse crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException {
         Usuario usuario = usuarioRepository.findById(actor.getIdUsuario())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
@@ -120,7 +118,8 @@ public class TurnoServiceImpl implements TurnoService {
             .usuario(usuario)
             .cancha(cancha)
             .build();
-        return turnoRepository.save(turno);
+        Turno guardado = turnoRepository.save(turno);
+        return mapear(List.of(guardado)).get(0);
     }
 
     @Override
@@ -131,8 +130,8 @@ public class TurnoServiceImpl implements TurnoService {
         turnoRepository.delete(turno);
     }
 
-    @Override
-    public Turno actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException {
+        @Override
+    public TurnoResponse actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException {
         Turno turnoActualizado = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno"));
         validarOwnership(turnoActualizado, actor);
@@ -147,20 +146,22 @@ public class TurnoServiceImpl implements TurnoService {
         turnoActualizado.setImagenPath(turnoRequest.getImagenPath());
         turnoActualizado.setPrecioPorJugador(turnoRequest.getPrecioPorJugador());
         turnoActualizado.setCancha(cancha);
-        return turnoRepository.save(turnoActualizado);
+        Turno guardado = turnoRepository.save(turnoActualizado);
+        return mapear(List.of(guardado)).get(0);
     }
 
     @Override
-    public Turno setImagen(Long idTurno, String imagenPath, Usuario actor) throws RecursoNoEncontradoException {
+    public TurnoResponse setImagen(Long idTurno, String imagenPath, Usuario actor) throws RecursoNoEncontradoException {
         Turno turno = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
         validarOwnership(turno, actor);
         turno.setImagenPath(imagenPath);
-        return turnoRepository.save(turno);
+        Turno guardado = turnoRepository.save(turno);
+        return mapear(List.of(guardado)).get(0);
     }
 
     @Override
-    public Turno actualizarStock(Long idTurno, Integer lugaresDisponibles, Usuario actor) throws RecursoNoEncontradoException {
+    public TurnoResponse actualizarStock(Long idTurno, Integer lugaresDisponibles, Usuario actor) throws RecursoNoEncontradoException {
         if (lugaresDisponibles == null || lugaresDisponibles < 0)
             throw new IllegalArgumentException("lugaresDisponibles debe ser >= 0");
 
@@ -169,7 +170,8 @@ public class TurnoServiceImpl implements TurnoService {
         validarOwnership(turno, actor);
         turno.setLugaresDisponibles(lugaresDisponibles);
         turno.setEstado(lugaresDisponibles == 0 ? EstadoTurno.LLENO : EstadoTurno.INCOMPLETO);
-        return turnoRepository.save(turno);
+        Turno guardado = turnoRepository.save(turno);
+        return mapear(List.of(guardado)).get(0);
     }
 
     @Override
