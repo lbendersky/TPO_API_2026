@@ -50,12 +50,16 @@ public class CanchaServiceImpl implements CanchaService {
 
     @Override
     public CanchaResponse publicar(Cancha cancha) throws RecursoNoEncontradoException {
+        if (cancha.getTipoFutbol() == null)
+            throw new IllegalArgumentException("Debe indicar el tipo de futbol de la cancha");
+
         Usuario publicador = usuarioRepository.findById(cancha.getPublicador().getIdUsuario())
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + cancha.getPublicador().getIdUsuario()));
         Localidad localidad = localidadRepository.findById(cancha.getLocalidad().getIdLocalidad())
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe la localidad " + cancha.getLocalidad().getIdLocalidad()));
         cancha.setPublicador(publicador);
         cancha.setLocalidad(localidad);
+        cancha.setCantidadJugadores(cancha.getTipoFutbol().getCantidadJugadores());
         if (cancha.getActiva() == null)
             cancha.setActiva(true);
         return CanchaResponse.from(canchaRepository.save(cancha));
@@ -63,6 +67,9 @@ public class CanchaServiceImpl implements CanchaService {
 
     @Override
     public CanchaResponse actualizar(Long idCancha, Cancha cancha) throws RecursoNoEncontradoException {
+        if (cancha.getTipoFutbol() == null)
+            throw new IllegalArgumentException("Debe indicar el tipo de futbol de la cancha");
+
         Cancha existente = canchaRepository.findById(idCancha)
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe la cancha " + idCancha));
         Localidad localidad = localidadRepository.findById(cancha.getLocalidad().getIdLocalidad())
@@ -71,9 +78,10 @@ public class CanchaServiceImpl implements CanchaService {
         existente.setDireccion(cancha.getDireccion());
         existente.setLocalidad(localidad);
         existente.setTipoSuperficie(cancha.getTipoSuperficie());
+        existente.setTipoFutbol(cancha.getTipoFutbol());
         existente.setPrecioUnitario(cancha.getPrecioUnitario());
         existente.setDescripcion(cancha.getDescripcion());
-        existente.setCantidadJugadores(cancha.getCantidadJugadores());
+        existente.setCantidadJugadores(cancha.getTipoFutbol().getCantidadJugadores());
         return CanchaResponse.from(canchaRepository.save(existente));
     }
 

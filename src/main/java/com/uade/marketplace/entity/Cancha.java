@@ -3,6 +3,7 @@ package com.uade.marketplace.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uade.marketplace.entity.enums.TipoFutbol;
 import com.uade.marketplace.entity.enums.TipoSuperficie;
 
 import jakarta.persistence.Column;
@@ -42,10 +43,14 @@ public class Cancha {
     @Column(nullable = false)
     private TipoSuperficie tipoSuperficie;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_futbol", nullable = false)
+    private TipoFutbol tipoFutbol;
+
     @Column(nullable = false)
     private Double precioUnitario;
 
-    @Column(nullable = false)
+    @Column()
     private Integer cantidadJugadores;
 
     @Column

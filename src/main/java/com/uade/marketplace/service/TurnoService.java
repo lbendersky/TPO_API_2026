@@ -20,8 +20,8 @@ public interface TurnoService {
 
     void eliminarTurno(Long turnoId, Usuario actor) throws RecursoNoEncontradoException;
 
-    TurnoResponse actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException;
-
+    TurnoResponse actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException, TurnoDuplicateException;
+    
     List<TurnoResponse> getTurnosPorCancha(Long idCancha);
 
     List<TurnoResponse> getTurnosDisponibles();

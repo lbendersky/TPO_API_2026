@@ -70,10 +70,10 @@ public class TurnoController {
                 .body(result);
     }
 
-    @PutMapping("/{turnoId}")
+        @PutMapping("/{turnoId}")
     public TurnoResponse actualizar(@AuthenticationPrincipal Usuario actor,
                             @PathVariable Long turnoId,
-                            @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
+                            @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException, TurnoDuplicateException {
         return turnoService.actualizarTurno(turnoId, turno, actor);
     }
 

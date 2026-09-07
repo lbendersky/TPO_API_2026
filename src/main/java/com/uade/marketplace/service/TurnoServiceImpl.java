@@ -109,8 +109,8 @@ public class TurnoServiceImpl implements TurnoService {
 
         Turno turno = Turno.builder()
             .fechaHora(turnoRequest.getFechaHora())
-            .tipoFutbol(turnoRequest.getTipoFutbol())
-            .lugaresDisponibles(turnoRequest.getLugaresDisponibles())
+            .tipoFutbol(cancha.getTipoFutbol())
+            .lugaresDisponibles(cancha.getCantidadJugadores())
             .precioPorJugador(turnoRequest.getPrecioPorJugador())
             .descripcion(turnoRequest.getDescripcion())
             .imagenPath(turnoRequest.getImagenPath())
@@ -130,8 +130,8 @@ public class TurnoServiceImpl implements TurnoService {
         turnoRepository.delete(turno);
     }
 
-        @Override
-    public TurnoResponse actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException {
+    @Override
+    public TurnoResponse actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException, TurnoDuplicateException {
         Turno turnoActualizado = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno"));
         validarOwnership(turnoActualizado, actor);
@@ -139,9 +139,15 @@ public class TurnoServiceImpl implements TurnoService {
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico una cancha"));
 
+        List<Turno> turnosExistentes =
+                turnoRepository.findByCanchaAndFechaHora(cancha, turnoRequest.getFechaHora());
+        boolean chocaConOtroTurno = turnosExistentes.stream()
+                .anyMatch(t -> !t.getIdTurno().equals(idTurno));
+        if (chocaConOtroTurno)
+            throw new TurnoDuplicateException();
+
         turnoActualizado.setFechaHora(turnoRequest.getFechaHora());
-        turnoActualizado.setTipoFutbol(turnoRequest.getTipoFutbol());
-        turnoActualizado.setLugaresDisponibles(turnoRequest.getLugaresDisponibles());
+        turnoActualizado.setTipoFutbol(cancha.getTipoFutbol());
         turnoActualizado.setDescripcion(turnoRequest.getDescripcion());
         turnoActualizado.setImagenPath(turnoRequest.getImagenPath());
         turnoActualizado.setPrecioPorJugador(turnoRequest.getPrecioPorJugador());
