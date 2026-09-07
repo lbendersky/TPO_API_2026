@@ -29,20 +29,20 @@ public class UsuarioController {
 
     @GetMapping("")
     public List<UsuarioResponse> getAll() {
-        return usuarioService.getAll().stream().map(UsuarioResponse::from).toList();
+        return usuarioService.getAll();
     }
 
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioResponse> getById(@PathVariable Long usuarioId) {
         return usuarioService.getById(usuarioId)
-            .map(u -> ResponseEntity.ok(UsuarioResponse.from(u)))
+            .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping(params = "email")
     public ResponseEntity<UsuarioResponse> buscarPorEmail(@RequestParam String email) {
         return usuarioService.buscarPorEmail(email)
-            .map(u -> ResponseEntity.ok(UsuarioResponse.from(u)))
+            .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -51,7 +51,7 @@ public class UsuarioController {
                                       @RequestBody Usuario usuario,
                                       @AuthenticationPrincipal Usuario auth) throws RecursoNoEncontradoException {
         verificarPermiso(auth, usuarioId);
-        return UsuarioResponse.from(usuarioService.actualizar(usuarioId, usuario));
+        return usuarioService.actualizar(usuarioId, usuario);
     }
 
     @DeleteMapping("/{usuarioId}")

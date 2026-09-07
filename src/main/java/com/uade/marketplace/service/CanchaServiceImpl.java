@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.marketplace.dto.response.CanchaResponse;
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Localidad;
 import com.uade.marketplace.entity.Usuario;
@@ -27,28 +28,28 @@ public class CanchaServiceImpl implements CanchaService {
     @Autowired
     private LocalidadRepository localidadRepository;
 
-    @Override
-    public List<Cancha> getAll() {
-        return canchaRepository.findByActivaTrue();
+        @Override
+    public List<CanchaResponse> getAll() {
+        return canchaRepository.findByActivaTrue().stream().map(CanchaResponse::from).toList();
     }
 
     @Override
-    public Optional<Cancha> getById(Long idCancha) {
-        return canchaRepository.findById(idCancha);
+    public Optional<CanchaResponse> getById(Long idCancha) {
+        return canchaRepository.findById(idCancha).map(CanchaResponse::from);
     }
 
     @Override
-    public List<Cancha> buscarPorLocalidad(String localidad) {
-        return canchaRepository.findByLocalidad_Nombre(localidad);
+    public List<CanchaResponse> buscarPorLocalidad(String localidad) {
+        return canchaRepository.findByLocalidad_NombreAndActivaTrue(localidad).stream().map(CanchaResponse::from).toList();
     }
 
     @Override
-    public List<Cancha> buscarPorSuperficie(TipoSuperficie tipoSuperficie) {
-        return canchaRepository.findByTipoSuperficie(tipoSuperficie);
+    public List<CanchaResponse> buscarPorSuperficie(TipoSuperficie tipoSuperficie) {
+        return canchaRepository.findByTipoSuperficieAndActivaTrue(tipoSuperficie).stream().map(CanchaResponse::from).toList();
     }
 
     @Override
-    public Cancha publicar(Cancha cancha) throws RecursoNoEncontradoException {
+    public CanchaResponse publicar(Cancha cancha) throws RecursoNoEncontradoException {
         Usuario publicador = usuarioRepository.findById(cancha.getPublicador().getIdUsuario())
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + cancha.getPublicador().getIdUsuario()));
         Localidad localidad = localidadRepository.findById(cancha.getLocalidad().getIdLocalidad())
@@ -57,11 +58,11 @@ public class CanchaServiceImpl implements CanchaService {
         cancha.setLocalidad(localidad);
         if (cancha.getActiva() == null)
             cancha.setActiva(true);
-        return canchaRepository.save(cancha);
+        return CanchaResponse.from(canchaRepository.save(cancha));
     }
 
     @Override
-    public Cancha actualizar(Long idCancha, Cancha cancha) throws RecursoNoEncontradoException {
+    public CanchaResponse actualizar(Long idCancha, Cancha cancha) throws RecursoNoEncontradoException {
         Cancha existente = canchaRepository.findById(idCancha)
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe la cancha " + idCancha));
         Localidad localidad = localidadRepository.findById(cancha.getLocalidad().getIdLocalidad())
@@ -73,7 +74,7 @@ public class CanchaServiceImpl implements CanchaService {
         existente.setPrecioUnitario(cancha.getPrecioUnitario());
         existente.setDescripcion(cancha.getDescripcion());
         existente.setCantidadJugadores(cancha.getCantidadJugadores());
-        return canchaRepository.save(existente);
+        return CanchaResponse.from(canchaRepository.save(existente));
     }
 
     @Override
@@ -96,12 +97,12 @@ public class CanchaServiceImpl implements CanchaService {
     }
 
     @Override
-    public List<Cancha> getCanchasPorPublicador(Long idUsuario) {
-        return canchaRepository.findByPublicador_IdUsuario(idUsuario);
+    public List<CanchaResponse> getCanchasPorPublicador(Long idUsuario) {
+        return canchaRepository.findByPublicador_IdUsuario(idUsuario).stream().map(CanchaResponse::from).toList();
     }
 
     @Override
-    public List<Cancha> getAllAdmin() {
-        return canchaRepository.findAll();
+    public List<CanchaResponse> getAllAdmin() {
+        return canchaRepository.findAll().stream().map(CanchaResponse::from).toList();
     }
 }
