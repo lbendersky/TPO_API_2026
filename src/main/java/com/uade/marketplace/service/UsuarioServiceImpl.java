@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.uade.marketplace.dto.response.UsuarioResponse;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.repository.UsuarioRepository;
@@ -15,28 +17,33 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
-    public List<Usuario> getAll() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponse> getAll() {
+        return usuarioRepository.findAll().stream().map(UsuarioResponse::from).toList();
     }
 
     @Override
-    public Optional<Usuario> getById(Long idUsuario) {
-        return usuarioRepository.findById(idUsuario);
+    public Optional<UsuarioResponse> getById(Long idUsuario) {
+        return usuarioRepository.findById(idUsuario).map(UsuarioResponse::from);
     }
 
     @Override
-    public Usuario actualizar(Long idUsuario, Usuario usuario) throws RecursoNoEncontradoException{
+    public UsuarioResponse actualizar(Long idUsuario, Usuario usuario) throws RecursoNoEncontradoException{
         Usuario usuarioActualizado = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + idUsuario));
-        usuarioActualizado.setNombreUsuario(usuario.getNombreUsuario());
-        usuarioActualizado.setDni(usuario.getDni());
-        usuarioActualizado.setNombre(usuario.getNombre());
-        usuarioActualizado.setApellido(usuario.getApellido());
-        usuarioActualizado.setEmail(usuario.getEmail());
-        usuarioActualizado.setContrasena(usuario.getContrasena());
-        usuarioActualizado.setTelefono(usuario.getTelefono());
-        return usuarioRepository.save(usuarioActualizado);
+        if (usuario.getNombreUsuario() != null) usuarioActualizado.setNombreUsuario(usuario.getNombreUsuario());
+        if (usuario.getDni() != null) usuarioActualizado.setDni(usuario.getDni());
+        if (usuario.getNombre() != null) usuarioActualizado.setNombre(usuario.getNombre());
+        if (usuario.getApellido() != null) usuarioActualizado.setApellido(usuario.getApellido());
+        if (usuario.getEmail() != null) usuarioActualizado.setEmail(usuario.getEmail());
+        if (usuario.getContrasena() != null && !usuario.getContrasena().isBlank()) {
+            usuarioActualizado.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        }
+        if (usuario.getTelefono() != null) usuarioActualizado.setTelefono(usuario.getTelefono());
+        return UsuarioResponse.from(usuarioRepository.save(usuarioActualizado));
     }
 
     @Override
@@ -45,9 +52,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Optional<Usuario> buscarPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
+    public Optional<UsuarioResponse> buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email).map(UsuarioResponse::from);
     }
-
-    
 }

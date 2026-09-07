@@ -31,42 +31,42 @@ public class CanchaController {
     @Autowired
     private CanchaService canchaService;
 
-    @GetMapping
+        @GetMapping
     public List<CanchaResponse> getAll() {
-        return canchaService.getAll().stream().map(CanchaResponse::from).toList();
+        return canchaService.getAll();
     }
 
     @GetMapping("/{canchaId}")
     public ResponseEntity<CanchaResponse> getById(@PathVariable Long canchaId) {
         return canchaService.getById(canchaId)
-                .map(c -> ResponseEntity.ok(CanchaResponse.from(c)))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/localidad/{localidad}")
     public List<CanchaResponse> buscarPorLocalidad(@PathVariable String localidad) {
-        return canchaService.buscarPorLocalidad(localidad).stream().map(CanchaResponse::from).toList();
+        return canchaService.buscarPorLocalidad(localidad);
     }
 
     @GetMapping("/superficie/{tipoSuperficie}")
     public List<CanchaResponse> buscarPorSuperficie(@PathVariable TipoSuperficie tipoSuperficie) {
-        return canchaService.buscarPorSuperficie(tipoSuperficie).stream().map(CanchaResponse::from).toList();
+        return canchaService.buscarPorSuperficie(tipoSuperficie);
     }
 
     @GetMapping("/usuario/{usuarioId}")
     public List<CanchaResponse> getCanchasPorPublicador(@PathVariable Long usuarioId) {
-        return canchaService.getCanchasPorPublicador(usuarioId).stream().map(CanchaResponse::from).toList();
+        return canchaService.getCanchasPorPublicador(usuarioId);
     }
     
 
     @PostMapping
     public CanchaResponse publicar(@RequestBody Cancha cancha) throws RecursoNoEncontradoException {
-        return CanchaResponse.from(canchaService.publicar(cancha));
+        return canchaService.publicar(cancha);
     }
 
     @PutMapping("/{canchaId}")
     public CanchaResponse actualizar(@PathVariable Long canchaId, @RequestBody Cancha cancha) throws RecursoNoEncontradoException {
-        return CanchaResponse.from(canchaService.actualizar(canchaId, cancha));
+        return canchaService.actualizar(canchaId, cancha);
     }
 
         @DeleteMapping("/{canchaId}")

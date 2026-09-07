@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,11 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 import com.uade.marketplace.dto.request.TurnoRequest;
 import com.uade.marketplace.dto.response.TurnoResponse;
-import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
@@ -62,32 +60,32 @@ public class TurnoController {
         return turnoService.getTurnosPorUsuario(usuarioId);
     }
 
-    // Métodos de escritura que devuelven la entidad limpiamente
+    // Métodos de escritura: devuelven TurnoResponse (DTO), nunca la entidad Turno cruda
     @PostMapping
-    public ResponseEntity<Turno> createTurno(@AuthenticationPrincipal Usuario actor,
+    public ResponseEntity<TurnoResponse> createTurno(@AuthenticationPrincipal Usuario actor,
                                              @RequestBody TurnoRequest turnoRequest)
             throws TurnoDuplicateException {
-        Turno result = turnoService.crearTurno(turnoRequest, actor);
+        TurnoResponse result = turnoService.crearTurno(turnoRequest, actor);
         return ResponseEntity.created(URI.create("/turnos/" + result.getIdTurno()))
                 .body(result);
     }
 
     @PutMapping("/{turnoId}")
-    public Turno actualizar(@AuthenticationPrincipal Usuario actor,
+    public TurnoResponse actualizar(@AuthenticationPrincipal Usuario actor,
                             @PathVariable Long turnoId,
                             @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
         return turnoService.actualizarTurno(turnoId, turno, actor);
     }
 
     @PutMapping("/{turnoId}/imagen")
-    public Turno setImagen(@AuthenticationPrincipal Usuario actor,
+    public TurnoResponse setImagen(@AuthenticationPrincipal Usuario actor,
                            @PathVariable Long turnoId,
                            @RequestBody java.util.Map<String, String> body) throws RecursoNoEncontradoException {
         return turnoService.setImagen(turnoId, body.get("imagenPath"), actor);
     }
 
     @PutMapping("/{turnoId}/stock")
-    public Turno actualizarStock(@AuthenticationPrincipal Usuario actor,
+    public TurnoResponse actualizarStock(@AuthenticationPrincipal Usuario actor,
                                  @PathVariable Long turnoId,
                                  @RequestBody java.util.Map<String, Integer> body) throws RecursoNoEncontradoException {
         return turnoService.actualizarStock(turnoId, body.get("lugaresDisponibles"), actor);

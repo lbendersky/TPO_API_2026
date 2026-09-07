@@ -19,6 +19,6 @@ public class AdminCanchaController {
 
     @GetMapping
     public List<CanchaResponse> getAllAdmin() {
-        return canchaService.getAllAdmin().stream().map(CanchaResponse::from).toList();
+        return canchaService.getAllAdmin();
     }
 }

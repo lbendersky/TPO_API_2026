@@ -36,6 +36,8 @@ public class CarritoServiceImpl implements CarritoService {
     private TurnoRepository turnoRepository;
     @Autowired
     private InscripcionRepository inscripcionRepository;
+    @Autowired 
+    private OfertaService ofertaService;
 
     private Carrito getOrCreateCarrito(Long idUsuario) throws RecursoNoEncontradoException {
         return carritoRepository.findByUsuario_IdUsuario(idUsuario)
@@ -69,15 +71,18 @@ public class CarritoServiceImpl implements CarritoService {
                 .findByCarrito_IdCarritoAndTurno_IdTurno(carrito.getIdCarrito(), idTurno)
                 .orElse(null);
 
+        Float precioActual = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(), ofertaService.obtenerOfertaActivaPorTurno(idTurno).orElse(null));
+
         if (item == null) {
             item = new ItemCarrito();
             item.setCarrito(carrito);
             item.setTurno(turno);
             item.setCantidad(cantidad);
-            item.setPrecioUnitario(turno.getPrecioPorJugador());
+            item.setPrecioUnitario(precioActual);
             carrito.getItems().add(item);
         } else {
             item.setCantidad(item.getCantidad() + cantidad);
+            item.setPrecioUnitario(precioActual);
         }
         itemCarritoRepository.save(item);
         return carrito;
@@ -139,6 +144,8 @@ public class CarritoServiceImpl implements CarritoService {
             if (turno.getLugaresDisponibles() < item.getCantidad())
                 throw new TurnoSinCuposException();
 
+            Float precioFinal = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(), ofertaService.obtenerOfertaActivaPorTurno(turno.getIdTurno()).orElse(null));
+
             for (int i = 0; i < item.getCantidad(); i++) {
                 turno.setLugaresDisponibles(turno.getLugaresDisponibles() - 1);
 
@@ -146,7 +153,7 @@ public class CarritoServiceImpl implements CarritoService {
                 inscripcion.setTurno(turno);
                 inscripcion.setUsuarioComprador(comprador);
                 inscripcion.setFechaCompra(LocalDateTime.now());
-                inscripcion.setMontoPagado(item.getPrecioUnitario().doubleValue());
+                inscripcion.setMontoPagado(precioFinal.doubleValue());
                 inscripcion.setEstadoPago(EstadoPago.PENDIENTE);
                 inscripciones.add(inscripcionRepository.save(inscripcion));
             }

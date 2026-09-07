@@ -1,8 +1,12 @@
 package com.uade.marketplace.controllers;
 
+import com.uade.marketplace.dto.request.OfertaRequest;
+import com.uade.marketplace.dto.response.OfertaResponse;
 import com.uade.marketplace.entity.Oferta;
+import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.service.OfertaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,29 +20,27 @@ public class OfertaController {
     private OfertaService ofertaService;
 
     @GetMapping
-    public List<Oferta> obtenerTodas() {
-        return ofertaService.obtenerTodas();
+    public List<OfertaResponse> obtenerTodas() {
+        return ofertaService.obtenerTodas().stream().map(OfertaResponse::from).toList();
     }
 
     @GetMapping("/turno/{idTurno}")
-    public ResponseEntity<Oferta> obtenerPorTurno(@PathVariable Long idTurno) {
+    public ResponseEntity<OfertaResponse> obtenerPorTurno(@PathVariable Long idTurno) {
         return ofertaService.obtenerPorTurno(idTurno)
-                .map(ResponseEntity::ok)
+                .map(o -> ResponseEntity.ok(OfertaResponse.from(o)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Oferta> crearOferta(@RequestBody Oferta oferta) {
-        return ResponseEntity.ok(ofertaService.crearOferta(oferta));
+    public ResponseEntity<OfertaResponse> crearOferta(@RequestBody OfertaRequest request) throws RecursoNoEncontradoException {
+        Oferta creada = ofertaService.crearOferta(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(OfertaResponse.from(creada));
     }
 
     @PutMapping("/{idOferta}")
-    public ResponseEntity<Oferta> actualizarOferta(@PathVariable Long idOferta, @RequestBody Oferta oferta) {
-        try {
-            return ResponseEntity.ok(ofertaService.actualizarOferta(idOferta, oferta));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<OfertaResponse> actualizarOferta(@PathVariable Long idOferta, @RequestBody OfertaRequest request) throws RecursoNoEncontradoException {
+        Oferta actualizada = ofertaService.actualizarOferta(idOferta, request);
+        return ResponseEntity.ok(OfertaResponse.from(actualizada));
     }
 
     @DeleteMapping("/{idOferta}")
