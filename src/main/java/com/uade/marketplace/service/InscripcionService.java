@@ -3,18 +3,20 @@ package com.uade.marketplace.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.uade.marketplace.entity.Inscripcion;
+import com.uade.marketplace.dto.request.InscripcionRequest;
+import com.uade.marketplace.dto.response.InscripcionResponse;
+import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoPago;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoSinCuposException;
 
 public interface InscripcionService {
 
-    List<Inscripcion> getAll();
-    Optional<Inscripcion>getById (Long idInscripcion);
-    Inscripcion crear (Inscripcion inscripcion)throws RecursoNoEncontradoException, TurnoSinCuposException;
-    Inscripcion actualizarEstadoPago(Long idInscripcion, EstadoPago nuevoEstado) throws RecursoNoEncontradoException;
+    List<InscripcionResponse> getAll();
+    Optional<InscripcionResponse>getById (Long idInscripcion);
+    InscripcionResponse crear (InscripcionRequest request, Usuario actor) throws RecursoNoEncontradoException, TurnoSinCuposException;
+    InscripcionResponse actualizarEstadoPago(Long idInscripcion, EstadoPago nuevoEstado) throws RecursoNoEncontradoException;
     void eliminar(Long idInscripcion);
-    List<Inscripcion> getPorUsuario(Long idUsuario);
-    List<Inscripcion> getPorTurno(Long idTurno);
+    List<InscripcionResponse> getPorUsuario(Long idUsuario);
+    List<InscripcionResponse> getPorTurno(Long idTurno);
 }

@@ -29,28 +29,28 @@ public class CarritoController {
     @Autowired
     private CarritoService carritoService;
 
-    @GetMapping
+        @GetMapping
     public CarritoResponse getCarrito(@AuthenticationPrincipal Usuario usuario) throws RecursoNoEncontradoException {
-        return CarritoResponse.from(carritoService.getPorUsuario(usuario.getIdUsuario()));
+        return carritoService.getPorUsuario(usuario.getIdUsuario());
     }
 
     @PostMapping("/items")
     public CarritoResponse agregarItem(@AuthenticationPrincipal Usuario usuario,
                                        @RequestBody ItemCarritoRequest request) throws RecursoNoEncontradoException {
-        return CarritoResponse.from(carritoService.agregarItem(usuario.getIdUsuario(), request.getIdTurno(), request.getCantidad()));
+        return carritoService.agregarItem(usuario.getIdUsuario(), request.getIdTurno(), request.getCantidad());
     }
 
     @PutMapping("/items/{idItem}")
     public CarritoResponse actualizarCantidad(@AuthenticationPrincipal Usuario usuario,
                                               @PathVariable Long idItem,
                                               @RequestBody ItemCarritoRequest request) throws RecursoNoEncontradoException {
-        return CarritoResponse.from(carritoService.actualizarCantidad(usuario.getIdUsuario(), idItem, request.getCantidad()));
+        return carritoService.actualizarCantidad(usuario.getIdUsuario(), idItem, request.getCantidad());
     }
 
     @DeleteMapping("/items/{idItem}")
     public CarritoResponse quitarItem(@AuthenticationPrincipal Usuario usuario,
                                       @PathVariable Long idItem) throws RecursoNoEncontradoException {
-        return CarritoResponse.from(carritoService.quitarItem(usuario.getIdUsuario(), idItem));
+        return carritoService.quitarItem(usuario.getIdUsuario(), idItem);
     }
 
     @DeleteMapping
@@ -62,8 +62,6 @@ public class CarritoController {
     @PostMapping("/checkout")
     public List<InscripcionResponse> checkout(@AuthenticationPrincipal Usuario usuario)
             throws RecursoNoEncontradoException, TurnoSinCuposException {
-        return carritoService.checkout(usuario.getIdUsuario()).stream()
-                .map(InscripcionResponse::from)
-                .toList();
+        return carritoService.checkout(usuario.getIdUsuario());
     }
 }

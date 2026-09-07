@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.marketplace.dto.request.InscripcionRequest;
 import com.uade.marketplace.dto.response.InscripcionResponse;
-import com.uade.marketplace.entity.Inscripcion;
+import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoPago;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoSinCuposException;
@@ -29,34 +31,34 @@ public class InscripcionController {
 
     @GetMapping
     public List<InscripcionResponse> getAll() {
-        return inscripcionService.getAll().stream().map(InscripcionResponse::from).toList();
+        return inscripcionService.getAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<InscripcionResponse> getById(@PathVariable Long id) {
         return inscripcionService.getById(id)
-                .map(i -> ResponseEntity.ok(InscripcionResponse.from(i)))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/usuario/{usuarioId}")
     public List<InscripcionResponse> getPorUsuario(@PathVariable Long usuarioId) {
-        return inscripcionService.getPorUsuario(usuarioId).stream().map(InscripcionResponse::from).toList();
+        return inscripcionService.getPorUsuario(usuarioId);
     }
 
     @GetMapping("/turno/{turnoId}")
     public List<InscripcionResponse> getPorTurno(@PathVariable Long turnoId) {
-        return inscripcionService.getPorTurno(turnoId).stream().map(InscripcionResponse::from).toList();
+        return inscripcionService.getPorTurno(turnoId);
     }
 
     @PostMapping
-    public InscripcionResponse crear(@RequestBody Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {
-        return InscripcionResponse.from(inscripcionService.crear(inscripcion));
+    public InscripcionResponse crear(@AuthenticationPrincipal Usuario actor, @RequestBody InscripcionRequest request) throws RecursoNoEncontradoException, TurnoSinCuposException {
+        return inscripcionService.crear(request, actor);
     }
 
     @PutMapping("/{id}/estado-pago")
     public InscripcionResponse actualizarPago(@PathVariable Long id, @RequestParam EstadoPago nuevoEstado) throws RecursoNoEncontradoException {
-        return InscripcionResponse.from(inscripcionService.actualizarEstadoPago(id, nuevoEstado));
+        return inscripcionService.actualizarEstadoPago(id, nuevoEstado);
     }
 
     @DeleteMapping("/{id}")
