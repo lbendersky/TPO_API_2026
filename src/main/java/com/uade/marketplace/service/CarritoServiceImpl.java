@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.marketplace.dto.response.CarritoResponse;
+import com.uade.marketplace.dto.response.InscripcionResponse;
 import com.uade.marketplace.entity.Carrito;
 import com.uade.marketplace.entity.Inscripcion;
 import com.uade.marketplace.entity.ItemCarrito;
@@ -52,14 +54,14 @@ public class CarritoServiceImpl implements CarritoService {
                 });
     }
 
-    @Override
-    public Carrito getPorUsuario(Long idUsuario) throws RecursoNoEncontradoException {
-        return getOrCreateCarrito(idUsuario);
+        @Override
+    public CarritoResponse getPorUsuario(Long idUsuario) throws RecursoNoEncontradoException {
+        return CarritoResponse.from(getOrCreateCarrito(idUsuario));
     }
 
     @Override
     @Transactional
-    public Carrito agregarItem(Long idUsuario, Long idTurno, Integer cantidad) throws RecursoNoEncontradoException {
+    public CarritoResponse agregarItem(Long idUsuario, Long idTurno, Integer cantidad) throws RecursoNoEncontradoException {
         if (cantidad == null || cantidad <= 0)
             throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
 
@@ -85,12 +87,12 @@ public class CarritoServiceImpl implements CarritoService {
             item.setPrecioUnitario(precioActual);
         }
         itemCarritoRepository.save(item);
-        return carrito;
+        return CarritoResponse.from(carrito);
     }
 
     @Override
     @Transactional
-    public Carrito actualizarCantidad(Long idUsuario, Long idItem, Integer cantidad) throws RecursoNoEncontradoException {
+    public CarritoResponse actualizarCantidad(Long idUsuario, Long idItem, Integer cantidad) throws RecursoNoEncontradoException {
         if (cantidad == null || cantidad <= 0)
             throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
 
@@ -102,12 +104,12 @@ public class CarritoServiceImpl implements CarritoService {
 
         item.setCantidad(cantidad);
         itemCarritoRepository.save(item);
-        return carrito;
+        return CarritoResponse.from(carrito);
     }
 
     @Override
     @Transactional
-    public Carrito quitarItem(Long idUsuario, Long idItem) throws RecursoNoEncontradoException {
+    public CarritoResponse quitarItem(Long idUsuario, Long idItem) throws RecursoNoEncontradoException {
         Carrito carrito = getOrCreateCarrito(idUsuario);
         ItemCarrito item = itemCarritoRepository.findById(idItem)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el item " + idItem));
@@ -116,7 +118,7 @@ public class CarritoServiceImpl implements CarritoService {
 
         carrito.getItems().removeIf(i -> i.getIdItem().equals(idItem));
         itemCarritoRepository.delete(item);
-        return carrito;
+        return CarritoResponse.from(carrito);
     }
 
     @Override
@@ -129,8 +131,7 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public List<Inscripcion> checkout(Long idUsuario) throws RecursoNoEncontradoException, TurnoSinCuposException {
-        Carrito carrito = getOrCreateCarrito(idUsuario);
+    public List<InscripcionResponse> checkout(Long idUsuario) throws RecursoNoEncontradoException, TurnoSinCuposException {        Carrito carrito = getOrCreateCarrito(idUsuario);
         if (carrito.getItems().isEmpty())
             throw new RecursoNoEncontradoException("El carrito esta vacio");
 
@@ -165,6 +166,6 @@ public class CarritoServiceImpl implements CarritoService {
 
         carrito.getItems().clear();
         carritoRepository.save(carrito);
-        return inscripciones;
+        return inscripciones.stream().map(InscripcionResponse::from).toList();
     }
 }

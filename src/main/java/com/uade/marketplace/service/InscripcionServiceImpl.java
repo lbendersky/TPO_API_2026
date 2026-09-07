@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.marketplace.dto.request.InscripcionRequest;
+import com.uade.marketplace.dto.response.InscripcionResponse;
 import com.uade.marketplace.entity.Inscripcion;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
@@ -28,37 +30,37 @@ public class InscripcionServiceImpl implements InscripcionService{
     private TurnoRepository turnoRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private OfertaService ofertaService;
 
-    public List<Inscripcion> getAll() {
-        return inscripcionRepository.findAll();
+    public List<InscripcionResponse> getAll() {
+        return inscripcionRepository.findAll().stream().map(InscripcionResponse::from).toList();
     }
 
-    public Optional<Inscripcion> getById(Long idInscripcion) {
-        return inscripcionRepository.findById(idInscripcion);
-    }
-
-    @Override
-    public List<Inscripcion> getPorUsuario(Long idUsuario) {
-        return inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario);
+    public Optional<InscripcionResponse> getById(Long idInscripcion) {
+        return inscripcionRepository.findById(idInscripcion).map(InscripcionResponse::from);
     }
 
     @Override
-    public List<Inscripcion> getPorTurno(Long idTurno) {
-        return inscripcionRepository.findByTurno_IdTurno(idTurno);
+    public List<InscripcionResponse> getPorUsuario(Long idUsuario) {
+        return inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario).stream().map(InscripcionResponse::from).toList();
+    }
+
+    @Override
+    public List<InscripcionResponse> getPorTurno(Long idTurno) {
+        return inscripcionRepository.findByTurno_IdTurno(idTurno).stream().map(InscripcionResponse::from).toList();
     }
 
     @Transactional(rollbackFor = Throwable.class)
     @Override
-    public Inscripcion crear(Inscripcion inscripcion) throws RecursoNoEncontradoException, TurnoSinCuposException {
-        if (inscripcion.getTurno() == null || inscripcion.getTurno().getIdTurno() == null)
+    public InscripcionResponse crear(InscripcionRequest request, Usuario actor) throws RecursoNoEncontradoException, TurnoSinCuposException {
+        if (request.getIdTurno() == null)
             throw new RecursoNoEncontradoException("Falta indicar el turno de la inscripcion");
-        if (inscripcion.getUsuarioComprador() == null || inscripcion.getUsuarioComprador().getIdUsuario() == null)
-            throw new RecursoNoEncontradoException("Falta indicar el usuario comprador");
 
-        Turno turno = turnoRepository.findById(inscripcion.getTurno().getIdTurno())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + inscripcion.getTurno().getIdTurno()));
-        Usuario comprador = usuarioRepository.findById(inscripcion.getUsuarioComprador().getIdUsuario())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + inscripcion.getUsuarioComprador().getIdUsuario()));
+        Turno turno = turnoRepository.findById(request.getIdTurno())
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + request.getIdTurno()));
+        Usuario comprador = usuarioRepository.findById(actor.getIdUsuario())
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + actor.getIdUsuario()));
 
         if (turno.getLugaresDisponibles() <= 0)
             throw new TurnoSinCuposException();
@@ -68,21 +70,24 @@ public class InscripcionServiceImpl implements InscripcionService{
             turno.setEstado(EstadoTurno.LLENO);
         turnoRepository.save(turno);
 
+        Float precioFinal = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(), ofertaService.obtenerOfertaActivaPorTurno(turno.getIdTurno()).orElse(null));
+
+        Inscripcion inscripcion = new Inscripcion();
         inscripcion.setTurno(turno);
         inscripcion.setUsuarioComprador(comprador);
         inscripcion.setFechaCompra(LocalDateTime.now());
-        if (inscripcion.getEstadoPago() == null)
-            inscripcion.setEstadoPago(EstadoPago.PENDIENTE);
+        inscripcion.setMontoPagado(precioFinal.doubleValue());
+        inscripcion.setEstadoPago(EstadoPago.PENDIENTE);
 
-        return inscripcionRepository.save(inscripcion);
+        return InscripcionResponse.from(inscripcionRepository.save(inscripcion));
     }
 
-    public Inscripcion actualizarEstadoPago(Long idInscripcion, EstadoPago nuevoEstado) throws RecursoNoEncontradoException {
+    public InscripcionResponse actualizarEstadoPago(Long idInscripcion, EstadoPago nuevoEstado) throws RecursoNoEncontradoException {
         Inscripcion inscripcion = inscripcionRepository.findById(idInscripcion)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe la inscripción"));
 
         inscripcion.setEstadoPago(nuevoEstado);
-        return inscripcionRepository.save(inscripcion);
+        return InscripcionResponse.from(inscripcionRepository.save(inscripcion));
     }
 
     public void eliminar(Long idInscripcion) {
