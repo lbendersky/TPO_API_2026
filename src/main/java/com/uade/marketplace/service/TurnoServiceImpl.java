@@ -39,36 +39,24 @@ public class TurnoServiceImpl implements TurnoService {
     private CanchaRepository canchaRepository;
 
     @Autowired
-    private OfertaRepository ofertaRepository;
+    private OfertaService ofertaService;
 
     private TurnoResponse convertirATurnoResponse(Turno t, Map<Long, Oferta> mapaOfertas) {
-        // La validación de fechas DESAPARECE. Si está en el mapa, está activa.
         Oferta ofertaActiva = mapaOfertas.get(t.getIdTurno());
-
-        Double porcentaje = null;
-        Float precioConDescuento = null;
-        boolean tieneOferta = false;
-
-        if (ofertaActiva != null) {
-            porcentaje = ofertaActiva.getPorcentajeDescuento();
-            precioConDescuento = t.getPrecioPorJugador() - (t.getPrecioPorJugador() * (porcentaje.floatValue() / 100.0f));
-            tieneOferta = true;
-        } else {
-            precioConDescuento = t.getPrecioPorJugador();
-        }
-
+        Float precioConDescuento = ofertaService.calcularPrecioConDescuento(t.getPrecioPorJugador(), ofertaActiva);
+        Double porcentaje = ofertaActiva != null ? ofertaActiva.getPorcentajeDescuento() : null;
+        boolean tieneOferta = ofertaActiva != null;
         return TurnoResponse.from(t, porcentaje, precioConDescuento, tieneOferta);
     }
 
     private List<TurnoResponse> mapear(List<Turno> turnos) {
         if (turnos.isEmpty()) return List.of();
-        LocalDate hoy = LocalDate.now(); 
-        List<Oferta> ofertasActivas = ofertaRepository.findActivas(hoy);
+        List<Oferta> ofertasActivas = ofertaService.obtenerActivas();
         Map<Long, Oferta> mapaOfertas = ofertasActivas.stream()
                 .filter(o -> o.getTurno() != null)
                 .collect(Collectors.toMap(
-                        o -> o.getTurno().getIdTurno(), 
-                        o -> o, 
+                        o -> o.getTurno().getIdTurno(),
+                        o -> o,
                         (o1, o2) -> o1.getPorcentajeDescuento() >= o2.getPorcentajeDescuento() ? o1 : o2
                 ));
 

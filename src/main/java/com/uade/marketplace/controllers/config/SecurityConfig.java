@@ -40,9 +40,6 @@ public class SecurityConfig {
                         // Solo ADMIN
                         .requestMatchers("/admin/**").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers("/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
-                        .requestMatchers(HttpMethod.PUT, "/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
-                        .requestMatchers(HttpMethod.DELETE, "/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
-                        .requestMatchers(HttpMethod.POST, "/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
                         
                         // Cualquier usuario autenticado (USUARIO o ADMIN)
                         .anyRequest().authenticated())
