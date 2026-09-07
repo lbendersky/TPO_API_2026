@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.marketplace.dto.response.UsuarioResponse;
 import com.uade.marketplace.entity.Usuario;
+import com.uade.marketplace.entity.enums.Rol;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.service.UsuarioService;
 
@@ -44,13 +47,24 @@ public class UsuarioController {
     }
 
     @PutMapping("/{usuarioId}")
-    public UsuarioResponse actualizar(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws RecursoNoEncontradoException {
+    public UsuarioResponse actualizar(@PathVariable Long usuarioId,
+                                      @RequestBody Usuario usuario,
+                                      @AuthenticationPrincipal Usuario auth) throws RecursoNoEncontradoException {
+        verificarPermiso(auth, usuarioId);
         return UsuarioResponse.from(usuarioService.actualizar(usuarioId, usuario));
     }
 
     @DeleteMapping("/{usuarioId}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long usuarioId) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long usuarioId,
+                                         @AuthenticationPrincipal Usuario auth) {
+        verificarPermiso(auth, usuarioId);
         usuarioService.eliminar(usuarioId);
         return ResponseEntity.noContent().build();
+    }
+
+    private void verificarPermiso(Usuario auth, Long usuarioId) {
+        if (auth.getRol() != Rol.ADMIN && !auth.getIdUsuario().equals(usuarioId)) {
+            throw new AccessDeniedException("No podés modificar otro usuario");
+        }
     }
 }
