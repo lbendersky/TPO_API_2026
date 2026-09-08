@@ -19,6 +19,7 @@ import com.uade.marketplace.dto.request.InscripcionRequest;
 import com.uade.marketplace.dto.response.InscripcionResponse;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoPago;
+import com.uade.marketplace.exceptions.AccesoDenegadoException;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoSinCuposException;
 import com.uade.marketplace.service.InscripcionService;
@@ -35,20 +36,20 @@ public class InscripcionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InscripcionResponse> getById(@PathVariable Long id) {
-        return inscripcionService.getById(id)
+    public ResponseEntity<InscripcionResponse> getById(@PathVariable Long id, @AuthenticationPrincipal Usuario actor) throws AccesoDenegadoException {
+        return inscripcionService.getById(id, actor)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public List<InscripcionResponse> getPorUsuario(@PathVariable Long usuarioId) {
-        return inscripcionService.getPorUsuario(usuarioId);
+    public List<InscripcionResponse> getPorUsuario(@PathVariable Long usuarioId, @AuthenticationPrincipal Usuario actor) throws AccesoDenegadoException {
+        return inscripcionService.getPorUsuario(usuarioId, actor);
     }
 
     @GetMapping("/turno/{turnoId}")
-    public List<InscripcionResponse> getPorTurno(@PathVariable Long turnoId) {
-        return inscripcionService.getPorTurno(turnoId);
+    public List<InscripcionResponse> getPorTurno(@PathVariable Long turnoId, @AuthenticationPrincipal Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException {
+        return inscripcionService.getPorTurno(turnoId, actor);
     }
 
     @PostMapping
