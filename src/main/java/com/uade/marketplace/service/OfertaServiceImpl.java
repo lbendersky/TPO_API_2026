@@ -12,6 +12,7 @@ import com.uade.marketplace.dto.response.OfertaResponse;
 import com.uade.marketplace.entity.Oferta;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import com.uade.marketplace.exceptions.SolicitudInvalidaException;
 import com.uade.marketplace.repository.OfertaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 
@@ -92,10 +93,10 @@ public class OfertaServiceImpl implements OfertaService {
         if (request.getPorcentajeDescuento() == null
                 || request.getPorcentajeDescuento() <= 0
                 || request.getPorcentajeDescuento() > 100)
-            throw new IllegalArgumentException("El porcentaje de descuento debe estar entre 0 y 100");
+            throw new SolicitudInvalidaException("El porcentaje de descuento debe estar entre 0 y 100");
         if (request.getFechaInicio() == null || request.getFechaFin() == null)
-            throw new IllegalArgumentException("Debe indicar fecha de inicio y fecha de fin");
+            throw new SolicitudInvalidaException("Debe indicar fecha de inicio y fecha de fin");
         if (request.getFechaInicio().isAfter(request.getFechaFin()))
-            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+            throw new SolicitudInvalidaException("La fecha de inicio no puede ser posterior a la fecha de fin");
     }
 }

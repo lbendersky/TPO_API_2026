@@ -18,6 +18,7 @@ import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoPago;
 import com.uade.marketplace.entity.enums.EstadoTurno;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import com.uade.marketplace.exceptions.SolicitudInvalidaException;
 import com.uade.marketplace.exceptions.TurnoSinCuposException;
 import com.uade.marketplace.repository.CarritoRepository;
 import com.uade.marketplace.repository.InscripcionRepository;
@@ -63,7 +64,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Transactional
     public CarritoResponse agregarItem(Long idUsuario, Long idTurno, Integer cantidad) throws RecursoNoEncontradoException {
         if (cantidad == null || cantidad <= 0)
-            throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
+            throw new SolicitudInvalidaException("La cantidad debe ser mayor a 0");
 
         Carrito carrito = getOrCreateCarrito(idUsuario);
         Turno turno = turnoRepository.findById(idTurno)
@@ -94,7 +95,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Transactional
     public CarritoResponse actualizarCantidad(Long idUsuario, Long idItem, Integer cantidad) throws RecursoNoEncontradoException {
         if (cantidad == null || cantidad <= 0)
-            throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
+            throw new SolicitudInvalidaException("La cantidad debe ser mayor a 0");
 
         Carrito carrito = getOrCreateCarrito(idUsuario);
         ItemCarrito item = itemCarritoRepository.findById(idItem)

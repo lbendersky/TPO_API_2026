@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.marketplace.dto.request.CanchaRequest;
 import com.uade.marketplace.dto.response.CanchaResponse;
-import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.TipoSuperficie;
 import com.uade.marketplace.exceptions.AccesoDenegadoException;
@@ -60,13 +60,13 @@ public class CanchaController {
     
 
     @PostMapping
-    public CanchaResponse publicar(@RequestBody Cancha cancha) throws RecursoNoEncontradoException {
-        return canchaService.publicar(cancha);
+    public CanchaResponse publicar(@AuthenticationPrincipal Usuario actor, @RequestBody CanchaRequest request) throws RecursoNoEncontradoException {
+        return canchaService.publicar(request, actor);
     }
 
     @PutMapping("/{canchaId}")
-    public CanchaResponse actualizar(@PathVariable Long canchaId, @RequestBody Cancha cancha) throws RecursoNoEncontradoException {
-        return canchaService.actualizar(canchaId, cancha);
+    public CanchaResponse actualizar(@PathVariable Long canchaId, @RequestBody CanchaRequest request, @AuthenticationPrincipal Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException {
+        return canchaService.actualizar(canchaId, request, actor);
     }
 
         @DeleteMapping("/{canchaId}")

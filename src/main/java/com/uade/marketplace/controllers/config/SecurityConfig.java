@@ -1,7 +1,5 @@
 package com.uade.marketplace.controllers.config;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -40,6 +39,9 @@ public class SecurityConfig {
                         // Solo ADMIN
                         .requestMatchers("/admin/**").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers("/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/inscripciones").hasAnyAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/inscripciones/*/estado-pago").hasAnyAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/inscripciones/**").hasAnyAuthority(Rol.ADMIN.name())
                         
                         // Cualquier usuario autenticado (USUARIO o ADMIN)
                         .anyRequest().authenticated())

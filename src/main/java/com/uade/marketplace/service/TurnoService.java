@@ -16,8 +16,8 @@ public interface TurnoService {
 
     Optional<TurnoResponse> getTurnoById(Long turnoId);
 
-    TurnoResponse crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException;
-
+    TurnoResponse crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException, RecursoNoEncontradoException;
+    
     void eliminarTurno(Long turnoId, Usuario actor) throws RecursoNoEncontradoException;
 
     TurnoResponse actualizarTurno(Long idTurno, TurnoRequest turnoRequest, Usuario actor) throws RecursoNoEncontradoException, TurnoDuplicateException;
