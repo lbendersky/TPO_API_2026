@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.marketplace.dto.request.CanchaRequest;
 import com.uade.marketplace.dto.response.CanchaResponse;
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Localidad;
@@ -14,6 +15,7 @@ import com.uade.marketplace.entity.enums.Rol;
 import com.uade.marketplace.entity.enums.TipoSuperficie;
 import com.uade.marketplace.exceptions.AccesoDenegadoException;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import com.uade.marketplace.exceptions.SolicitudInvalidaException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.LocalidadRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
@@ -49,39 +51,55 @@ public class CanchaServiceImpl implements CanchaService {
     }
 
     @Override
-    public CanchaResponse publicar(Cancha cancha) throws RecursoNoEncontradoException {
-        if (cancha.getTipoFutbol() == null)
-            throw new IllegalArgumentException("Debe indicar el tipo de futbol de la cancha");
+    public CanchaResponse publicar(CanchaRequest request, Usuario actor) throws RecursoNoEncontradoException {
+        if (request.getTipoFutbol() == null)
+            throw new SolicitudInvalidaException("Debe indicar el tipo de futbol de la cancha");
 
-        Usuario publicador = usuarioRepository.findById(cancha.getPublicador().getIdUsuario())
-            .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + cancha.getPublicador().getIdUsuario()));
-        Localidad localidad = localidadRepository.findById(cancha.getLocalidad().getIdLocalidad())
-            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la localidad " + cancha.getLocalidad().getIdLocalidad()));
-        cancha.setPublicador(publicador);
+        Usuario publicador = usuarioRepository.findById(actor.getIdUsuario())
+            .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + actor.getIdUsuario()));
+        Localidad localidad = localidadRepository.findById(request.getIdLocalidad())
+            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la localidad " + request.getIdLocalidad()));
+
+        Cancha cancha = new Cancha();
+        cancha.setNombre(request.getNombre());
+        cancha.setDireccion(request.getDireccion());
         cancha.setLocalidad(localidad);
-        cancha.setCantidadJugadores(cancha.getTipoFutbol().getCantidadJugadores());
-        if (cancha.getActiva() == null)
-            cancha.setActiva(true);
+        cancha.setTipoSuperficie(request.getTipoSuperficie());
+        cancha.setTipoFutbol(request.getTipoFutbol());
+        cancha.setPrecioUnitario(request.getPrecioUnitario());
+        cancha.setDescripcion(request.getDescripcion());
+        cancha.setCantidadJugadores(request.getTipoFutbol().getCantidadJugadores());
+        cancha.setActiva(true);
+        cancha.setPublicador(publicador);
+
         return CanchaResponse.from(canchaRepository.save(cancha));
     }
 
     @Override
-    public CanchaResponse actualizar(Long idCancha, Cancha cancha) throws RecursoNoEncontradoException {
-        if (cancha.getTipoFutbol() == null)
-            throw new IllegalArgumentException("Debe indicar el tipo de futbol de la cancha");
+    public CanchaResponse actualizar(Long idCancha, CanchaRequest request, Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException {
+        if (request.getTipoFutbol() == null)
+            throw new SolicitudInvalidaException("Debe indicar el tipo de futbol de la cancha");
 
         Cancha existente = canchaRepository.findById(idCancha)
             .orElseThrow(() -> new RecursoNoEncontradoException("No existe la cancha " + idCancha));
-        Localidad localidad = localidadRepository.findById(cancha.getLocalidad().getIdLocalidad())
-            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la localidad " + cancha.getLocalidad().getIdLocalidad()));
-        existente.setNombre(cancha.getNombre());
-        existente.setDireccion(cancha.getDireccion());
+
+        boolean esDueño = existente.getPublicador() != null
+                && existente.getPublicador().getIdUsuario().equals(actor.getIdUsuario());
+        boolean esAdmin = actor.getRol() == Rol.ADMIN;
+        if (!esDueño && !esAdmin)
+            throw new AccesoDenegadoException("No tenés permiso para editar esta cancha");
+
+        Localidad localidad = localidadRepository.findById(request.getIdLocalidad())
+            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la localidad " + request.getIdLocalidad()));
+            
+        existente.setNombre(request.getNombre());
+        existente.setDireccion(request.getDireccion());
         existente.setLocalidad(localidad);
-        existente.setTipoSuperficie(cancha.getTipoSuperficie());
-        existente.setTipoFutbol(cancha.getTipoFutbol());
-        existente.setPrecioUnitario(cancha.getPrecioUnitario());
-        existente.setDescripcion(cancha.getDescripcion());
-        existente.setCantidadJugadores(cancha.getTipoFutbol().getCantidadJugadores());
+        existente.setTipoSuperficie(request.getTipoSuperficie());
+        existente.setTipoFutbol(request.getTipoFutbol());
+        existente.setPrecioUnitario(request.getPrecioUnitario());
+        existente.setDescripcion(request.getDescripcion());
+        existente.setCantidadJugadores(request.getTipoFutbol().getCantidadJugadores());
         return CanchaResponse.from(canchaRepository.save(existente));
     }
 

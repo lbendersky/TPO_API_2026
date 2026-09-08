@@ -20,6 +20,7 @@ import com.uade.marketplace.entity.enums.EstadoTurno;
 import com.uade.marketplace.entity.enums.Rol;
 import com.uade.marketplace.entity.enums.TipoFutbol;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import com.uade.marketplace.exceptions.SolicitudInvalidaException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
@@ -115,15 +116,15 @@ public class TurnoServiceImpl implements TurnoService {
                 });
     }
 
-    @Override
-    public TurnoResponse crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException {
+        @Override
+    public TurnoResponse crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException, RecursoNoEncontradoException {
         Usuario usuario = usuarioRepository.findById(actor.getIdUsuario())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
-                .orElseThrow(() -> new IllegalArgumentException("Cancha no encontrada"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Cancha no encontrada"));
 
         if (Boolean.FALSE.equals(cancha.getActiva()))
-            throw new IllegalArgumentException("No se puede crear un turno en una cancha inactiva");
+            throw new SolicitudInvalidaException("No se puede crear un turno en una cancha inactiva");
 
         if (hayOverlap(cancha, turnoRequest.getFechaHora(), null))
             throw new TurnoDuplicateException();
@@ -161,7 +162,7 @@ public class TurnoServiceImpl implements TurnoService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico una cancha"));
 
         if (Boolean.FALSE.equals(cancha.getActiva()))
-            throw new IllegalArgumentException("No se puede mover un turno a una cancha inactiva");
+            throw new SolicitudInvalidaException("No se puede mover un turno a una cancha inactiva");
 
         if (hayOverlap(cancha, turnoRequest.getFechaHora(), idTurno))
             throw new TurnoDuplicateException();
@@ -189,7 +190,7 @@ public class TurnoServiceImpl implements TurnoService {
     @Override
     public TurnoResponse actualizarStock(Long idTurno, Integer lugaresDisponibles, Usuario actor) throws RecursoNoEncontradoException {
         if (lugaresDisponibles == null || lugaresDisponibles < 0)
-            throw new IllegalArgumentException("lugaresDisponibles debe ser >= 0");
+            throw new SolicitudInvalidaException("lugaresDisponibles debe ser >= 0");
 
         Turno turno = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
