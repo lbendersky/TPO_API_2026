@@ -23,6 +23,12 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (repository.existsByEmail(request.getEmail())
+                || repository.existsByNombreUsuario(request.getNombreUsuario())
+                || repository.existsByDni(request.getDni())
+                || repository.existsByTelefono(request.getTelefono()))
+            throw new com.uade.marketplace.exceptions.UsuarioDuplicadoException();
+
         var user = Usuario.builder()
                 .email(request.getEmail())
                 .nombre(request.getNombre())

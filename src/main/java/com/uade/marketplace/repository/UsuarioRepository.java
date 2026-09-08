@@ -10,4 +10,8 @@ import com.uade.marketplace.entity.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
+    boolean existsByEmail(String email);
+    boolean existsByNombreUsuario(String nombreUsuario);
+    boolean existsByDni(String dni);
+    boolean existsByTelefono(String telefono);
 }
