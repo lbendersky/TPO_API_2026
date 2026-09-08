@@ -35,6 +35,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/turnos/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/canchas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/ofertas/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/localidades/**").permitAll()
+
 
                         // Solo ADMIN
                         .requestMatchers("/admin/**").hasAnyAuthority(Rol.ADMIN.name())
