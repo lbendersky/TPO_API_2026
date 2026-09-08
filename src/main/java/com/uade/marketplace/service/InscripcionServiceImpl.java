@@ -15,6 +15,8 @@ import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoPago;
 import com.uade.marketplace.entity.enums.EstadoTurno;
+import com.uade.marketplace.entity.enums.Rol;
+import com.uade.marketplace.exceptions.AccesoDenegadoException;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoSinCuposException;
 import com.uade.marketplace.repository.InscripcionRepository;
@@ -37,18 +39,35 @@ public class InscripcionServiceImpl implements InscripcionService{
         return inscripcionRepository.findAll().stream().map(InscripcionResponse::from).toList();
     }
 
-    public Optional<InscripcionResponse> getById(Long idInscripcion) {
-        return inscripcionRepository.findById(idInscripcion).map(InscripcionResponse::from);
+    public Optional<InscripcionResponse> getById(Long idInscripcion, Usuario actor) throws AccesoDenegadoException {
+        Optional<Inscripcion> inscripcion = inscripcionRepository.findById(idInscripcion);
+        if (inscripcion.isEmpty()) return Optional.empty();
+        validarOwnershipInscripcion(inscripcion.get(), actor);
+        return inscripcion.map(InscripcionResponse::from);
     }
 
     @Override
-    public List<InscripcionResponse> getPorUsuario(Long idUsuario) {
+    public List<InscripcionResponse> getPorUsuario(Long idUsuario, Usuario actor) throws AccesoDenegadoException {
+        if (actor.getRol() != Rol.ADMIN && !actor.getIdUsuario().equals(idUsuario))
+            throw new AccesoDenegadoException("No podés ver las inscripciones de otro usuario");
         return inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario).stream().map(InscripcionResponse::from).toList();
     }
 
     @Override
-    public List<InscripcionResponse> getPorTurno(Long idTurno) {
+    public List<InscripcionResponse> getPorTurno(Long idTurno, Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException {
+        Turno turno = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        boolean esOrganizador = turno.getUsuario() != null && turno.getUsuario().getIdUsuario().equals(actor.getIdUsuario());
+        boolean esAdmin = actor.getRol() == Rol.ADMIN;
+        if (!esOrganizador && !esAdmin)
+            throw new AccesoDenegadoException("No podés ver las inscripciones de este turno");
         return inscripcionRepository.findByTurno_IdTurno(idTurno).stream().map(InscripcionResponse::from).toList();
+    }
+
+    private void validarOwnershipInscripcion(Inscripcion inscripcion, Usuario actor) throws AccesoDenegadoException {
+        if (actor.getRol() == Rol.ADMIN) return;
+        if (inscripcion.getUsuarioComprador() == null || !inscripcion.getUsuarioComprador().getIdUsuario().equals(actor.getIdUsuario()))
+            throw new AccesoDenegadoException("No podés ver esta inscripción");
     }
 
     @Transactional(rollbackFor = Throwable.class)
