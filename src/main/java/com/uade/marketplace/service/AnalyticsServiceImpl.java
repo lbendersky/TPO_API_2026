@@ -34,7 +34,6 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 turnoRepository.count(),
                 turnoRepository.countByEstado(EstadoTurno.INCOMPLETO),
                 turnoRepository.countByEstado(EstadoTurno.LLENO),
-                turnoRepository.countByEstado(EstadoTurno.EN_PROCESO),
                 inscripcionRepository.count(),
                 inscripcionRepository.countByEstadoPago(EstadoPago.PENDIENTE),
                 inscripcionRepository.countByEstadoPago(EstadoPago.PAGADO),
