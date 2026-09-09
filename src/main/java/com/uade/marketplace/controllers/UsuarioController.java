@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.marketplace.dto.request.UsuarioRequest;
 import com.uade.marketplace.dto.response.UsuarioResponse;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.Rol;
@@ -48,10 +49,10 @@ public class UsuarioController {
 
     @PutMapping("/{usuarioId}")
     public UsuarioResponse actualizar(@PathVariable Long usuarioId,
-                                      @RequestBody Usuario usuario,
+                                      @RequestBody UsuarioRequest request,
                                       @AuthenticationPrincipal Usuario auth) throws RecursoNoEncontradoException {
         verificarPermiso(auth, usuarioId);
-        return usuarioService.actualizar(usuarioId, usuario);
+        return usuarioService.actualizar(usuarioId, request);
     }
 
     @DeleteMapping("/{usuarioId}")

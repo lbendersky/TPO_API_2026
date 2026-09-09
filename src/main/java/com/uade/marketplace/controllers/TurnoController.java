@@ -64,16 +64,16 @@ public class TurnoController {
     @PostMapping
     public ResponseEntity<TurnoResponse> createTurno(@AuthenticationPrincipal Usuario actor,
                                              @RequestBody TurnoRequest turnoRequest)
-            throws TurnoDuplicateException {
+            throws TurnoDuplicateException, RecursoNoEncontradoException {
         TurnoResponse result = turnoService.crearTurno(turnoRequest, actor);
         return ResponseEntity.created(URI.create("/turnos/" + result.getIdTurno()))
                 .body(result);
     }
 
-    @PutMapping("/{turnoId}")
+        @PutMapping("/{turnoId}")
     public TurnoResponse actualizar(@AuthenticationPrincipal Usuario actor,
                             @PathVariable Long turnoId,
-                            @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException {
+                            @RequestBody TurnoRequest turno) throws RecursoNoEncontradoException, TurnoDuplicateException {
         return turnoService.actualizarTurno(turnoId, turno, actor);
     }
 

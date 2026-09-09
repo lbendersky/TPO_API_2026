@@ -12,7 +12,6 @@ public class AnalyticsResponse {
     private long totalTurnos;
     private long turnosIncompletos;
     private long turnosLlenos;
-    private long turnosEnProceso;
     private long totalInscripciones;
     private long inscripcionesPendientes;
     private long inscripcionesPagadas;

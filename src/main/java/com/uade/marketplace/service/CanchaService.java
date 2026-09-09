@@ -3,6 +3,7 @@ package com.uade.marketplace.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.uade.marketplace.dto.request.CanchaRequest;
 import com.uade.marketplace.dto.response.CanchaResponse;
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Usuario;
@@ -15,8 +16,8 @@ public interface CanchaService {
     Optional<CanchaResponse> getById(Long idCancha);
     List<CanchaResponse> buscarPorLocalidad(String localidad);
     List<CanchaResponse> buscarPorSuperficie(TipoSuperficie tipoSuperficie);
-    CanchaResponse publicar (Cancha cancha) throws RecursoNoEncontradoException;
-    CanchaResponse actualizar(Long idCancha, Cancha cancha) throws RecursoNoEncontradoException;
+    CanchaResponse publicar(CanchaRequest request, Usuario actor) throws RecursoNoEncontradoException;
+    CanchaResponse actualizar(Long idCancha, CanchaRequest request, Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException;
     void eliminar(Long idCancha, Usuario usuarioActual, String motivo) throws RecursoNoEncontradoException, AccesoDenegadoException;
     List<CanchaResponse> getCanchasPorPublicador(Long idUsuario);
     List<CanchaResponse> getAllAdmin();

@@ -1,17 +1,20 @@
 package com.uade.marketplace.service;
 
-import com.uade.marketplace.dto.request.OfertaRequest;
-import com.uade.marketplace.entity.Oferta;
-import com.uade.marketplace.entity.Turno;
-import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
-import com.uade.marketplace.repository.OfertaRepository;
-import com.uade.marketplace.repository.TurnoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.uade.marketplace.dto.request.OfertaRequest;
+import com.uade.marketplace.dto.response.OfertaResponse;
+import com.uade.marketplace.entity.Oferta;
+import com.uade.marketplace.entity.Turno;
+import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import com.uade.marketplace.exceptions.SolicitudInvalidaException;
+import com.uade.marketplace.repository.OfertaRepository;
+import com.uade.marketplace.repository.TurnoRepository;
 
 @Service
 public class OfertaServiceImpl implements OfertaService {
@@ -23,18 +26,18 @@ public class OfertaServiceImpl implements OfertaService {
     private TurnoRepository turnoRepository;
 
     @Override
-    public List<Oferta> obtenerTodas() {
-        return ofertaRepository.findAll();
+    public List<OfertaResponse> obtenerTodas() {
+        return ofertaRepository.findAll().stream().map(OfertaResponse::from).toList();
     }
 
     @Override
-    public Optional<Oferta> obtenerPorTurno(Long idTurno) {
+    public Optional<OfertaResponse> obtenerPorTurno(Long idTurno) {
         List<Oferta> ofertas = ofertaRepository.findByTurno_IdTurno(idTurno);
-        return ofertas.isEmpty() ? Optional.empty() : Optional.of(ofertas.get(0));
+        return ofertas.isEmpty() ? Optional.empty() : Optional.of(OfertaResponse.from(ofertas.get(0)));
     }
 
     @Override
-    public Oferta crearOferta(OfertaRequest request) throws RecursoNoEncontradoException {
+    public OfertaResponse crearOferta(OfertaRequest request) throws RecursoNoEncontradoException {
         if (request.getIdTurno() == null)
             throw new RecursoNoEncontradoException("Falta indicar el turno de la oferta");
         Turno turno = turnoRepository.findById(request.getIdTurno())
@@ -47,18 +50,18 @@ public class OfertaServiceImpl implements OfertaService {
                 .fechaFin(request.getFechaFin())
                 .turno(turno)
                 .build();
-        return ofertaRepository.save(oferta);
+        return OfertaResponse.from(ofertaRepository.save(oferta));
     }
 
     @Override
-    public Oferta actualizarOferta(Long idOferta, OfertaRequest request) throws RecursoNoEncontradoException {
+    public OfertaResponse actualizarOferta(Long idOferta, OfertaRequest request) throws RecursoNoEncontradoException {
         Oferta oferta = ofertaRepository.findById(idOferta)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe la oferta " + idOferta));
         validarDatos(request);
         oferta.setPorcentajeDescuento(request.getPorcentajeDescuento());
         oferta.setFechaInicio(request.getFechaInicio());
         oferta.setFechaFin(request.getFechaFin());
-        return ofertaRepository.save(oferta);
+        return OfertaResponse.from(ofertaRepository.save(oferta));
     }
 
     @Override
@@ -90,10 +93,10 @@ public class OfertaServiceImpl implements OfertaService {
         if (request.getPorcentajeDescuento() == null
                 || request.getPorcentajeDescuento() <= 0
                 || request.getPorcentajeDescuento() > 100)
-            throw new IllegalArgumentException("El porcentaje de descuento debe estar entre 0 y 100");
+            throw new SolicitudInvalidaException("El porcentaje de descuento debe estar entre 0 y 100");
         if (request.getFechaInicio() == null || request.getFechaFin() == null)
-            throw new IllegalArgumentException("Debe indicar fecha de inicio y fecha de fin");
+            throw new SolicitudInvalidaException("Debe indicar fecha de inicio y fecha de fin");
         if (request.getFechaInicio().isAfter(request.getFechaFin()))
-            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+            throw new SolicitudInvalidaException("La fecha de inicio no puede ser posterior a la fecha de fin");
     }
 }
