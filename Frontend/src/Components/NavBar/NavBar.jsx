@@ -5,9 +5,16 @@ import Buscador from "./Buscador"
 function NavBar() {
     return (
         <>
-            <MenuDesplegable />
-            <Buscador />
-            <Carrito />
+            <header>
+                <nav>
+                    <ul>
+                        <MenuDesplegable />    
+                        <Buscador />    
+                        <Carrito />    
+                    </ul>
+                </nav>
+            </header>
+            <hr />
         </>
     )
 }

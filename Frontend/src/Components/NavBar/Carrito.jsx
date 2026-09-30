@@ -1,6 +1,7 @@
 function Carrito() {
     return (
         <>
+            <p>Carrito</p>
         </>
     )
 }
