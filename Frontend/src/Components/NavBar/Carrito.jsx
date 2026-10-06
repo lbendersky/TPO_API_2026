@@ -1,7 +1,7 @@
 function Carrito() {
     return (
         <>
-            <p>Carrito</p>
+            <img src="" alt="carrito" />
         </>
     )
 }
