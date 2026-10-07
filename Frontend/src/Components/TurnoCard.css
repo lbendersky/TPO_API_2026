@@ -1,0 +1,78 @@
+.turno-card {
+    border: 0.0625rem solid var(--blanco);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--blanco);
+    transition: box-shadow 0.2s;
+}
+
+.turno-card:hover {
+    box-shadow: 0 0.25rem 0.75rem var(--gris);
+}
+
+.turno-card__img {
+    width: 100%;
+    height: 10rem;
+    object-fit: cover;
+}
+
+.turno-card__body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    text-align: center;
+}
+
+.turno-card__titulo {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    color: var(--negro);
+}
+
+.turno-card__localidadTipo {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--gris);
+    font-weight: 500;
+}
+
+.turno-card__fechaCupos {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--verdeOscuro);
+    font-weight: bold;
+}
+
+.turno-card__precio {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--negro);
+}
+
+.turno-card__precio--tachado {
+    text-decoration: line-through;
+    color: var(--gris);
+    font-weight: normal;
+    margin-right: 0.5rem;
+}
+
+.turno-card__precio--oferta {
+    color: var(--negro);
+}
+
+.turno-card__organizador {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--gris);
+    font-style: italic;
+}
+
+.turno-card__descripcion {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--gris);
+}

@@ -1,22 +1,8 @@
-import { useState } from 'react'
-import './App.css'
-import NavBar from "./Components/NavBar/NavBar"
-import Tarjeta from "./Components/Tarjeta"
+import './App.css';
+import Inicio from './views/Inicio';
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <nav>
-        <NavBar />
-      </nav>
-
-      <section>
-        <Tarjeta />
-      </section>
-    </>
-  )
+    return <Inicio />;
 }
 
-export default App
+export default App;
