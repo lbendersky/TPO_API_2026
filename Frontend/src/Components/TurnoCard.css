@@ -1,3 +1,9 @@
+.turno-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .turno-card {
     border: 0.0625rem solid var(--blanco);
     border-radius: 0.5rem;
@@ -9,7 +15,7 @@
 }
 
 .turno-card:hover {
-    box-shadow: 0 0.25rem 0.75rem var(--gris);
+    box-shadow: 0 0.5rem 2rem var(--negro);
 }
 
 .turno-card__img {
@@ -22,14 +28,16 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.25rem;
     text-align: center;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
 }
 
 .turno-card__titulo {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: var(--negro);
+    letter-spacing: 0.05rem;
 }
 
 .turno-card__localidadTipo {
@@ -43,12 +51,11 @@
     margin: 0;
     font-size: 1rem;
     color: var(--verdeOscuro);
-    font-weight: bold;
 }
 
 .turno-card__precio {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: bold;
     color: var(--negro);
 }
@@ -73,6 +80,6 @@
 
 .turno-card__descripcion {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--gris);
 }

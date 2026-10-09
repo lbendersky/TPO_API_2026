@@ -1,16 +1,23 @@
 .inicio {
-    padding: 2rem;
+    padding: 0 2rem 2rem;
     max-width: 75rem;
     margin: 0 auto;
 }
 
 .inicio__titulo {
     font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+    margin: 1rem;
     color: var(--blanco);
     font-weight: bold;
     text-align: center;
-    -webkit-text-stroke: 4px #000;
-    text-shadow: -8px 4px 10px #000; /* Cambia el último '0px' por '5px' si la prefieres difuminada */
+    -webkit-text-stroke: 4px var(--negro);
+    text-shadow: -8px 4px 10px var(--negro); /* Cambia el último '0px' por '5px' si la prefieres difuminada */
     paint-order: markers stroke fill; 
+}
+
+.inicio__img {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
 }

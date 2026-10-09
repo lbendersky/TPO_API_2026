@@ -8,9 +8,7 @@ const Inicio = () => {
         <>
             <NavBar />
             <main className="inicio">
-                <h1 className="inicio__titulo">
-                    Turnos disponibles
-                </h1>
+                <img src="/inicio.png" alt="Sumate" className="inicio__img"/>
                 <TurnoList />
             </main>
         </>

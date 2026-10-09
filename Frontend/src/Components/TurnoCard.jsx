@@ -15,6 +15,7 @@ const TurnoCard = ({
     tieneOfertaActiva,
 }) => {
     return (
+        <a href="#" className="turno-card-link">
         <article className="turno-card">
             <img className="turno-card__img" src={imagenPath} alt={nombreCancha} />
             <div className="turno-card__body">
@@ -35,6 +36,7 @@ const TurnoCard = ({
                 <p className="turno-card__descripcion">{descripcion}</p>
             </div>
         </article>
+        </a>
     );
 };
 

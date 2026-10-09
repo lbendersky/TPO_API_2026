@@ -1,0 +1,41 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2rem;
+    background-color: var(--blanco);
+    letter-spacing: 0.05em;                                                             
+    line-height: 1.4;    
+    font-size: 1.5rem;
+}
+
+.navbar .logo{
+    height: 60px;
+    display: block;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--verdeOscuro);
+}
+
+.navbar .buscador {
+    list-style: none;
+    align-items: center;
+    gap: 1rem;
+    color: var(--verdeOscuro);
+}
+
+.navbar .titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--verdeOscuro);
+    text-decoration: none;
+}
