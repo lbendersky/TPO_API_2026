@@ -1,1 +1,25 @@
-@import "tailwindcss";
+:root {
+    --blanco: #ffffff;
+    --negro: #000000;
+    --verdeOscuro: #317131;
+    --gris: #888888;
+}
+
+:root {
+    font-family: 'Passion One', system-ui;
+    font-size: 16px;
+    color: var(--blanco);
+    background: var(--verdeOscuro);
+}
+
+body {
+    margin: 0;
+}
+
+h1, h2, h3, h4 {
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
