@@ -30,8 +30,10 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
     @Query("SELECT t FROM Turno t WHERE " +
            "(:tipoFutbol IS NULL OR t.tipoFutbol = :tipoFutbol) AND " +
            "(:precioMin IS NULL OR t.precioPorJugador >= :precioMin) AND " +
-           "(:precioMax IS NULL OR t.precioPorJugador <= :precioMax)")
+           "(:precioMax IS NULL OR t.precioPorJugador <= :precioMax) AND " +
+           "(:localidad IS NULL OR LOWER(t.cancha.localidad.nombre) = LOWER(:localidad))")
     List<Turno> filtrar(@Param("tipoFutbol") TipoFutbol tipoFutbol,
                         @Param("precioMin") Float precioMin,
-                        @Param("precioMax") Float precioMax);
+                        @Param("precioMax") Float precioMax,
+                        @Param("localidad") String localidad);
 }
