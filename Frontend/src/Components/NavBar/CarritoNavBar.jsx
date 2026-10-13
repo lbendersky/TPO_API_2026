@@ -1,7 +1,7 @@
 function CarritoNavBar() {
     return (
-        <>
-            <img src="" alt="carrito" />
+        <>    
+            <img src="" alt="carrito"/>
         </>
     )
 }
