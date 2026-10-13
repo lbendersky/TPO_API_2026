@@ -7,7 +7,6 @@ const TurnoCard = ({
     precioPorJugador,
     descripcion,
     imagenPath,
-    estado,
     nombreCancha,
     localidad,
     nombreOrganizador,
