@@ -1,8 +1,20 @@
 import './App.css';
-import Inicio from './views/Inicio';
+import NavBar from './Components/NavBar/NavBar';
+import Inicio from './views/Inicio'
+import Carrito from './views/Carrito';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
-    return <Inicio />;
+    return (
+        <>
+        <NavBar/>
+        <Routes>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/inicio" element={<Inicio />} />
+            <Route path="/carrito" element={<Carrito />} />
+        </Routes>
+        </>
+    );
 }
 
 export default App;
