@@ -1,4 +1,4 @@
-function Carrito() {
+function CarritoNavBar() {
     return (
         <>
             <img src="" alt="carrito" />
@@ -6,4 +6,4 @@ function Carrito() {
     )
 }
 
-export default Carrito
+export default CarritoNavBar

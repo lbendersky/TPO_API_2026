@@ -1,0 +1,13 @@
+import React from 'react'
+
+const AvisoPrioridadBloqueada = () =>{
+  return (
+    <>
+        <h4>Prioridad bloqueada</h4>
+        <p>Lorem ipsum dolor sit amet.</p>
+        <ContadorAvisoCarrito></ContadorAvisoCarrito>
+    </>
+  )
+}
+
+export default AvisoPrioridadBloqueada

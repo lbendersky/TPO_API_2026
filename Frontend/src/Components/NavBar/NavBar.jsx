@@ -1,8 +1,4 @@
-import { BotonCambioDeURL } from "./BotonCambioDeURL"
-import { BotonPublicarCancha } from "./BotonPublicarCancha"
-import { BuscadorNavBar } from "./BuscadorNavBar"
-import Carrito from "./Carrito"
-import MenuDesplegable from "./MenuDesplegable"
+import CarritoNavBar from "./CarritoNavBar"
 import Buscador from "./Buscador"
 import Logo from "./Logo"
 import Titulo from "./Titulo"
@@ -21,8 +17,7 @@ const NavBar = () =>{
                         <Buscador />
                     </div>
                     <ul>
-                        <MenuDesplegable />
-                        <Carrito />
+                        <CarritoNavBar />
                     </ul>
                 </nav>
             </header>
