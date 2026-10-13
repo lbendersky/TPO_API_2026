@@ -1,6 +1,6 @@
 import './Inicio.css';
 
-import TurnoList from '../components/TurnoList';
+import TurnoList from '../Components/TurnoList';
 
 const Inicio = () => {
     return (

@@ -6,7 +6,7 @@ const AvisoPrioridadBloqueada = () =>{
     <>
         <h4>Prioridad bloqueada</h4>
         <p>Lorem ipsum dolor sit amet.</p>
-        <ContadorAvisoCarrito></ContadorAvisoCarrito>
+        <ContadorAvisoCarrito/>
     </>
   )
 }

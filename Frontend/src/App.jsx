@@ -1,5 +1,5 @@
 import './App.css';
-import NavBar from './components/NavBar/NavBar';
+import NavBar from './Components/NavBar/NavBar';
 import Inicio from './views/Inicio'
 import Carrito from './views/Carrito';
 import { Routes, Route } from 'react-router-dom';

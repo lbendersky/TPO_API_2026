@@ -1,4 +1,4 @@
-import CarritoNavBar from "./CarritoNavBar"
+import {BotonCarritoNavBar} from "./BotonCarritoNavBar"
 import Buscador from "./Buscador"
 import Logo from "./Logo"
 import Titulo from "./Titulo"
@@ -25,10 +25,7 @@ const NavBar = () =>{
                         <Buscador />
                     </div>
                     <ul>
-                        <button onClick={irACarrito}>
-                            <CarritoNavBar/>    
-                        </button>
-                        
+                        <BotonCarritoNavBar irACarrito={irACarrito}/>
                     </ul>
                 </nav>
             </header>
