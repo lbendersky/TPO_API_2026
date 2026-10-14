@@ -7,6 +7,8 @@ import { useState, useMemo } from 'react';
 import TurnoCard from './TurnoCard';
 // Importa el componente de la barra de filtros horizontal
 import Filtros from './Filtros';
+// Hook del contexto de búsqueda: nos permite leer el texto que escribe el usuario en el NavBar
+import { useBusqueda } from '../context/BusquedaContext';
 
 // Componente funcional TurnoList: lista los turnos y permite filtrarlos
 const TurnoList = () => {
@@ -66,6 +68,9 @@ const TurnoList = () => {
         precioMax: null,
     });
 
+    // Lee el texto de búsqueda compartido vía contexto (lo escribe el <Buscador /> del NavBar)
+    const { textoBusqueda } = useBusqueda();
+
     // --- CÓDIGO LISTO PARA CONECTAR AL BACKEND EN EL FUTURO ---
     // Cuando conectemos al backend, reemplazar el useState hardcodeado por un useEffect así:
     //
@@ -105,8 +110,11 @@ const TurnoList = () => {
     }, [turnos]);
 
     // useMemo: aplica los filtros en memoria sobre el array mock
-    // Se recalcula cuando cambia la lista de turnos o los filtros aplicados
+    // Se recalcula cuando cambia la lista de turnos, los filtros aplicados o el texto del buscador
     const turnosFiltrados = useMemo(() => {
+        // Normaliza el texto del buscador: trim para sacar espacios y toLowerCase para match case-insensitive
+        const textoNormalizado = textoBusqueda.trim().toLowerCase();
+
         return turnos.filter((t) => {
             // Sólo mostrar turnos con estado INCOMPLETO (en el futuro lo hará /turnos/disponibles)
             if (t.estado !== 'INCOMPLETO') return false;
@@ -118,10 +126,12 @@ const TurnoList = () => {
             if (filtros.precioMin != null && t.precioPorJugador < filtros.precioMin) return false;
             // Filtra por precio máximo si está definido
             if (filtros.precioMax != null && t.precioPorJugador > filtros.precioMax) return false;
+            // Filtra por texto del buscador contra nombreCancha (case-insensitive, "contiene")
+            if (textoNormalizado && !t.nombreCancha.toLowerCase().includes(textoNormalizado)) return false;
             // Si pasó todos los filtros, se incluye en la lista final
             return true;
         });
-    }, [turnos, filtros]);
+    }, [turnos, filtros, textoBusqueda]);
 
     // JSX que renderiza la barra de filtros arriba y la grilla de tarjetas abajo
     return (

@@ -1,8 +1,8 @@
+import { ShoppingCart } from 'lucide-react';
+
 function CarritoNavBar() {
     return (
-        <>    
-            <img src="" alt="carrito"/>
-        </>
+        <ShoppingCart className="carrito-navbar__icono" />
     )
 }
 

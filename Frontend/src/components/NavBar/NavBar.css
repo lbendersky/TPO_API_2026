@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 2rem;
+    padding: 0.75rem 5rem;
     background-color: var(--blanco);
     letter-spacing: 0.0em;                                                             
     line-height: 1.4;    
@@ -27,8 +27,29 @@
 .navbar .buscador {
     list-style: none;
     align-items: center;
-    gap: 1rem;
     color: var(--verdeOscuro);
+}
+
+/* Estilos del input de búsqueda dentro del NavBar */
+.buscador__input {
+    /* Padding chico para que no sume altura al navbar */
+    padding: 4px 14px;
+    /* Tamaño de fuente igual al navbar (1.5rem definido arriba) */
+    font-size: 1.5rem;
+    /* Borde visible para que se note que es un input */
+    border: 3px solid var(--verdeOscuro);
+    /* Esquinas redondeadas estilo "pill" */
+    border-radius: 20px;
+    /* Fondo blanco */
+    background-color: var(--blanco);
+    /* Color del texto que escribe el usuario */
+    color: var(--negro);
+    /* Ancho fijo para que no colapse */
+    width: 500px;
+    /* Hereda la fuente del body */
+    font-family: inherit;
+    /* Quita el borde azul por defecto al hacer focus */
+    outline: none;
 }
 
 .navbar .titulo {
@@ -38,4 +59,10 @@
     gap: 0.25rem;
     color: var(--verdeOscuro);
     text-decoration: none;
+}
+
+.carrito-navbar__icono {                                                                                                                 
+    width: 32px;
+    height: 32px;                                                                                                                        
+    color: var(--verdeOscuro);                            
 }

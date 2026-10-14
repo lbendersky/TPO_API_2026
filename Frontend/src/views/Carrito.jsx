@@ -1,5 +1,5 @@
-import { HeaderCarrito } from "../Components/Carrito/HeaderCarrito";
-import AvisoPrioridadBloqueada from "../Components/Carrito/AvisoPrioridadBloqueada";
+import { HeaderCarrito } from "../components/Carrito/HeaderCarrito";
+import AvisoPrioridadBloqueada from "../components/Carrito/AvisoPrioridadBloqueada";
 
 const Carrito = () => {
     return ( 
