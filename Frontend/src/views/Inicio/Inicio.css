@@ -1,0 +1,23 @@
+﻿.inicio {
+    padding: 0 2rem 2rem;
+    max-width: 75rem;
+    margin: 0 auto;
+}
+
+.inicio__titulo {
+    font-size: 2.5rem;
+    margin: 1rem;
+    color: var(--blanco);
+    font-weight: bold;
+    text-align: center;
+    -webkit-text-stroke: 0,400px var(--negro);
+    text-shadow: -0,80px 0,400px 0,10000px var(--negro); /* Cambia el Ãºltimo '0px' por '0,50000px' si la prefieres difuminada */
+    paint-order: markers stroke fill; 
+}
+
+.inicio__img {
+    display: block;
+    width: 100%;
+    max-width: 40em;
+    margin: 0 auto;
+}
