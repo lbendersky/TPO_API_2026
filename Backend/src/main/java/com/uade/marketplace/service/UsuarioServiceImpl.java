@@ -48,7 +48,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public void eliminar(Long idUsuario) {
+    public void eliminar(Long idUsuario) throws RecursoNoEncontradoException {
+        if (!usuarioRepository.existsById(idUsuario))
+            throw new RecursoNoEncontradoException("No existe el usuario " + idUsuario);
         usuarioRepository.deleteById(idUsuario);
     }
 

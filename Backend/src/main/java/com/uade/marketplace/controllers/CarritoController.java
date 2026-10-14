@@ -1,6 +1,7 @@
 package com.uade.marketplace.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +55,9 @@ public class CarritoController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> vaciar(@AuthenticationPrincipal Usuario usuario) throws RecursoNoEncontradoException {
+    public ResponseEntity<Map<String, String>> vaciar(@AuthenticationPrincipal Usuario usuario) throws RecursoNoEncontradoException {
         carritoService.vaciar(usuario.getIdUsuario());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Map.of("mensaje", "Carrito vaciado correctamente"));
     }
 
     @PostMapping("/checkout")

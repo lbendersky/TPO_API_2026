@@ -1,6 +1,7 @@
 package com.uade.marketplace.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -56,11 +57,11 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{usuarioId}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long usuarioId,
-                                         @AuthenticationPrincipal Usuario auth) {
+    public ResponseEntity<Map<String, String>> eliminar(@PathVariable Long usuarioId,
+                                                        @AuthenticationPrincipal Usuario auth) throws RecursoNoEncontradoException {
         verificarPermiso(auth, usuarioId);
         usuarioService.eliminar(usuarioId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Map.of("mensaje", "Usuario eliminado correctamente"));
     }
 
     private void verificarPermiso(Usuario auth, Long usuarioId) {

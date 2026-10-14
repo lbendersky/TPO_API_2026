@@ -202,7 +202,7 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax, String localidad) {
-        return mapear(turnoRepository.filtrar(tipoFutbol, precioMin, precioMax, localidad));
+    public List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax, String localidad, String texto) {
+        return mapear(turnoRepository.filtrar(tipoFutbol, precioMin, precioMax, localidad, texto));
     }
 }

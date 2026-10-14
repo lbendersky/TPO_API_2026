@@ -11,6 +11,6 @@ public interface UsuarioService {
     List<UsuarioResponse> getAll();
     Optional<UsuarioResponse> getById(Long idUsuario);
     UsuarioResponse actualizar(Long idUsuario, UsuarioRequest request) throws RecursoNoEncontradoException;
-    void eliminar(Long idUsuario);
+    void eliminar(Long idUsuario) throws RecursoNoEncontradoException;
     Optional<UsuarioResponse> buscarPorEmail(String email);
 }

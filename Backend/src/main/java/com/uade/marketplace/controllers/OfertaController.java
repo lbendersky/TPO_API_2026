@@ -1,6 +1,7 @@
 package com.uade.marketplace.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,8 +52,8 @@ public class OfertaController {
     }
 
     @DeleteMapping("/{idOferta}")
-    public ResponseEntity<Void> eliminarOferta(@PathVariable Long idOferta) {
+    public ResponseEntity<Map<String, String>> eliminarOferta(@PathVariable Long idOferta) throws RecursoNoEncontradoException {
         ofertaService.eliminarOferta(idOferta);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Map.of("mensaje", "Oferta eliminada correctamente"));
     }
 }

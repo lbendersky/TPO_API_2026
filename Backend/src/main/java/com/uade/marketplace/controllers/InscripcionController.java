@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.marketplace.dto.request.InscripcionRequest;
 import com.uade.marketplace.dto.response.InscripcionResponse;
+import com.uade.marketplace.dto.response.TurnoResponse;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoPago;
 import com.uade.marketplace.exceptions.AccesoDenegadoException;
@@ -63,7 +64,7 @@ public class InscripcionController {
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        inscripcionService.eliminar(id);
+    public TurnoResponse eliminar(@PathVariable Long id) throws RecursoNoEncontradoException {
+        return inscripcionService.eliminar(id);
     }
 }
