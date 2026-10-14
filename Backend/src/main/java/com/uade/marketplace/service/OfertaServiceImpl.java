@@ -65,7 +65,9 @@ public class OfertaServiceImpl implements OfertaService {
     }
 
     @Override
-    public void eliminarOferta(Long idOferta) {
+    public void eliminarOferta(Long idOferta) throws RecursoNoEncontradoException {
+        if (!ofertaRepository.existsById(idOferta))
+            throw new RecursoNoEncontradoException("No existe la oferta " + idOferta);
         ofertaRepository.deleteById(idOferta);
     }
 

@@ -32,5 +32,4 @@ public interface TurnoService {
 
     TurnoResponse actualizarStock(Long idTurno, Integer lugaresDisponibles, Usuario actor) throws RecursoNoEncontradoException;
 
-    List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax, String localidad);
-}
+    List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax, String localidad, String texto);}

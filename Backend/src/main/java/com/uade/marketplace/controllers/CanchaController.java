@@ -1,6 +1,7 @@
 package com.uade.marketplace.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -69,11 +70,13 @@ public class CanchaController {
         return canchaService.actualizar(canchaId, request, actor);
     }
 
-        @DeleteMapping("/{canchaId}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long canchaId, @AuthenticationPrincipal Usuario usuarioActual, @RequestParam(required = false) String motivo)
+    @DeleteMapping("/{canchaId}")
+    public ResponseEntity<Map<String, String>> eliminar(@PathVariable Long canchaId,
+                                                        @AuthenticationPrincipal Usuario usuarioActual,
+                                                        @RequestParam(required = false) String motivo)
             throws RecursoNoEncontradoException, AccesoDenegadoException {
         canchaService.eliminar(canchaId, usuarioActual, motivo);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Map.of("mensaje", "Cancha dada de baja correctamente"));
     }
 
 }

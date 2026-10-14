@@ -13,7 +13,7 @@ public interface OfertaService {
     Optional<OfertaResponse> obtenerPorTurno(Long idTurno);
     OfertaResponse crearOferta(OfertaRequest request) throws RecursoNoEncontradoException;
     OfertaResponse actualizarOferta(Long idOferta, OfertaRequest request) throws RecursoNoEncontradoException;
-    void eliminarOferta(Long idOferta);
+    void eliminarOferta(Long idOferta) throws RecursoNoEncontradoException;
     List<Oferta> obtenerActivas();
     Optional<Oferta> obtenerOfertaActivaPorTurno(Long idTurno);    
     Float calcularPrecioConDescuento(Float precioOriginal, Oferta ofertaActiva);

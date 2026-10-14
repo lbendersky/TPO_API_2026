@@ -28,12 +28,15 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
                                        @Param("hasta") LocalDateTime hasta);
 
     @Query("SELECT t FROM Turno t WHERE " +
-           "(:tipoFutbol IS NULL OR t.tipoFutbol = :tipoFutbol) AND " +
-           "(:precioMin IS NULL OR t.precioPorJugador >= :precioMin) AND " +
-           "(:precioMax IS NULL OR t.precioPorJugador <= :precioMax) AND " +
-           "(:localidad IS NULL OR LOWER(t.cancha.localidad.nombre) = LOWER(:localidad))")
-    List<Turno> filtrar(@Param("tipoFutbol") TipoFutbol tipoFutbol,
-                        @Param("precioMin") Float precioMin,
-                        @Param("precioMax") Float precioMax,
-                        @Param("localidad") String localidad);
+       "t.estado = com.uade.marketplace.entity.enums.EstadoTurno.INCOMPLETO AND " +
+       "(:tipoFutbol IS NULL OR t.tipoFutbol = :tipoFutbol) AND " +
+       "(:precioMin IS NULL OR t.precioPorJugador >= :precioMin) AND " +
+       "(:precioMax IS NULL OR t.precioPorJugador <= :precioMax) AND " +
+       "(:localidad IS NULL OR LOWER(t.cancha.localidad.nombre) = LOWER(:localidad)) AND " +
+       "(:texto IS NULL OR LOWER(t.cancha.nombre) LIKE LOWER(CONCAT('%', :texto, '%')))")
+List<Turno> filtrar(@Param("tipoFutbol") TipoFutbol tipoFutbol,
+                    @Param("precioMin") Float precioMin,
+                    @Param("precioMax") Float precioMax,
+                    @Param("localidad") String localidad,
+                    @Param("texto") String texto);
 }

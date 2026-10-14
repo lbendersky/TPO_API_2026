@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.marketplace.dto.request.InscripcionRequest;
 import com.uade.marketplace.dto.response.InscripcionResponse;
+import com.uade.marketplace.dto.response.TurnoResponse;
 import com.uade.marketplace.entity.Inscripcion;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
@@ -34,6 +35,8 @@ public class InscripcionServiceImpl implements InscripcionService{
     private UsuarioRepository usuarioRepository;
     @Autowired
     private OfertaService ofertaService;
+    @Autowired
+    private TurnoService turnoService;
 
     public List<InscripcionResponse> getAll() {
         return inscripcionRepository.findAll().stream().map(InscripcionResponse::from).toList();
@@ -109,8 +112,21 @@ public class InscripcionServiceImpl implements InscripcionService{
         return InscripcionResponse.from(inscripcionRepository.save(inscripcion));
     }
 
-    public void eliminar(Long idInscripcion) {
-        inscripcionRepository.deleteById(idInscripcion);
+    @Transactional(rollbackFor = Throwable.class)
+    @Override
+    public TurnoResponse eliminar(Long idInscripcion) throws RecursoNoEncontradoException {
+        Inscripcion inscripcion = inscripcionRepository.findById(idInscripcion)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe la inscripción " + idInscripcion));
+
+        Turno turno = inscripcion.getTurno();
+        turno.setLugaresDisponibles(turno.getLugaresDisponibles() + 1);
+        turno.setEstado(EstadoTurno.INCOMPLETO);
+        turnoRepository.save(turno);
+
+        inscripcionRepository.delete(inscripcion);
+
+        return turnoService.getTurnoById(turno.getIdTurno())
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + turno.getIdTurno()));
     }
 
 

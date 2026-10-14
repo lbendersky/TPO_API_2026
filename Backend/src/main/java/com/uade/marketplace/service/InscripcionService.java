@@ -10,6 +10,7 @@ import com.uade.marketplace.entity.enums.EstadoPago;
 import com.uade.marketplace.exceptions.AccesoDenegadoException;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoSinCuposException;
+import com.uade.marketplace.dto.response.TurnoResponse;
 
 public interface InscripcionService {
 
@@ -17,7 +18,7 @@ public interface InscripcionService {
     Optional<InscripcionResponse> getById(Long idInscripcion, Usuario actor) throws AccesoDenegadoException;
     InscripcionResponse crear (InscripcionRequest request, Usuario actor) throws RecursoNoEncontradoException, TurnoSinCuposException;
     InscripcionResponse actualizarEstadoPago(Long idInscripcion, EstadoPago nuevoEstado) throws RecursoNoEncontradoException;
-    void eliminar(Long idInscripcion);
+    TurnoResponse eliminar(Long idInscripcion) throws RecursoNoEncontradoException;    
     List<InscripcionResponse> getPorUsuario(Long idUsuario, Usuario actor) throws AccesoDenegadoException;
     List<InscripcionResponse> getPorTurno(Long idTurno, Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException;
 }

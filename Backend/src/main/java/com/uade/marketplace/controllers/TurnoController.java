@@ -3,6 +3,7 @@ package com.uade.marketplace.controllers;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class TurnoController {
         if (result.isPresent())
             return ResponseEntity.ok(result.get());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/cancha/{canchaId}")
@@ -60,7 +61,6 @@ public class TurnoController {
         return turnoService.getTurnosPorUsuario(usuarioId);
     }
 
-    // Métodos de escritura: devuelven TurnoResponse (DTO), nunca la entidad Turno cruda
     @PostMapping
     public ResponseEntity<TurnoResponse> createTurno(@AuthenticationPrincipal Usuario actor,
                                              @RequestBody TurnoRequest turnoRequest)
@@ -96,14 +96,15 @@ public class TurnoController {
             @org.springframework.web.bind.annotation.RequestParam(required = false) com.uade.marketplace.entity.enums.TipoFutbol tipoFutbol,
             @org.springframework.web.bind.annotation.RequestParam(required = false) Float precioMin,
             @org.springframework.web.bind.annotation.RequestParam(required = false) Float precioMax,
-            @org.springframework.web.bind.annotation.RequestParam(required = false) String localidad) {
-        return turnoService.filtrar(tipoFutbol, precioMin, precioMax, localidad);
+            @org.springframework.web.bind.annotation.RequestParam(required = false) String localidad,
+            @org.springframework.web.bind.annotation.RequestParam(required = false) String texto) {
+        return turnoService.filtrar(tipoFutbol, precioMin, precioMax, localidad, texto);
     }
 
     @DeleteMapping("/{turnoId}")
-    public ResponseEntity<Void> eliminar(@AuthenticationPrincipal Usuario actor,
-                                         @PathVariable Long turnoId) throws RecursoNoEncontradoException {
+    public ResponseEntity<Map<String, String>> eliminar(@AuthenticationPrincipal Usuario actor,
+                                                        @PathVariable Long turnoId) throws RecursoNoEncontradoException {
         turnoService.eliminarTurno(turnoId, actor);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Map.of("mensaje", "Turno eliminado correctamente"));
     }
 }
