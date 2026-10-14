@@ -1,12 +1,17 @@
 .navbar {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0.75rem 5rem;
     background-color: var(--blanco);
-    letter-spacing: 0.0em;                                                             
-    line-height: 1.4;    
+    letter-spacing: 0.0em;
+    line-height: 1.4;
     font-size: 1.5rem;
+    gap: 1rem;
+}
+
+.navbar > ul:nth-of-type(1) {
+    margin-left: auto;
 }
 
 .navbar .logo{
@@ -19,12 +24,16 @@
     margin: 0;
     padding: 0;
     display: flex;
-    align-items: center;
+    align-items: end;
     gap: 1rem;
     color: var(--verdeOscuro);
 }
 
 .navbar .buscador {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     list-style: none;
     align-items: center;
     color: var(--verdeOscuro);

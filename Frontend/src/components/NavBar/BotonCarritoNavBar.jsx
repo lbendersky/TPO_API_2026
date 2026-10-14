@@ -1,4 +1,3 @@
-import React from 'react'
 import CarritoNavBar from "./CarritoNavBar"
 
 export const BotonCarritoNavBar = ({ irACarrito }) => {

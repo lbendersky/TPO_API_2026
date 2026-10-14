@@ -1,4 +1,5 @@
 import {BotonCarritoNavBar} from "./BotonCarritoNavBar"
+import {BotonUsuarioNavBar} from "./BotonUsuarioNavbar"
 import Buscador from "./Buscador"
 import Logo from "./Logo"
 import Titulo from "./Titulo"
@@ -12,6 +13,9 @@ const NavBar = () =>{
         navigate('/carrito');
     };
 
+    const irAPerfil = () => {
+        navigate('/perfil');
+    };
 
     return (
         <>
@@ -26,6 +30,9 @@ const NavBar = () =>{
                     </div>
                     <ul>
                         <BotonCarritoNavBar irACarrito={irACarrito}/>
+                    </ul>
+                    <ul>
+                        <BotonUsuarioNavBar irAPerfil={irAPerfil}/>
                     </ul>
                 </nav>
             </header>
