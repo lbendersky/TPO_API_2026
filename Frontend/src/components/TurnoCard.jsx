@@ -31,8 +31,8 @@ const TurnoCard = ({
                         <>${precioPorJugador} c/u</>
                     )}
                 </p>
-                <p className="turno-card__organizador">Organiza: {nombreOrganizador}</p>
-                <p className="turno-card__descripcion">{descripcion}</p>
+                <p className="turno-card__organizador">Organiza: {nombreOrganizador}</p> 
+                <p className="turno-card__descripcion">{descripcion || "\u00A0"}</p> 
             </div>
         </article>
         </a>
