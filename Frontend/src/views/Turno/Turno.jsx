@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
 // URL base del backend (definida en src/config.js a partir de VITE_API_URL)
 import { API_URL } from '../../config';
+import { formatearFechaHora } from '../../utils/fecha';
 
 // Mapeo del enum del back (F5, F7, F8, F11) al texto legible que mostramos al usuario
 const TIPO_FUTBOL_LABEL = {
@@ -73,7 +74,7 @@ const Turno = () => {
                     </li>
                     <li className="turno__dato">
                         <Calendar size={18} className="turno__dato-icono" />
-                        <span>{turno.fechaHora}</span>
+                        <span>{formatearFechaHora(turno.fechaHora)}</span>
                     </li>
                     <li className="turno__dato">
                         <Users size={18} className="turno__dato-icono" />

@@ -30,7 +30,7 @@
     flex-direction: column;
     gap: 0.25rem;
     text-align: center;
-    letter-spacing: 1px;
+    letter-spacing: 0.0625em;
     line-height: 1.4;
 }
 

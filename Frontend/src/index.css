@@ -9,7 +9,7 @@
 
 :root {
     font-family: 'Passion One', system-ui;
-    font-size: 16px;
+    font-size: 1em;
     color: var(--blanco);
     background: var(--verdeOscuro);
 }

@@ -10,8 +10,8 @@
     color: var(--blanco);
     font-weight: bold;
     text-align: center;
-    -webkit-text-stroke: 0,400px var(--negro);
-    text-shadow: -0,80px 0,400px 0,10000px var(--negro); /* Cambia el Ãºltimo '0px' por '0,50000px' si la prefieres difuminada */
+    -webkit-text-stroke: 0.05em var(--negro);
+    text-shadow: -0.05em 0.1em 0.25em var(--negro); /* Cambia el Ãºltimo '0.25em' por '0.5em' si la prefieres difuminada */
     paint-order: markers stroke fill; 
 }
 

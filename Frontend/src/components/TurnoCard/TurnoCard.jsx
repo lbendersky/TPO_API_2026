@@ -1,6 +1,7 @@
 import './TurnoCard.css';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../../config';
+import { formatearFechaHora } from '../../utils/fecha';
 
 const TurnoCard = ({
     idTurno,
@@ -23,7 +24,8 @@ const TurnoCard = ({
             <div className="turno-card__body">
                 <h3 className="turno-card__titulo">{nombreCancha}</h3>
                 <p className="turno-card__localidadTipo">{localidad} - {tipoFutbol}</p>
-                <p className="turno-card__fechaCupos">{fechaHora} - Quedan {lugaresDisponibles} lugares</p>
+                <p className="turno-card__fechaCupos">{formatearFechaHora(fechaHora)}</p>
+                <p className="turno-card__fechaCupos">Quedan {lugaresDisponibles} lugares</p>
                 <p className="turno-card__precio">
                     {tieneOfertaActiva ? (
                         <>
