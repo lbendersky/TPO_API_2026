@@ -13,7 +13,13 @@
       "Bash(git mv *)",
       "Bash(git pull *)",
       "Bash(git fsck *)",
-      "Bash(git stash *)"
+      "Bash(git stash *)",
+      "Bash(npx vite *)",
+      "Bash(curl -s http://localhost:5174/)",
+      "Bash(curl -s http://localhost:5174/src/main.jsx)",
+      "Bash(curl -s http://localhost:5174/src/App.jsx)",
+      "Bash(curl -s http://localhost:5174/src/components/Filtros/Filtros.jsx)",
+      "Bash(curl -s http://localhost:5174/src/components/NavBar/NavBar.jsx)"
     ]
   }
 }

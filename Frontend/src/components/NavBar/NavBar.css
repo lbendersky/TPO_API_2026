@@ -39,25 +39,15 @@
     color: var(--verdeOscuro);
 }
 
-/* Estilos del input de búsqueda dentro del NavBar */
 .buscador__input {
-    /* Padding chico para que no sume altura al navbar */
     padding: 0.17em 0.58em;
-    /* Tamaño de fuente igual al navbar (1.5rem definido arriba) */
     font-size: 1.5rem;
-    /* Borde visible para que se note que es un input */
     border: 0.125em solid var(--verdeOscuro);
-    /* Esquinas redondeadas estilo "pill" */
     border-radius: 0.83em;
-    /* Fondo blanco */
     background-color: var(--blanco);
-    /* Color del texto que escribe el usuario */
     color: var(--negro);
-    /* Ancho fijo para que no colapse */
     width: 20.83em;
-    /* Hereda la fuente del body */
     font-family: inherit;
-    /* Quita el borde azul por defecto al hacer focus */
     outline: none;
 }
 

@@ -11,7 +11,7 @@
     font-weight: bold;
     text-align: center;
     -webkit-text-stroke: 0.05em var(--negro);
-    text-shadow: -0.05em 0.1em 0.25em var(--negro); /* Cambia el Ãºltimo '0.25em' por '0.5em' si la prefieres difuminada */
+    text-shadow: -0.05em 0.1em 0.25em var(--negro);
     paint-order: markers stroke fill; 
 }
 

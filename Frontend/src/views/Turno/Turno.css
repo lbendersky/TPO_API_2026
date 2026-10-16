@@ -1,8 +1,6 @@
-/* Vista de detalle del turno: layout de 2 columnas en desktop, 1 columna en mobile */
-
 .turno {
     display: grid;
-    /* Dos columnas: la imagen ocupa un poco más que la info */
+    /* Dos columnas */
     grid-template-columns: 1.2fr 1fr;
     gap: 2rem;
     max-width: 68.75em;
@@ -10,7 +8,6 @@
     padding: 0 1.5rem;
 }
 
-/* Imagen principal: ocupa toda la columna izquierda */
 .turno__img {
     width: 100%;
     height: 100%;
@@ -19,7 +16,6 @@
     box-shadow: 0 0.25em 0.75em var(--negro);
 }
 
-/* Panel de información del turno a la derecha */
 .turno__info {
     display: flex;
     flex-direction: column;
@@ -30,7 +26,6 @@
     box-shadow: 0 0.25em 0.75em var(--negro);
 }
 
-/* Header: badges arriba del título, en fila */
 .turno__header {
     display: flex;
     gap: 0.5rem;
@@ -54,7 +49,6 @@
     color: var(--verdeMuyOscuro);
 }
 
-/* Lista de datos con íconos: cada ítem en una sola línea, ícono al lado del texto */
 .turno__datos {
     list-style: none;
     padding: 0;
@@ -84,7 +78,6 @@
     line-height: 1.1;
 }
 
-/* Footer: separa precio del botón, CTA ocupa todo el ancho */
 .turno__footer {
     display: flex;
     flex-direction: column;
@@ -106,7 +99,6 @@
     font-size: 1.2rem;
 }
 
-/* Precio original tachado cuando hay oferta activa */
 .turno__precio--tachado {
     text-decoration: line-through;
     color: var(--gris);
@@ -126,7 +118,6 @@
     opacity: 0.9;
 }
 
-/* Botón principal "Sumarme": ocupa todo el ancho, texto centrado */
 .turno__cta {
     width: 100%;
     padding: 1.1rem 1.5rem;
@@ -145,7 +136,6 @@
     background-color: var(--verdeClaro);
 }
 
-/* Mensaje mientras carga */
 .turno__cargando {
     text-align: center;
     padding: 3rem;

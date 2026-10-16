@@ -1,159 +1,97 @@
-﻿/* Contenedor principal de la barra de filtros: layout horizontal con flex */
-.filtros-bar {
-    /* display flex para alinear los campos y el botÃ³n en una fila */
+﻿.filtros-bar {
     display: flex;
-    /* Centra los items verticalmente dentro de la barra */
     align-items: stretch;
-    /* Fondo blanco para contraste con el fondo verde de la pÃ¡gina */
     background-color: var(--blanco);
-    /* Esquinas redondeadas estilo "pill" */
     border-radius: 3.2em;
-    /* Sombra sutil para darle profundidad */
     box-shadow: 0 0.25em 0.75em var(--negro);
-    /* Padding interno izquierdo (el derecho lo ocupa el botÃ³n) */
     padding: 0 0 0 1.8em;
-    /* Ancho mÃ¡ximo para que no se estire demasiado en pantallas grandes */
     max-width: 75em;
-    /* Centra la barra horizontalmente en su contenedor padre */
     margin: 1.4em auto;
-    /* Oculta cualquier overflow (importante para que el border-radius recorte el botÃ³n) */
     overflow: hidden;
     margin-bottom: 2.8em;
 }
 
-/* Cada "campo" (localidad, formato, precio) es un bloque flex */
 .filtros-bar__campo {
-    /* Flex para alinear Ã­cono + contenido en una fila */
     display: flex;
-    /* Centra verticalmente Ã­cono y contenido */
     align-items: center;
-    /* Espacio entre el Ã­cono y el label/input */
     gap: 0.75em;
-    /* Cada campo ocupa espacio proporcional al disponible */
     flex: 1;
-    /* Padding vertical para dar aire arriba y abajo */
     padding: 0.9em 1.4em;
 }
 
-/* Ãcono SVG (Lucide) decorativo a la izquierda de cada campo */
 .filtros-bar__icono {
-    /* Ancho y alto del SVG (los SVG no responden a font-size, usan width/height) */
     width: 2em;
     height: 2em;
-    /* color define "currentColor" dentro del SVG (lo usa Lucide para stroke) */
     color: var(--verdeOscuro);
-    /* flex-shrink: 0 evita que el Ã­cono se achique si falta espacio */
     flex-shrink: 0;
 }
 
-/* Contenedor del label + input (apilados verticalmente) */
 .filtros-bar__contenido {
-    /* Flex en columna: label arriba, input abajo */
     display: flex;
     flex-direction: column;
-    /* Ocupa todo el ancho disponible dentro del campo */
     flex: 1;
 }
 
-/* Label chico con el nombre del filtro ("BARRIO O ZONA", etc.) */
 .filtros-bar__label {
-    /* Letra chica estilo "overline" */
     font-size: 1.3em;
-    /* Gris para que no compita con el valor del input */
     color: var(--gris);
-    /* PequeÃ±o margen abajo para separarlo del input */
     margin-bottom: 0.2em;
 }
 
-/* Input/select de cada filtro (texto principal) */
 .filtros-bar__input {
-    /* Sin borde para que parezca parte del fondo blanco */
     border: none;
-    /* Sin outline al hacer focus (lo manejamos con otro efecto si queremos) */
     outline: none;
-    /* Fondo transparente para heredar el blanco de la barra */
     background: transparent;
-    /* Fuente mÃ¡s grande para el valor seleccionado */
     font-size: 1em;
-    /* Color oscuro para legibilidad */
     color: var(--negro);
-    /* Padding 0 porque ya lo maneja el campo padre */
     padding: 0;
-    /* Cursor de puntero sobre los selects */
     cursor: pointer;
-    /* Hereda el font-family del body */
     font-family: inherit;
     border: 0.125em solid var(--gris);
     border-radius: 0.5em;
     padding: 0.4em;
 }
 
-/* Variante del input especÃ­ficamente para los campos de rango de precio */
 .filtros-bar__input--rango {
-    /* flex: 1 hace que el input crezca para repartir el espacio disponible del apartado */
     flex: 1;
-    /* max-width limita el ancho mÃ¡ximo para que no se estiren demasiado en pantallas grandes */
     max-width: 7.5em;
-    /* min-width evita que se achiquen por debajo de un ancho usable */
     min-width: 0;
-    /* Cursor de texto en lugar de puntero */
     cursor: text;
     border: 0.125em solid var(--gris);
     border-radius: 0.5em;
     padding: 0.4em;
 }
 
-/* Contenedor flex horizontal para los dos inputs de precio y el guiÃ³n */
 .filtros-bar__rango {
-    /* Flex horizontal */
     display: flex;
-    /* Centra los items verticalmente */
     align-items: center;
-    /* Espacio entre los inputs y el guiÃ³n */
     gap: 0.6em;
     justify-content: center;
     width: 100%;
 }
 
-/* GuiÃ³n decorativo entre los inputs min/max */
 .filtros-bar__guion {
-    /* Color gris para que no compita con los inputs */
     color: var(--gris);
 }
 
-/* LÃ­nea vertical separadora entre campos */
 .filtros-bar__separador {
-    /* Ancho de 0.0625em para que sea una lÃ­nea fina (1px) */
     width: 0.0625em;
-    /* Fondo gris claro para que sea sutil */
     background-color: var(--gris);
-    /* Margen vertical para que no toque los bordes de la barra */
     margin: 0.75em 0;
 }
 
-/* BotÃ³n principal "BUSCAR TURNOS" */
 .filtros-bar__boton {
-    /* Color terracota como en la imagen de referencia */
     background-color: var(--verdeClaro);
-    /* Texto blanco para contraste */
     color: var(--blanco);
-    /* Sin borde */
     border: none;
-    /* Padding horizontal generoso para que el botÃ³n sea prominente */
     padding: 0 2em;
-    /* Fuente negrita y mediana */
     font-size: 1.5em;
-    /* Espaciado entre letras estilo "BUSCAR TURNOS" */
     letter-spacing: 0.1em;
-    /* Cursor de puntero */
     cursor: pointer;
-    /* TransiciÃ³n suave al hacer hover */
     transition: background-color 0.2s;
-    /* Hereda la fuente del body */
     font-family: inherit;
 }
 
-/* Efecto hover: oscurece ligeramente el fondo */
 .filtros-bar__boton:hover {
     background-color: var(--verdeOscuro);
 }

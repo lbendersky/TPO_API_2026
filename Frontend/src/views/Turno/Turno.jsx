@@ -1,19 +1,17 @@
-// Estilos propios de la vista de detalle del turno
 import './Turno.css';
 
-// useParams: hook de react-router que lee los parámetros dinámicos de la URL.
-// En nuestra ruta "/turno/:id", nos devuelve { id: "<lo que haya en la URL>" }.
-import { useParams } from 'react-router-dom';
+// Importa el hook useParams de react-router-dom para leer parámetros de la URL
+import { useParams, useNavigate } from 'react-router-dom';
 // useState: para guardar el turno traído del back.
 // useEffect: para disparar el fetch cuando se monta el componente o cambia el id.
 import { useState, useEffect } from 'react';
-// Íconos de lucide-react para hacer el panel más vistoso
+
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
-// URL base del backend (definida en src/config.js a partir de VITE_API_URL)
+// URL base del backend
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
+import { useAuth } from '../../context/AuthContext';
 
-// Mapeo del enum del back (F5, F7, F8, F11) al texto legible que mostramos al usuario
 const TIPO_FUTBOL_LABEL = {
     F5: 'Fútbol 5',
     F7: 'Fútbol 7',
@@ -22,14 +20,33 @@ const TIPO_FUTBOL_LABEL = {
 };
 
 const Turno = () => {
-    // Extraemos el id de la URL. OJO: viene como string.
     const { id } = useParams();
-
-    // Estado donde guardamos el turno. null = todavía no cargó.
+    const navigate = useNavigate();
+    const { estaLogueado, token } = useAuth();
     const [turno, setTurno] = useState(null);
 
-    // Efecto que se ejecuta cada vez que cambia el id de la URL.
-    // Hace GET /turnos/{id} al back y guarda la respuesta en el estado.
+    const agregarAlCarrito = async () => {
+        if (!estaLogueado) {
+            navigate('/login');
+            return;
+        }
+        try {
+            const response = await fetch(`${API_URL}/carrito/items`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ idTurno: turno.idTurno, cantidad: 1 }),
+            });
+            if (!response.ok) throw new Error('No se pudo agregar al carrito');
+            navigate('/carrito');
+        } catch (error) {
+            console.error('Error al agregar al carrito', error);
+            alert('No se pudo agregar al carrito');
+        }
+    };
+
     useEffect(() => {
         fetch(`${API_URL}/turnos/${id}`)
             .then((response) => response.json())
@@ -37,26 +54,25 @@ const Turno = () => {
             .catch((error) => console.error('Error al cargar turno', error));
     }, [id]);
 
-    // Mientras no haya respuesta mostramos un mensaje simple de carga
     if (!turno) return <p className="turno__cargando">Cargando...</p>;
 
     return (
         <main className="turno">
-            {/* Imagen principal de la cancha. imagenPath viene como ruta relativa, por eso le anteponemos API_URL */}
+            {}
             <img
                 className="turno__img"
                 src={`${API_URL}/${turno.imagenPath}`}
                 alt={turno.nombreCancha}
             />
 
-            {/* Panel con toda la info del turno */}
+            {}
             <section className="turno__info">
-                {/* Header del panel: badge con el tipo de fútbol + título */}
+                {}
                 <div className="turno__header">
                     <span className="turno__badge">
                         {TIPO_FUTBOL_LABEL[turno.tipoFutbol] ?? turno.tipoFutbol}
                     </span>
-                    {/* Si hay oferta activa mostramos un badge adicional llamando la atención */}
+                    {}
                     {turno.tieneOfertaActiva && (
                         <span className="turno__badge turno__badge--oferta">
                             <Tag size={14} /> ¡Oferta!
@@ -66,7 +82,7 @@ const Turno = () => {
 
                 <h1 className="turno__titulo">{turno.nombreCancha}</h1>
 
-                {/* Lista de datos clave con íconos: localidad, fecha y cupos */}
+                {}
                 <ul className="turno__datos">
                     <li className="turno__dato">
                         <MapPin size={18} className="turno__dato-icono" />
@@ -86,13 +102,12 @@ const Turno = () => {
                     </li>
                 </ul>
 
-                {/* Descripción libre del turno (solo si viene). Separada en su propio bloque. */}
+                {}
                 {turno.descripcion && (
                     <p className="turno__descripcion">{turno.descripcion}</p>
                 )}
 
-                {/* Bloque final: precio prominente + CTA.
-                    Usamos un contenedor para que precio y botón queden alineados al pie. */}
+                {}
                 <div className="turno__footer">
                     <div className="turno__precio">
                         {turno.tieneOfertaActiva ? (
@@ -119,7 +134,7 @@ const Turno = () => {
                         )}
                     </div>
 
-                    <button className="turno__cta" type="button">
+                    <button className="turno__cta" type="button" onClick={agregarAlCarrito}>
                         Sumarme
                     </button>
                 </div>

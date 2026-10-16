@@ -1,3 +1,5 @@
+// Fromatea la fecha proveniente de la base de datos
+
 export const formatearFechaHora = (fechaHora) => {
     if (!fechaHora) return '';
     const fecha = new Date(fechaHora);

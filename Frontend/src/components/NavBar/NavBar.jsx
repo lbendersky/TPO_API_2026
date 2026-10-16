@@ -13,9 +13,6 @@ const NavBar = () =>{
         navigate('/carrito');
     };
 
-    const irAPerfil = () => {
-        navigate('/perfil');
-    };
 
     return (
         <>
@@ -32,7 +29,7 @@ const NavBar = () =>{
                         <BotonCarritoNavBar irACarrito={irACarrito}/>
                     </ul>
                     <ul>
-                        <BotonUsuarioNavBar irAPerfil={irAPerfil}/>
+                        <BotonUsuarioNavBar/>
                     </ul>
                 </nav>
             </header>

@@ -1,20 +1,15 @@
-// Importa los estilos del componente para que se apliquen al renderizar
 import './TurnoList.css';
 
-// Importa los hooks useState (estado) y useEffect (efectos secundarios) de React
 import { useState, useEffect } from 'react';
-// Importa el componente de tarjeta individual que muestra cada turno
 import TurnoCard from '../TurnoCard/TurnoCard';
-// Importa el componente de la barra de filtros horizontal
 import Filtros from '../Filtros/Filtros';
-// Hook del contexto de búsqueda: nos permite leer el texto que escribe el usuario en el NavBar
 import { useBusqueda } from '../../context/BusquedaContext';
 import { API_URL } from '../../config';
 
 const TurnoList = () => {
     const [turnos, setTurnos] = useState([]);
     const [localidades, setLocalidades] = useState([]);
-    // Estado con los filtros aplicados actualmente (null = sin filtro)
+    // Filtro en null por defecto
     const [filtros, setFiltros] = useState({
         localidad: null,
         tipoFutbol: null,
@@ -45,13 +40,12 @@ const TurnoList = () => {
             .catch((error) => console.error('Error al cargar turnos', error));
     }, [filtros, textoBusqueda]);
 
-    // JSX que renderiza la barra de filtros arriba y la grilla de tarjetas abajo
     return (
         <>
-            {/* Barra de filtros: le pasamos las localidades disponibles y el callback */}
+            {}
             <Filtros localidades={localidades} onFiltrar={setFiltros} />
 
-            {/* Grilla con las tarjetas de los turnos ya filtrados */}
+            {}
             <section className="turno-list">
                 {/* Recorre el array filtrado y renderiza una TurnoCard por cada turno */}
                 {turnos.map((value) => (
@@ -71,7 +65,7 @@ const TurnoList = () => {
                         tieneOfertaActiva={value.tieneOfertaActiva}
                     />
                 ))}
-                {/* Mensaje opcional cuando no hay resultados que coincidan con los filtros */}
+                {}
                 {turnos.length === 0 && (
                     <p className="turno-list__vacio">No hay turnos que coincidan con los filtros.</p>
                 )}
@@ -80,5 +74,4 @@ const TurnoList = () => {
     );
 };
 
-// Exporta el componente para poder importarlo desde Inicio.jsx
 export default TurnoList;
