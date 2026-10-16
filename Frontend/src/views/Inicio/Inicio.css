@@ -1,4 +1,4 @@
-.inicio {
+﻿.inicio {
     padding: 0 2rem 2rem;
     max-width: 75rem;
     margin: 0 auto;
@@ -10,14 +10,14 @@
     color: var(--blanco);
     font-weight: bold;
     text-align: center;
-    -webkit-text-stroke: 4px var(--negro);
-    text-shadow: -8px 4px 10px var(--negro); /* Cambia el último '0px' por '5px' si la prefieres difuminada */
+    -webkit-text-stroke: 0.05em var(--negro);
+    text-shadow: -0.05em 0.1em 0.25em var(--negro);
     paint-order: markers stroke fill; 
 }
 
 .inicio__img {
     display: block;
     width: 100%;
-    max-width: 500px;
+    max-width: 40em;
     margin: 0 auto;
 }

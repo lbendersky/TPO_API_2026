@@ -1,14 +1,16 @@
 :root {
     --blanco: #ffffff;
     --negro: #000000;
+    --verdeMuyOscuro: #214d21;
     --verdeOscuro: #317131;
     --verdeClaro: #42a442;
     --gris: #888888;
+    --rojo: #c0392b;
 }
 
 :root {
     font-family: 'Passion One', system-ui;
-    font-size: 16px;
+    font-size: 1em;
     color: var(--blanco);
     background: var(--verdeOscuro);
 }

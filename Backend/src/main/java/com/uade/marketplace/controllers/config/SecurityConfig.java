@@ -37,6 +37,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/ofertas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/localidades/**").permitAll()
 
+                        // Imagenes estaticas
+                        .requestMatchers(HttpMethod.GET, "/imagenes/**").permitAll()
+
 
                         // Solo ADMIN
                         .requestMatchers("/admin/**").hasAnyAuthority(Rol.ADMIN.name())

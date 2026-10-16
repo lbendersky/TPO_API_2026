@@ -6,17 +6,31 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.marketplace.dto.request.UsuarioRequest;
 import com.uade.marketplace.dto.response.UsuarioResponse;
+import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import com.uade.marketplace.repository.CarritoRepository;
+import com.uade.marketplace.repository.InscripcionRepository;
+import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CarritoRepository carritoRepository;
+
+    @Autowired
+    private InscripcionRepository inscripcionRepository;
+
+    @Autowired
+    private TurnoRepository turnoRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -48,9 +62,26 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public void eliminar(Long idUsuario) throws RecursoNoEncontradoException {
         if (!usuarioRepository.existsById(idUsuario))
             throw new RecursoNoEncontradoException("No existe el usuario " + idUsuario);
+
+        // Borrar inscripciones del usuario como comprador
+        inscripcionRepository.deleteAll(
+                inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario));
+
+        // Borrar los turnos que organiza y sus inscripciones asociadas
+        for (Turno turno : turnoRepository.findByUsuario_IdUsuario(idUsuario)) {
+            inscripcionRepository.deleteAll(
+                    inscripcionRepository.findByTurno_IdTurno(turno.getIdTurno()));
+            turnoRepository.delete(turno);
+        }
+
+        // Borrar el carrito del usuario (los items se borran por orphanRemoval)
+        carritoRepository.findByUsuario_IdUsuario(idUsuario)
+                .ifPresent(carritoRepository::delete);
+
         usuarioRepository.deleteById(idUsuario);
     }
 

@@ -1,0 +1,99 @@
+.perfil {
+    max-width: 37.5em;
+    margin: 2.5em auto;
+    padding: 1.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    letter-spacing: 0.08em;
+}
+
+.perfil__titulo {
+    margin: 0;
+    font-size: 3em;
+    text-align: center;
+}
+
+.perfil__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+.perfil__campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    font-size: 0.9em;
+}
+
+.perfil__campo input {
+    padding: 0.625em;
+    border: 0.0625em solid var(--blanco);
+    background: var(--blanco);
+    color: var(--gris);
+    border-radius: 0.375em;
+    font-size: 1em;
+}
+
+.perfil__guardar {
+    padding: 0.75em;
+    border: none;
+    border-radius: 0.375em;
+    background: var(--verdeMuyOscuro);
+    color: var(--blanco);
+    cursor: pointer;
+    transition: background 0.3s, border 0.2s;
+    margin-top: 0.5em;
+}
+
+.perfil__guardar:hover {
+    background: var(--verdeOscuro);
+    border: 0.0625em solid var(--blanco);
+}
+
+.perfil__mensaje {
+    color: var(--verdeOscuro);
+    text-align: center;
+    margin: 0;
+}
+
+.perfil__error {
+    color: var(--rojo);
+    text-align: center;
+    margin: 0;
+}
+
+.perfil__acciones {
+    display: flex;
+    gap: 0.5em;
+    margin-top: 1em;
+}
+
+.perfil__logout,
+.perfil__eliminar {
+    flex: 1;
+    padding: 0.75em;
+    border: 0.0625em solid var(--gris);
+    border-radius: 0.375em;
+    cursor: pointer;
+    background: var(--blanco);
+    color: var(--gris);
+    transition: background 0.2s, color 0.2s;
+}
+
+.perfil__logout:hover {
+    background: var(--verdeOscuro);
+    color: var(--blanco);
+    border-color: var(--blanco);
+}
+
+.perfil__eliminar {
+    color: var(--rojo);
+    border-color: var(--rojo);
+}
+
+.perfil__eliminar:hover {
+    background: var(--rojo);
+    color: var(--blanco);
+}

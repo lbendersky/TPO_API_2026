@@ -15,7 +15,7 @@
 }
 
 .navbar .logo{
-    height: 60px;
+    height: 2.5em;
     display: block;
 }
 
@@ -39,25 +39,15 @@
     color: var(--verdeOscuro);
 }
 
-/* Estilos del input de búsqueda dentro del NavBar */
 .buscador__input {
-    /* Padding chico para que no sume altura al navbar */
-    padding: 4px 14px;
-    /* Tamaño de fuente igual al navbar (1.5rem definido arriba) */
+    padding: 0.17em 0.58em;
     font-size: 1.5rem;
-    /* Borde visible para que se note que es un input */
-    border: 3px solid var(--verdeOscuro);
-    /* Esquinas redondeadas estilo "pill" */
-    border-radius: 20px;
-    /* Fondo blanco */
+    border: 0.125em solid var(--verdeOscuro);
+    border-radius: 0.83em;
     background-color: var(--blanco);
-    /* Color del texto que escribe el usuario */
     color: var(--negro);
-    /* Ancho fijo para que no colapse */
-    width: 500px;
-    /* Hereda la fuente del body */
+    width: 20.83em;
     font-family: inherit;
-    /* Quita el borde azul por defecto al hacer focus */
     outline: none;
 }
 
@@ -68,10 +58,26 @@
     gap: 0.25rem;
     color: var(--verdeOscuro);
     text-decoration: none;
+    padding: 0.25em 0.5em;
+    border-radius: 0.3em;
+    transition: background-color 0.2s;
 }
 
-.carrito-navbar__icono {                                                                                                                 
-    width: 32px;
-    height: 32px;                                                                                                                        
-    color: var(--verdeOscuro);                            
+.navbar .titulo:hover {
+    background-color: var(--gris);
+}
+
+.carrito-navbar__icono {
+    width: 1.33em;
+    height: 1.33em;
+    color: var(--verdeOscuro);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 0.3em;
+    padding: 0.3em;
+    box-sizing: content-box;
+}
+
+.carrito-navbar__icono:hover {
+    background-color: var(--gris);
 }
