@@ -57,7 +57,6 @@ const TurnoList = () => {
                         lugaresDisponibles={value.lugaresDisponibles}
                         precioPorJugador={value.precioPorJugador}
                         descripcion={value.descripcion}
-                        imagenPath={value.imagenPath}
                         nombreCancha={value.nombreCancha}
                         localidad={value.localidad}
                         nombreOrganizador={value.nombreOrganizador}

@@ -77,13 +77,6 @@ public class TurnoController {
         return turnoService.actualizarTurno(turnoId, turno, actor);
     }
 
-    @PutMapping("/{turnoId}/imagen")
-    public TurnoResponse setImagen(@AuthenticationPrincipal Usuario actor,
-                           @PathVariable Long turnoId,
-                           @RequestBody java.util.Map<String, String> body) throws RecursoNoEncontradoException {
-        return turnoService.setImagen(turnoId, body.get("imagenPath"), actor);
-    }
-
     @PutMapping("/{turnoId}/stock")
     public TurnoResponse actualizarStock(@AuthenticationPrincipal Usuario actor,
                                  @PathVariable Long turnoId,

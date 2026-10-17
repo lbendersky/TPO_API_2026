@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.Customizer;
 
 import com.uade.marketplace.entity.enums.Rol;
 
@@ -25,6 +26,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         // Auth y errores
@@ -36,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/canchas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/ofertas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/localidades/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/imagenes/**").permitAll()
 
                         // Imagenes estaticas
                         .requestMatchers(HttpMethod.GET, "/imagenes/**").permitAll()

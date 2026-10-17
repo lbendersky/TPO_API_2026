@@ -25,6 +25,7 @@ import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
+import com.uade.marketplace.repository.ImagenRepository;
 
 @Service
 public class TurnoServiceImpl implements TurnoService {
@@ -40,6 +41,9 @@ public class TurnoServiceImpl implements TurnoService {
 
     @Autowired
     private OfertaService ofertaService;
+
+    @Autowired
+    private ImagenRepository imagenRepository;
 
     private TurnoResponse convertirATurnoResponse(Turno t, Map<Long, Oferta> mapaOfertas) {
         Oferta ofertaActiva = mapaOfertas.get(t.getIdTurno());
@@ -135,7 +139,6 @@ public class TurnoServiceImpl implements TurnoService {
             .lugaresDisponibles(cancha.getCantidadJugadores())
             .precioPorJugador(turnoRequest.getPrecioPorJugador())
             .descripcion(turnoRequest.getDescripcion())
-            .imagenPath(turnoRequest.getImagenPath())
             .estado(EstadoTurno.INCOMPLETO)
             .usuario(usuario)
             .cancha(cancha)
@@ -144,11 +147,12 @@ public class TurnoServiceImpl implements TurnoService {
         return mapear(List.of(guardado)).get(0);
     }
 
-    @Override
+        @Override
     public void eliminarTurno(Long idTurno, Usuario actor) throws RecursoNoEncontradoException {
         Turno turno = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
         validarOwnership(turno, actor);
+        imagenRepository.deleteAll(imagenRepository.findByTurno_IdTurno(idTurno));
         turnoRepository.delete(turno);
     }
 
@@ -170,20 +174,9 @@ public class TurnoServiceImpl implements TurnoService {
         turnoActualizado.setFechaHora(turnoRequest.getFechaHora());
         turnoActualizado.setTipoFutbol(cancha.getTipoFutbol());
         turnoActualizado.setDescripcion(turnoRequest.getDescripcion());
-        turnoActualizado.setImagenPath(turnoRequest.getImagenPath());
         turnoActualizado.setPrecioPorJugador(turnoRequest.getPrecioPorJugador());
         turnoActualizado.setCancha(cancha);
         Turno guardado = turnoRepository.save(turnoActualizado);
-        return mapear(List.of(guardado)).get(0);
-    }
-
-    @Override
-    public TurnoResponse setImagen(Long idTurno, String imagenPath, Usuario actor) throws RecursoNoEncontradoException {
-        Turno turno = turnoRepository.findById(idTurno)
-                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
-        validarOwnership(turno, actor);
-        turno.setImagenPath(imagenPath);
-        Turno guardado = turnoRepository.save(turno);
         return mapear(List.of(guardado)).get(0);
     }
 
