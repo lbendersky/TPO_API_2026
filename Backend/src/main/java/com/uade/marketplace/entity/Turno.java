@@ -47,9 +47,6 @@ public class Turno {
     @Column
     private String descripcion;
 
-    @Column(name = "imagen_path")
-    private String imagenPath;
-
     @Enumerated(EnumType.STRING)
     @Column(check = @CheckConstraint(name = "chequear_estado_turno", constraint = "estado IN ('INCOMPLETO', 'LLENO')"))
     private EstadoTurno estado;

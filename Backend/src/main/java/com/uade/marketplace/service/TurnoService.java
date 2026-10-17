@@ -28,8 +28,6 @@ public interface TurnoService {
 
     List<TurnoResponse> getTurnosPorUsuario(Long idUsuario);
 
-    TurnoResponse setImagen(Long idTurno, String imagenPath, Usuario actor) throws RecursoNoEncontradoException;
-
     TurnoResponse actualizarStock(Long idTurno, Integer lugaresDisponibles, Usuario actor) throws RecursoNoEncontradoException;
 
     List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax, String localidad, String texto);}

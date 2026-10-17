@@ -24,6 +24,7 @@ const Turno = () => {
     const navigate = useNavigate();
     const { estaLogueado, token } = useAuth();
     const [turno, setTurno] = useState(null);
+    const [imagenes, setImagenes] = useState([]);
 
     const agregarAlCarrito = async () => {
         if (!estaLogueado) {
@@ -54,16 +55,31 @@ const Turno = () => {
             .catch((error) => console.error('Error al cargar turno', error));
     }, [id]);
 
+    useEffect(() => {
+        fetch(`${API_URL}/imagenes/turno/${id}`)
+            .then((response) => {
+                if (!response.ok) throw new Error('No se pudieron cargar las imágenes');
+                return response.json();
+            })
+            .then((data) => setImagenes(data))
+            .catch((error) => console.error('Error al cargar las imágenes', error));
+    }, [id]);
+
     if (!turno) return <p className="turno__cargando">Cargando...</p>;
 
     return (
         <main className="turno">
             {}
-            <img
-                className="turno__img"
-                src={`${API_URL}/${turno.imagenPath}`}
-                alt={turno.nombreCancha}
-            />
+            <div className="turno__galeria">
+                {imagenes.map((imagen, index) => (
+                    <img
+                        key={index}
+                        className="turno__img"
+                        src={`data:image/jpeg;base64,${imagen.file}`}
+                        alt={`${turno.nombreCancha} - foto ${index + 1}`}
+                    />
+                ))}
+            </div>
 
             {}
             <section className="turno__info">

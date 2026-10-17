@@ -2,6 +2,7 @@ import './TurnoCard.css';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
+import { useState, useEffect } from 'react';
 
 const TurnoCard = ({
     idTurno,
@@ -10,17 +11,27 @@ const TurnoCard = ({
     lugaresDisponibles,
     precioPorJugador,
     descripcion,
-    imagenPath,
     nombreCancha,
     localidad,
     nombreOrganizador,
     precioConDescuento,
     tieneOfertaActiva,
 }) => {
+    //Pide imagen/es a back
+    useEffect(() => {
+        fetch(`${API_URL}/imagenes/turno/${idTurno}`)
+            .then((response) => {
+                if (!response.ok) throw new Error('No se pudo cargar la imagen');
+                return response.json();
+            })
+            .then((data) => setImagen(data[0].file))
+            .catch((error) => console.error('Error al cargar la imagen', error));
+    }, [idTurno]);
+    
     return (
         <Link to={`/turno/${idTurno}`} className="turno-card-link">
         <article className="turno-card">
-            <img className="turno-card__img" src={`${API_URL}/${imagenPath}`} alt={nombreCancha} />
+            {imagen && <img className="turno-card__img" src={`data:image/jpeg;base64,${imagen}`} alt={nombreCancha} />}
             <div className="turno-card__body">
                 <h3 className="turno-card__titulo">{nombreCancha}</h3>
                 <p className="turno-card__localidadTipo">{localidad} - {tipoFutbol}</p>

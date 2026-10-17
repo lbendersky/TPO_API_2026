@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/canchas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/ofertas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/localidades/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/imagenes/**").permitAll()
 
                         // Imagenes estaticas
                         .requestMatchers(HttpMethod.GET, "/imagenes/**").permitAll()
