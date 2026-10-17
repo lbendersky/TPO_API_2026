@@ -1,4 +1,4 @@
-.turno-card-link {
+﻿.turno-card-link {
     text-decoration: none;
     color: inherit;
     display: block;
@@ -30,7 +30,7 @@
     flex-direction: column;
     gap: 0.25rem;
     text-align: center;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.0625em;
     line-height: 1.4;
 }
 

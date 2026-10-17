@@ -1,0 +1,74 @@
+.login {
+    max-width: 37.5em;
+    margin: 2.5em auto;
+    padding: 1.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    letter-spacing: 0.08em;
+}
+
+.login__tabs {
+    display: flex;
+    gap: 0.5em;
+}
+
+.login__tab {
+    flex: 1;
+    padding: 0.625em;
+    border: 0.0625em solid var(--gris);
+    background: var(--blanco);
+    color: var(--gris);
+    cursor: pointer;
+    border-radius: 0.375em;
+    font-size: 1em;
+    transition: background 0.2s, color 0.2s;
+}
+
+.login__tab:hover {
+    background: var(--verdeOscuro);
+    color: var(--blanco);
+    border: 0.0625em solid var(--blanco);
+}
+
+.login__tab--activa {
+    background: var(--verdeMuyOscuro);
+    color: var(--blanco);
+    border: 0.0625em solid var(--blanco);
+}
+
+.login__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625em;
+}
+
+.login__form input {
+    padding: 0.625em;
+    border: 0.0625em solid var(--blanco);
+    background: var(--blanco);
+    color: var(--gris);
+    border-radius: 0.375em;
+    font-size: 1em;
+}
+
+.login__submit {
+    padding: 0.75em;
+    border: none;
+    border-radius: 0.375em;
+    background: var(--verdeMuyOscuro);
+    color: var(--blanco);
+    cursor: pointer;
+    transition: background 0.5s, border 0.2s;
+}
+
+.login__submit:hover {
+    background: var(--verdeOscuro);
+    border: 0.0625em solid var(--blanco);
+}
+
+.login__error {
+    color: var(--rojo);
+    text-align: center;
+    margin: 0;
+}

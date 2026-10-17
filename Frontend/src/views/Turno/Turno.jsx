@@ -1,0 +1,146 @@
+import './Turno.css';
+
+// Importa el hook useParams de react-router-dom para leer parámetros de la URL
+import { useParams, useNavigate } from 'react-router-dom';
+// useState: para guardar el turno traído del back.
+// useEffect: para disparar el fetch cuando se monta el componente o cambia el id.
+import { useState, useEffect } from 'react';
+
+import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
+// URL base del backend
+import { API_URL } from '../../config';
+import { formatearFechaHora } from '../../utils/fecha';
+import { useAuth } from '../../context/AuthContext';
+
+const TIPO_FUTBOL_LABEL = {
+    F5: 'Fútbol 5',
+    F7: 'Fútbol 7',
+    F8: 'Fútbol 8',
+    F11: 'Fútbol 11',
+};
+
+const Turno = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { estaLogueado, token } = useAuth();
+    const [turno, setTurno] = useState(null);
+
+    const agregarAlCarrito = async () => {
+        if (!estaLogueado) {
+            navigate('/login');
+            return;
+        }
+        try {
+            const response = await fetch(`${API_URL}/carrito/items`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ idTurno: turno.idTurno, cantidad: 1 }),
+            });
+            if (!response.ok) throw new Error('No se pudo agregar al carrito');
+            navigate('/carrito');
+        } catch (error) {
+            console.error('Error al agregar al carrito', error);
+            alert('No se pudo agregar al carrito');
+        }
+    };
+
+    useEffect(() => {
+        fetch(`${API_URL}/turnos/${id}`)
+            .then((response) => response.json())
+            .then((data) => setTurno(data))
+            .catch((error) => console.error('Error al cargar turno', error));
+    }, [id]);
+
+    if (!turno) return <p className="turno__cargando">Cargando...</p>;
+
+    return (
+        <main className="turno">
+            {}
+            <img
+                className="turno__img"
+                src={`${API_URL}/${turno.imagenPath}`}
+                alt={turno.nombreCancha}
+            />
+
+            {}
+            <section className="turno__info">
+                {}
+                <div className="turno__header">
+                    <span className="turno__badge">
+                        {TIPO_FUTBOL_LABEL[turno.tipoFutbol] ?? turno.tipoFutbol}
+                    </span>
+                    {}
+                    {turno.tieneOfertaActiva && (
+                        <span className="turno__badge turno__badge--oferta">
+                            <Tag size={14} /> ¡Oferta!
+                        </span>
+                    )}
+                </div>
+
+                <h1 className="turno__titulo">{turno.nombreCancha}</h1>
+
+                {}
+                <ul className="turno__datos">
+                    <li className="turno__dato">
+                        <MapPin size={18} className="turno__dato-icono" />
+                        <span>{turno.localidad}</span>
+                    </li>
+                    <li className="turno__dato">
+                        <Calendar size={18} className="turno__dato-icono" />
+                        <span>{formatearFechaHora(turno.fechaHora)}</span>
+                    </li>
+                    <li className="turno__dato">
+                        <Users size={18} className="turno__dato-icono" />
+                        <span>Quedan {turno.lugaresDisponibles} lugares</span>
+                    </li>
+                    <li className="turno__dato">
+                        <User size={18} className="turno__dato-icono" />
+                        <span>Organiza: {turno.nombreOrganizador}</span>
+                    </li>
+                </ul>
+
+                {}
+                {turno.descripcion && (
+                    <p className="turno__descripcion">{turno.descripcion}</p>
+                )}
+
+                {}
+                <div className="turno__footer">
+                    <div className="turno__precio">
+                        {turno.tieneOfertaActiva ? (
+                            <>
+                                <span className="turno__precio--tachado">
+                                    ${turno.precioPorJugador}
+                                </span>
+                                <span className="turno__precio--oferta">
+                                    ${turno.precioConDescuento}
+                                </span>
+                                <span className="turno__precio-sufijo">
+                                    c/u
+                                </span>
+                            </>
+                        ) : (
+                            <>
+                                <span className="turno__precio--oferta">
+                                    ${turno.precioPorJugador}
+                                </span>
+                                <span className="turno__precio-sufijo">
+                                    c/u
+                                </span>
+                            </>
+                        )}
+                    </div>
+
+                    <button className="turno__cta" type="button" onClick={agregarAlCarrito}>
+                        Sumarme
+                    </button>
+                </div>
+            </section>
+        </main>
+    );
+};
+
+export default Turno;
