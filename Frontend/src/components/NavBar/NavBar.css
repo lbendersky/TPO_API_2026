@@ -81,3 +81,30 @@
 .carrito-navbar__icono:hover {
     background-color: var(--gris);
 }
+
+.boton-publicar {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.35em 0.9em;
+    font-family: inherit;
+    font-size: 1.1rem;
+    letter-spacing: 0.03em;
+    color: var(--blanco);
+    background-color: var(--verdeOscuro);
+    border: 0.12em solid var(--verdeOscuro);
+    border-radius: 2em;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.15s;
+}
+
+.boton-publicar:hover {
+    background-color: var(--blanco);
+    color: var(--verdeOscuro);
+    transform: translateY(-0.1em);
+}
+
+.boton-publicar__icono {
+    width: 1.3em;
+    height: 1.3em;
+}

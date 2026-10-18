@@ -17,6 +17,9 @@ const TurnoCard = ({
     precioConDescuento,
     tieneOfertaActiva,
 }) => {
+
+    const [imagen, setImagen] = useState('');
+    
     //Pide imagen/es a back
     useEffect(() => {
         fetch(`${API_URL}/imagenes/turno/${idTurno}`)

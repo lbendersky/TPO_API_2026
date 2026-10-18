@@ -1,5 +1,6 @@
 import {BotonCarritoNavBar} from "./BotonCarritoNavBar"
 import {BotonUsuarioNavBar} from "./BotonUsuarioNavbar"
+import {BotonPublicarCanchaNavBar} from "./BotonPublicarCanchaNavBar"
 import Buscador from "./Buscador"
 import Logo from "./Logo"
 import Titulo from "./Titulo"
@@ -26,6 +27,7 @@ const NavBar = () =>{
                         <Buscador />
                     </div>
                     <ul>
+                        <BotonPublicarCanchaNavBar />
                         <BotonCarritoNavBar irACarrito={irACarrito}/>
                     </ul>
                     <ul>

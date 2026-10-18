@@ -1,0 +1,75 @@
+.form-cancha {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1em 1.5em;
+    max-width: 50em;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: var(--blanco);
+    border-radius: 1.2em;
+    box-shadow: 0 0.6em 1.5em rgba(0, 0, 0, 0.25);
+}
+
+.form-cancha label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--verdeOscuro);
+}
+
+.form-cancha input,
+.form-cancha select,
+.form-cancha textarea {
+    padding: 0.6em 0.8em;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--negro);
+    border: 0.12em solid #d5dfd5;
+    border-radius: 0.6em;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-cancha input:focus,
+.form-cancha select:focus,
+.form-cancha textarea:focus {
+    border-color: var(--verdeOscuro);
+}
+
+.form-cancha textarea {
+    resize: vertical;
+}
+
+/* La descripción y el botón ocupan las dos columnas */
+.form-cancha__completo,
+.form-cancha__boton {
+    grid-column: 1 / -1;
+}
+
+.form-cancha__boton {
+    padding: 0.8em;
+    font-family: inherit;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    color: var(--blanco);
+    background-color: var(--verdeOscuro);
+    border: none;
+    border-radius: 2em;
+    cursor: pointer;
+    transition: transform 0.15s, filter 0.2s;
+}
+
+.form-cancha__boton:hover {
+    filter: brightness(1.15);
+    transform: translateY(-0.1em);
+}
+
+/* En celulares, una sola columna */
+@media (max-width: 40em) {
+    .form-cancha {
+        grid-template-columns: 1fr;
+    }
+}

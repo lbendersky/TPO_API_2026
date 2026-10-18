@@ -1,0 +1,57 @@
+.publicar-cancha {
+    padding: 2em 1.5em 3em;
+}
+
+.publicar-cancha__titulo {
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--blanco);
+}
+
+.publicar-cancha__subtitulo {
+    margin-bottom: 1.5em;
+    text-align: center;
+    color: var(--blanco);
+}
+
+.publicar-cancha__error {
+    max-width: 50em;
+    margin: 0 auto 1em;
+    padding: 0.8em 1em;
+    color: #8a1c1c;
+    background-color: #fde2e2;
+    border-radius: 0.6em;
+    text-align: center;
+}
+
+.publicar-cancha__exito {
+    max-width: 40em;
+    margin: 1.5em auto 0;
+    padding: 2em;
+    text-align: center;
+    color: var(--verdeOscuro);
+    background-color: var(--blanco);
+    border-radius: 1.2em;
+    box-shadow: 0 0.6em 1.5em rgba(0, 0, 0, 0.25);
+}
+
+.publicar-cancha__exito p {
+    margin: 0.5em 0 1.5em;
+    color: var(--negro);
+}
+
+.publicar-cancha__exito button {
+    margin: 0 0.4em;
+    padding: 0.6em 1.4em;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--blanco);
+    background-color: var(--verdeOscuro);
+    border: none;
+    border-radius: 2em;
+    cursor: pointer;
+}
+
+.publicar-cancha__exito button:hover {
+    filter: brightness(1.15);
+}
