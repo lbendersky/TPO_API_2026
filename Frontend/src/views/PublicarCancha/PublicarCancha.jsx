@@ -54,6 +54,7 @@ const PublicarCancha = () => {
                     <h2>¡Listo! "{publicada.nombre}" ya está publicada ⚽</h2>
                     <p>{publicada.localidad} - {publicada.tipoFutbol} - {publicada.cantidadJugadores} jugadores</p>
                     <button onClick={() => setPublicada(null)}>Publicar otra cancha</button>
+                    <button onClick={() => navigate('/mis-canchas')}>Ver mis canchas</button>
                     <button onClick={() => navigate('/inicio')}>Volver al inicio</button>
                 </section>
             ) : (

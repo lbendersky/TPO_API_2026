@@ -1,0 +1,47 @@
+.mis-canchas {
+    max-width: 60em;
+    margin: 0 auto;
+    padding: 2em 1.5em 3em;
+}
+
+.mis-canchas__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    margin-bottom: 1.5em;
+}
+
+.mis-canchas__titulo {
+    font-size: 2.5rem;
+    color: var(--blanco);
+}
+
+.mis-canchas__nueva {
+    padding: 0.6em 1.4em;
+    font-family: inherit;
+    font-size: 1.1rem;
+    color: var(--verdeOscuro);
+    background-color: var(--blanco);
+    border: none;
+    border-radius: 2em;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+.mis-canchas__nueva:hover {
+    transform: translateY(-0.1em);
+}
+
+.mis-canchas__aviso {
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--blanco);
+}
+
+.mis-canchas__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+}

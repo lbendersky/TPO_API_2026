@@ -1,0 +1,60 @@
+.cancha-propia {
+    padding: 1.5em;
+    color: var(--negro);
+    background-color: var(--blanco);
+    border-radius: 1em;
+    box-shadow: 0 0.5em 1.2em rgba(0, 0, 0, 0.2);
+}
+
+.cancha-propia__nombre {
+    font-size: 1.6rem;
+    color: var(--verdeOscuro);
+}
+
+.cancha-propia__info p {
+    margin-top: 0.2em;
+    color: var(--gris);
+}
+
+.cancha-propia__baja {
+    margin-left: 0.5em;
+    padding: 0.15em 0.6em;
+    font-size: 0.8rem;
+    color: #8a1c1c;
+    background-color: #fde2e2;
+    border-radius: 1em;
+    vertical-align: middle;
+}
+
+.cancha-propia__boton {
+    margin-top: 1em;
+    padding: 0.5em 1.2em;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--blanco);
+    background-color: var(--verdeOscuro);
+    border: none;
+    border-radius: 2em;
+    cursor: pointer;
+}
+
+.cancha-propia__boton:hover {
+    filter: brightness(1.15);
+}
+
+.cancha-propia__mensaje,
+.cancha-propia__error {
+    margin-top: 1em;
+    padding: 0.6em 1em;
+    border-radius: 0.6em;
+}
+
+.cancha-propia__mensaje {
+    color: var(--verdeOscuro);
+    background-color: #e3f2e3;
+}
+
+.cancha-propia__error {
+    color: #8a1c1c;
+    background-color: #fde2e2;
+}
