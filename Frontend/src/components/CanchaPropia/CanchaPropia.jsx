@@ -1,7 +1,7 @@
 import './CanchaPropia.css';
 
-import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import CarruselCancha from '../CarruselCancha/CarruselCancha';
 import FormularioCancha from '../FormularioCancha/FormularioCancha';

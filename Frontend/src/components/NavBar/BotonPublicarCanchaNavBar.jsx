@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { PlusCircle } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 
 export const BotonPublicarCanchaNavBar = () => {
     const navigate = useNavigate();
