@@ -1,7 +1,7 @@
 import './TurnoPropio.css';
 
 import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
 import FormularioTurno from '../FormularioTurno/FormularioTurno';

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import UsuarioNavBar from "../Usuario/UsuarioNavBar"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/useAuth"
 
 export const BotonUsuarioNavBar = () => {
     const navigate = useNavigate();
