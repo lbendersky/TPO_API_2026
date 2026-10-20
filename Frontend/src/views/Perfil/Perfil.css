@@ -114,3 +114,35 @@
     background: var(--rojo);
     color: var(--blanco);
 }
+
+.perfil__encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.8em;
+    border-bottom: 0.1em solid rgba(255, 255, 255, 0.3);
+}
+
+.perfil__encabezado .perfil__titulo {
+    margin: 0;
+}
+
+.perfil__mis-canchas {
+    padding: 0.5em 1.4em;
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--verdeOscuro);
+    background: var(--blanco);
+    border: 0.12em solid var(--blanco);
+    border-radius: 2em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.perfil__mis-canchas:hover {
+    background: var(--verdeMuyOscuro);
+    color: var(--blanco);
+}

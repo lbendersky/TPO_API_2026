@@ -2,11 +2,11 @@ import './FormularioTurno.css';
 
 import { useState } from 'react';
 
-const FormularioTurno = ({ precioSugerido, onCrear, onCancelar }) => {
+const FormularioTurno = ({ precioSugerido, inicial, onCrear, onCancelar }) => {
     const [form, setForm] = useState({
-        fechaHora: '',
-        precioPorJugador: precioSugerido,
-        descripcion: '',
+        fechaHora: inicial ? inicial.fechaHora.slice(0, 16) : '',
+        precioPorJugador: inicial ? inicial.precioPorJugador : precioSugerido,
+        descripcion: inicial ? inicial.descripcion || '' : '',
     });
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,7 +30,7 @@ const FormularioTurno = ({ precioSugerido, onCrear, onCancelar }) => {
             </label>
             <div className="form-turno__botones">
                 <button type="button" className="form-turno__cancelar" onClick={onCancelar}>Cancelar</button>
-                <button type="submit" className="form-turno__publicar">Publicar turno</button>
+                <button type="submit" className="form-turno__publicar">{inicial ? 'Guardar cambios' : 'Publicar turno'}</button>            
             </div>
         </form>
     );

@@ -3,65 +3,49 @@ import './CanchaPropia.css';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
-import FormularioTurno from '../FormularioTurno/FormularioTurno';
+import CarruselCancha from '../CarruselCancha/CarruselCancha';
+import FormularioCancha from '../FormularioCancha/FormularioCancha';
+import TurnosDeCancha from '../TurnosDeCancha/TurnosDeCancha';
 
-const CanchaPropia = ({ cancha }) => {
+const CanchaPropia = ({ cancha, onCambio }) => {
     const { token } = useAuth();
-    const [abierto, setAbierto] = useState(false);
-    const [mensaje, setMensaje] = useState('');
+    const [editando, setEditando] = useState(false);
     const [error, setError] = useState('');
-    const [imagenes, setImagenes] = useState([]);
-    const [indice, setIndice] = useState(0);
 
-    useEffect(() => {
-        fetch(`${API_URL}/imagenes/cancha/${cancha.idCancha}`)
-            .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-            .then((data) => {
-                setImagenes(data.map((img) => img.file));
-                setIndice(0);
-            })
-            .catch((e) => console.error('Error al cargar la imagen', e));
-    }, [cancha.idCancha]);
-
-    const anterior = () => setIndice((i) => Math.max(i - 1, 0));
-    const siguiente = () => setIndice((i) => Math.min(i + 1, imagenes.length - 1));
-
-    const crearTurno = (datos) => {
-        setMensaje('');
+    const guardar = (form) => {
         setError('');
-        fetch(`${API_URL}/turnos`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({ ...datos, idCancha: cancha.idCancha, precioPorJugador: Number(datos.precioPorJugador) }),
+        fetch(`${API_URL}/canchas/${cancha.idCancha}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ ...form, idLocalidad: Number(form.idLocalidad), precioUnitario: Number(form.precioUnitario) }),
         })
             .then((response) => {
-                if (response.status === 409) throw new Error('Ya hay un turno en esta cancha en ese horario.');
-                if (!response.ok) throw new Error('No se pudo crear el turno. Revisá que la fecha sea futura.');
+                if (!response.ok) throw new Error('No se pudieron guardar los cambios.');
                 return response.json();
             })
-            .then(() => {
-                setMensaje('¡Turno publicado! Ya aparece en el inicio.');
-                setAbierto(false);
+            .then((data) => {
+                onCambio(data);
+                setEditando(false);
             })
             .catch((err) => setError(err.message));
     };
 
-        return (
+    const darDeBaja = () => {
+        setError('');
+        fetch(`${API_URL}/canchas/${cancha.idCancha}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` },
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error('No se pudo dar de baja la cancha.');
+                onCambio({ ...cancha, activa: false });
+            })
+            .catch((err) => setError(err.message));
+    };
+
+    return (
         <article className="cancha-propia">
-            {imagenes.length > 0 && (
-                <div className="cancha-propia__carrusel">
-                    {imagenes.length > 1 && (
-                        <button type="button" className="cancha-propia__flecha cancha-propia__flecha--izq" onClick={anterior} disabled={indice === 0}>‹</button>
-                    )}
-                    <img className="cancha-propia__img" src={`data:image/jpeg;base64,${imagenes[indice]}`} alt={cancha.nombre} />
-                    {imagenes.length > 1 && (
-                        <button type="button" className="cancha-propia__flecha cancha-propia__flecha--der" onClick={siguiente} disabled={indice === imagenes.length - 1}>›</button>
-                    )}
-                </div>
-            )}
+            <CarruselCancha idCancha={cancha.idCancha} nombre={cancha.nombre} />
             <div className="cancha-propia__info">
                 <h2 className="cancha-propia__nombre">
                     {cancha.nombre} {!cancha.activa && <span className="cancha-propia__baja">Dada de baja</span>}
@@ -69,19 +53,15 @@ const CanchaPropia = ({ cancha }) => {
                 <p>{cancha.localidad} - {cancha.tipoFutbol} - {cancha.tipoSuperficie}</p>
                 <p>{cancha.direccion} - ${cancha.precioUnitario} el turno</p>
             </div>
-
-            {cancha.activa && !abierto && (
-                <button className="cancha-propia__boton" onClick={() => setAbierto(true)}>+ Agregar turno</button>
+            {cancha.activa && (
+                <div className="cancha-propia__acciones">
+                    <button className="cancha-propia__boton" onClick={() => setEditando(!editando)}>{editando ? 'Cancelar edición' : 'Editar cancha'}</button>
+                    <button className="cancha-propia__boton cancha-propia__boton--peligro" onClick={darDeBaja}>Dar de baja</button>
+                </div>
             )}
-            {mensaje && <p className="cancha-propia__mensaje">{mensaje}</p>}
             {error && <p className="cancha-propia__error">{error}</p>}
-            {abierto && (
-                <FormularioTurno
-                    precioSugerido={Math.round(cancha.precioUnitario / cancha.cantidadJugadores)}
-                    onCrear={crearTurno}
-                    onCancelar={() => setAbierto(false)}
-                />
-            )}
+            {editando && <FormularioCancha inicial={cancha} textoBoton="Guardar cambios" onPublicar={guardar} />}
+            <TurnosDeCancha cancha={cancha} />
         </article>
     );
 };

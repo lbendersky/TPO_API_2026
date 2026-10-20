@@ -3,30 +3,14 @@ import './FormularioCancha.css';
 import { useState, useEffect } from 'react';
 import { API_URL } from '../../config';
 import { SUPERFICIES, FORMATOS } from '../../utils/opcionesCancha';
+import SelectorFotos from '../SelectorFotos/SelectorFotos';
 
-const FORM_VACIO = {
-    nombre: '', direccion: '', idLocalidad: '', tipoSuperficie: '',
-    tipoFutbol: '', precioUnitario: '', descripcion: '',
-};
+const FORM_VACIO = { nombre: '', direccion: '', idLocalidad: '', tipoSuperficie: '', tipoFutbol: '', precioUnitario: '', descripcion: '',};
 
-const FormularioCancha = ({ onPublicar }) => {
-    const [form, setForm] = useState(FORM_VACIO);
+const FormularioCancha = ({ onPublicar, inicial}) => {
+    const [form, setForm] = useState(inicial ? { ...FORM_VACIO, ...inicial } : FORM_VACIO);
     const [localidades, setLocalidades] = useState([]);
     const [fotosElegidas, setFotosElegidas] = useState([]);
-    const [precargadas, setPrecargadas] = useState([]);
-
-    const toggleFoto = (id) => {
-        setFotosElegidas((actual) =>
-            actual.includes(id) ? actual.filter((f) => f !== id) : [...actual, id]
-        );
-    };
-
-    useEffect(() => {
-        fetch(`${API_URL}/imagenes/precargadas`)
-            .then((r) => r.json())
-            .then(setPrecargadas)
-            .catch((e) => console.error('Error al cargar las fotos precargadas', e));
-    }, []);
 
     useEffect(() => {
         fetch(`${API_URL}/localidades`)
@@ -77,22 +61,8 @@ const FormularioCancha = ({ onPublicar }) => {
             <label className="form-cancha__completo">Descripción
                 <textarea name="descripcion" rows="3" value={form.descripcion} onChange={handleChange} />
             </label>
-            <div className="form-cancha__completo">
-                <p>Foto de la cancha</p>
-                <div className="form-cancha__fotos">
-                    {precargadas.map((img) => (
-                        <img
-                            key={img.id}
-                            src={`data:image/png;base64,${img.file}`}
-                            alt={img.nombre}
-                            title={img.nombre}
-                            onClick={() => toggleFoto(img.id)}
-                            className={`form-cancha__foto ${fotosElegidas.includes(img.id) ? 'form-cancha__foto--elegida' : ''}`}
-                        />
-                    ))}
-                </div>
-            </div>
-            <button type="submit" className="form-cancha__boton">Publicar cancha</button>
+            {!inicial && <SelectorFotos elegidas={fotosElegidas} onCambiar={setFotosElegidas} />}
+            <button type="submit" className="form-cancha__boton">{inicial ? 'Guardar cambios' : 'Publicar cancha'}</button>        
         </form>
     );
 };
