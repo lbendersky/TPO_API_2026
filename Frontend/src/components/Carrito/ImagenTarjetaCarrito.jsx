@@ -1,11 +1,11 @@
 import React from 'react'
 import { ImagenTarjeta } from './ImagenTarjeta'
-import { TipoCanchaTarjeta } from './TipoCanchaTarjeta'
+import { TipoCanchaTarjeta } from './TipoFutbolTarjeta'
 
 export const ImagenTarjetaCarrito = ({ imagen, tipoCancha }) => {
   return (
     <>
-        <TipoCanchaTarjeta tipoCancha={tipoCancha}/>
+        <TipoFutbolTarjeta tipoCancha={tipoCancha}/>
         <ImagenTarjeta imagen={imagen}/>        
     </>
   )
