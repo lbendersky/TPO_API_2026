@@ -38,9 +38,10 @@
     gap: 0.3rem;
     background-color: var(--verdeOscuro);
     color: var(--blanco);
-    padding: 0.3rem 0.8rem;
+    padding: 0.45rem 1rem;
     border-radius: 100em;
-    font-size: 1rem;
+    font-size: 1.3rem;
+    font-weight: 700;
     letter-spacing: 0.08em;
 }
 
@@ -63,7 +64,8 @@
     align-items: center;
     gap: 0.6rem;
     color: var(--blanco);
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 .turno__dato-icono {
@@ -91,18 +93,20 @@
     align-items: baseline;
     gap: 0.5rem;
     font-size: 2.5rem;
+    font-weight: 700;
     margin: 0;
 }
 
 .turno__precio-sufijo {
     color: var(--blanco);
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 
 .turno__precio--tachado {
     text-decoration: line-through;
     color: var(--gris);
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 400;
 }
 
 /* Precio con descuento aplicado */
@@ -113,7 +117,8 @@
 .turno__descripcion {
     color: var(--blanco);
     line-height: 1.5;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
+    font-weight: 700;
     margin: 0;
     opacity: 0.9;
 }

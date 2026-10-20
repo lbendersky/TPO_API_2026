@@ -3,7 +3,6 @@ import './TurnoList.css';
 import { useState, useEffect } from 'react';
 import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
-import { useBusqueda } from '../../context/BusquedaContext';
 import { API_URL } from '../../config';
 
 const TurnoList = () => {
@@ -11,13 +10,12 @@ const TurnoList = () => {
     const [localidades, setLocalidades] = useState([]);
     // Filtro en null por defecto
     const [filtros, setFiltros] = useState({
+        texto: null,
         localidad: null,
         tipoFutbol: null,
         precioMin: null,
         precioMax: null,
     });
-
-    const { textoBusqueda } = useBusqueda();
 
     useEffect(() => {
         fetch(`${API_URL}/localidades`)
@@ -32,13 +30,13 @@ const TurnoList = () => {
         if (filtros.tipoFutbol) url = url + `tipoFutbol=${filtros.tipoFutbol}&`;
         if (filtros.precioMin != null) url = url + `precioMin=${filtros.precioMin}&`;
         if (filtros.precioMax != null) url = url + `precioMax=${filtros.precioMax}&`;
-        if (textoBusqueda) url = url + `texto=${textoBusqueda}&`;
+        if (filtros.texto) url = url + `texto=${filtros.texto}&`;
 
         fetch(url)
             .then((response) => response.json())
             .then((data) => setTurnos(data))
             .catch((error) => console.error('Error al cargar turnos', error));
-    }, [filtros, textoBusqueda]);
+    }, [filtros]);
 
     return (
         <>

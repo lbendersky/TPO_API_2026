@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
 import { useState, useEffect } from 'react';
+import { ImageOff } from 'lucide-react';
 
 const TurnoCard = ({
     idTurno,
@@ -48,22 +49,28 @@ const TurnoCard = ({
     return (
         <Link to={`/turno/${idTurno}`} className="turno-card-link">
         <article className="turno-card">
-            {imagenes.length > 0 && (
-                <div className="turno-card__carrusel">
-                    {imagenes.length > 1 && (
-                        <button type="button" className="turno-card__flecha turno-card__flecha--izq" onClick={anterior} disabled={indice === 0}>‹</button>
-                    )}
-                    <img className="turno-card__img" src={`data:image/jpeg;base64,${imagenes[indice]}`} alt={nombreCancha} />
-                    {imagenes.length > 1 && (
-                        <button type="button" className="turno-card__flecha turno-card__flecha--der" onClick={siguiente} disabled={indice === imagenes.length - 1}>›</button>
-                    )}
-                </div>
-            )}
+            <div className="turno-card__carrusel">
+                {imagenes.length > 0 ? (
+                    <>
+                        {imagenes.length > 1 && (
+                            <button type="button" className="turno-card__flecha turno-card__flecha--izq" onClick={anterior} disabled={indice === 0}>‹</button>
+                        )}
+                        <img className="turno-card__img" src={`data:image/jpeg;base64,${imagenes[indice]}`} alt={nombreCancha} />
+                        {imagenes.length > 1 && (
+                            <button type="button" className="turno-card__flecha turno-card__flecha--der" onClick={siguiente} disabled={indice === imagenes.length - 1}>›</button>
+                        )}
+                    </>
+                ) : (
+                    <div className="turno-card__img turno-card__img--placeholder">
+                        <ImageOff className="turno-card__img-icono" />
+                    </div>
+                )}
+            </div>
             <div className="turno-card__body">
                 <h3 className="turno-card__titulo">{nombreCancha}</h3>
                 <p className="turno-card__localidadTipo">{localidad} - {tipoFutbol}</p>
-                <p className="turno-card__fechaCupos">{formatearFechaHora(fechaHora)}</p>
-                <p className="turno-card__fechaCupos">Quedan {lugaresDisponibles} lugares</p>
+                <p className="turno-card__fechaCupos turno-card__fechaCupos--fecha">{formatearFechaHora(fechaHora)}</p>
+                <p className="turno-card__fechaCupos turno-card__fechaCupos--cupos">Quedan {lugaresDisponibles} lugares</p>
                 <p className="turno-card__precio">
                     {tieneOfertaActiva ? (
                         <>

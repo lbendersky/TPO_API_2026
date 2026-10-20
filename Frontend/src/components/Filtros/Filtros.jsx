@@ -2,11 +2,12 @@ import './Filtros.css';
 
 import { useState } from 'react';
 
-import { MapPin, Trophy, DollarSign } from 'lucide-react';
+import { MapPin, Trophy, DollarSign, Search } from 'lucide-react';
 
 // Recibe por props una lista de localidades disponibles
 const Filtros = ({ localidades = [], onFiltrar }) => {
     // Setea seun fitro del usuario
+    const [texto, setTexto] = useState('');
     const [localidad, setLocalidad] = useState('');
     const [tipoFutbol, setTipoFutbol] = useState('');
     const [precioMin, setPrecioMin] = useState('');
@@ -15,6 +16,7 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
     const handleBuscar = () => {
         // Convierte strings vacíos a null para que el padre sepa que no hay filtro aplicado
         onFiltrar({
+            texto: texto.trim() || null,
             localidad: localidad || null,
             tipoFutbol: tipoFutbol || null,
             // parseFloat convierte el string del input a número
@@ -23,9 +25,45 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
         });
     };
 
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') handleBuscar();
+    };
+
+    // No deja cargar precios negativos
+    const handlePrecioMinChange = (e) => {
+        const val = e.target.value;
+        if (val === '' || Number(val) >= 0) setPrecioMin(val);
+    };
+
+    // El maximo no puede ser menor o igual al minimo cargado
+    const handlePrecioMaxChange = (e) => {
+        const val = e.target.value;
+        const minActual = precioMin ? Number(precioMin) : 0;
+        if (val === '' || (Number(val) >= 0 && Number(val) > minActual)) setPrecioMax(val);
+    };
+
     return (
         <section className="filtros-bar">
-            <div className="filtros-bar__campo">
+            <div className="filtros-bar__campo filtros-bar__campo--nombre">
+                {}
+                <Search className="filtros-bar__icono" />
+                <div className="filtros-bar__contenido">
+                    <label className="filtros-bar__label">NOMBRE DE LA CANCHA</label>
+                    <input
+                        type="text"
+                        className="filtros-bar__input"
+                        placeholder="Buscar por nombre..."
+                        value={texto}
+                        onChange={(e) => setTexto(e.target.value)}
+                        onKeyDown={handleEnter}
+                    />
+                </div>
+            </div>
+
+            {}
+            <div className="filtros-bar__separador"></div>
+
+            <div className="filtros-bar__campo filtros-bar__campo--zona">
                 {}
                 <MapPin className="filtros-bar__icono" />
                 <div className="filtros-bar__contenido">
@@ -49,7 +87,7 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
             <div className="filtros-bar__separador"></div>
 
             {}
-            <div className="filtros-bar__campo">
+            <div className="filtros-bar__campo filtros-bar__campo--formato">
                 {}
                 <Trophy className="filtros-bar__icono" />
                 <div className="filtros-bar__contenido">
@@ -74,7 +112,7 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
             <div className="filtros-bar__separador"></div>
 
             {}
-            <div className="filtros-bar__campo">
+            <div className="filtros-bar__campo filtros-bar__campo--precio">
                 {}
                 <DollarSign className="filtros-bar__icono" />
                 <div className="filtros-bar__contenido">
@@ -86,8 +124,10 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
                             type="number"
                             className="filtros-bar__input filtros-bar__input--rango"
                             placeholder="Mín"
+                            min="0"
+                            step="1000"
                             value={precioMin}
-                            onChange={(e) => setPrecioMin(e.target.value)}
+                            onChange={handlePrecioMinChange}
                         />
                         {}
                         <span className="filtros-bar__guion">-</span>
@@ -96,8 +136,10 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
                             type="number"
                             className="filtros-bar__input filtros-bar__input--rango"
                             placeholder="Máx"
+                            min={precioMin ? Number(precioMin) + 1000 : 0}
+                            step="1000"
                             value={precioMax}
-                            onChange={(e) => setPrecioMax(e.target.value)}
+                            onChange={handlePrecioMaxChange}
                         />
                     </div>
                 </div>

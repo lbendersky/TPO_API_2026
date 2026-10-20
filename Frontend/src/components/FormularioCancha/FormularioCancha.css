@@ -14,7 +14,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.35em;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
+    font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--verdeOscuro);
@@ -25,7 +26,7 @@
 .form-cancha textarea {
     padding: 0.6em 0.8em;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: var(--negro);
     border: 0.12em solid var(--blanco);
     border-radius: 0.6em;
@@ -52,7 +53,8 @@
 .form-cancha__boton {
     padding: 0.8em;
     font-family: inherit;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
+    font-weight: 700;
     letter-spacing: 0.05em;
     color: var(--blanco);
     background-color: var(--verdeOscuro);

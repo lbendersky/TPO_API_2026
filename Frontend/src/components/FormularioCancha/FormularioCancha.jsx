@@ -72,7 +72,7 @@ const FormularioCancha = ({ onPublicar }) => {
                 </select>
             </label>
             <label>Precio del turno ($)
-                <input type="number" min="1" name="precioUnitario" value={form.precioUnitario} onChange={handleChange} required />
+                <input type="number" min="1000" step="1000" name="precioUnitario" value={form.precioUnitario} onChange={handleChange} required />
             </label>
             <label className="form-cancha__completo">Descripción
                 <textarea name="descripcion" rows="3" value={form.descripcion} onChange={handleChange} />
