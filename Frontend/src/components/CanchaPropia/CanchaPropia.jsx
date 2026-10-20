@@ -1,7 +1,7 @@
 import './CanchaPropia.css';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import FormularioTurno from '../FormularioTurno/FormularioTurno';
 
