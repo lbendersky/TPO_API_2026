@@ -1,0 +1,41 @@
+.turno-propio {
+    width: 100%;
+    padding: 0.8em 1em;
+    background-color: #f4f8f4;
+    border-radius: 0.8em;
+}
+
+.turno-propio__fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6em 1.4em;
+}
+
+.turno-propio__fecha {
+    font-weight: bold;
+    text-transform: capitalize;
+    color: var(--verdeOscuro);
+}
+
+.turno-propio__acciones {
+    display: flex;
+    gap: 0.4em;
+    margin-left: auto;
+}
+
+.turno-propio__acciones button {
+    padding: 0.3em 0.9em;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--verdeOscuro);
+    background-color: var(--blanco);
+    border: 0.12em solid var(--verdeOscuro);
+    border-radius: 2em;
+    cursor: pointer;
+}
+
+.turno-propio__acciones .turno-propio__borrar {
+    color: #8a1c1c;
+    border-color: #8a1c1c;
+}
