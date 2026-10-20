@@ -10,7 +10,7 @@ import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
 // URL base del backend
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 
 const TIPO_FUTBOL_LABEL = {
     F5: 'Fútbol 5',
