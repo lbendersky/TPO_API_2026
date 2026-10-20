@@ -76,6 +76,15 @@ const Perfil = () => {
 
     return (
         <main className="perfil">
+            {usuario.rol === 'ADMIN' && (
+                <button
+                    type="button"
+                    className="perfil__moderar"
+                    onClick={() => navigate('/moderar')}
+                >
+                    Moderar turnos y usuarios
+                </button>
+            )}
             <h1 className="perfil__titulo">Mi perfil</h1>
 
             <form className="perfil__form" onSubmit={handleGuardar}>
@@ -115,6 +124,9 @@ const Perfil = () => {
             {error && <p className="perfil__error">{error}</p>}
 
             <div className="perfil__acciones">
+                <button type="button" className="perfil__logout" onClick={() => navigate('/mis-canchas')}>
+                    Mis canchas
+                </button>
                 <button type="button" className="perfil__logout" onClick={handleLogout}>
                     Cerrar sesión
                 </button>

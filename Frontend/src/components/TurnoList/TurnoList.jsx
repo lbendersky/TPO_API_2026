@@ -52,6 +52,7 @@ const TurnoList = () => {
                     <TurnoCard
                         key={value.idTurno}
                         idTurno={value.idTurno}
+                        idCancha={value.idCancha}
                         fechaHora={value.fechaHora}
                         tipoFutbol={value.tipoFutbol}
                         lugaresDisponibles={value.lugaresDisponibles}

@@ -9,5 +9,6 @@ import com.uade.marketplace.entity.Imagen;
 
 @Repository
 public interface ImagenRepository extends JpaRepository<Imagen, Long> {
-    List<Imagen> findByTurno_IdTurno(Long idTurno);
+    List<Imagen> findByCancha_IdCancha(Long idCancha);
+    List<Imagen> findByCanchaIsNull();
 }

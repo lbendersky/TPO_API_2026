@@ -1,0 +1,75 @@
+.form-turno {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8em 1.2em;
+    margin-top: 1.2em;
+    padding-top: 1.2em;
+    border-top: 0.1em dashed var(--verdeOscuro);
+}
+
+.form-turno label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--verdeOscuro);
+}
+
+.form-turno input {
+    padding: 0.5em 0.7em;
+    font-family: inherit;
+    font-size: 1rem;
+    border: 0.12em solid var(--verdeOscuro);
+    border-radius: 0.6em;
+    outline: none;
+    padding: 0.5em;
+}
+
+.form-turno input:focus {
+    border-color: var(--verdeOscuro);
+}
+
+.form-turno__completo,
+.form-turno__botones {
+    grid-column: 1 / -1;
+}
+
+.form-turno__botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6em;
+}
+
+.form-turno__botones button:hover {
+    background-color: var(--verdeMuyOscuro);
+    color: var(--blanco);
+}
+
+.form-turno__botones button {
+    padding: 0.5em 1.3em;
+    font-family: inherit;
+    font-size: 1rem;
+    border-radius: 2em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.form-turno__cancelar {
+    color: var(--verdeOscuro);
+    background-color: var(--blanco);
+    border: 0.12em solid var(--verdeOscuro);
+}
+
+.form-turno__publicar {
+    color: var(--blanco);
+    background-color: var(--verdeOscuro);
+    border: 0.12em solid var(--verdeOscuro);
+}
+
+@media (max-width: 40em) {
+    .form-turno {
+        grid-template-columns: 1fr;
+    }
+}

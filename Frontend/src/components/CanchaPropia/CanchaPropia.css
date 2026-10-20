@@ -1,0 +1,110 @@
+.cancha-propia {
+    padding: 1.5em;
+    color: var(--negro);
+    background-color: var(--blanco);
+    border-radius: 1em;
+    box-shadow: 0 0.5em 1.2em rgba(0, 0, 0, 0.2);
+}
+
+.cancha-propia__nombre {
+    font-size: 1.6rem;
+    color: var(--verdeOscuro);
+}
+
+.cancha-propia__info p {
+    margin-top: 0.2em;
+    color: var(--gris);
+}
+
+.cancha-propia__baja {
+    margin-left: 0.5em;
+    padding: 0.15em 0.6em;
+    font-size: 0.8rem;
+    color: var(--rojo);
+    background-color: var(--rojoClaro);
+    border-radius: 1em;
+    vertical-align: middle;
+}
+
+.cancha-propia__boton {
+    margin-top: 1em;
+    padding: 0.5em 1.2em;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--blanco);
+    background-color: var(--verdeOscuro);
+    border: none;
+    border-radius: 2em;
+    cursor: pointer;
+}
+
+.cancha-propia__boton:hover {
+    filter: brightness(1.15);
+}
+
+.cancha-propia__mensaje,
+.cancha-propia__error {
+    margin-top: 1em;
+    padding: 0.6em 1em;
+    border-radius: 0.6em;
+}
+
+.cancha-propia__mensaje {
+    color: var(--verdeOscuro);
+    background-color: var(--blanco);
+}
+
+.cancha-propia__error {
+    color: var(--rojo);
+    background-color: var(--rojoClaro);
+}
+
+.cancha-propia__carrusel {
+    position: relative;
+    width: 100%;
+    max-width: 24em;
+}
+
+.cancha-propia__img {
+    width: 100%;
+    height: 16em;
+    object-fit: cover;
+    border-radius: 0.75em;
+    display: block;
+}
+
+.cancha-propia__flecha {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.2em;
+    height: 2.2em;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--blanco);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.cancha-propia__flecha:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.cancha-propia__flecha--izq {
+    left: 0.5em;
+}
+
+.cancha-propia__flecha--der {
+    right: 0.5em;
+}
+
+.cancha-propia__flecha:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.cancha-propia__flecha:disabled:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
