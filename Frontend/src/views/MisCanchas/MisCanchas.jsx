@@ -35,6 +35,8 @@ const MisCanchas = () => {
             });
     }, [usuario]);
 
+    const actualizarCancha = (cambiada) => setCanchas(canchas.map((c) => (c.idCancha === cambiada.idCancha ? cambiada : c)));
+
     return (
         <main className="mis-canchas">
             <div className="mis-canchas__header">
@@ -51,7 +53,7 @@ const MisCanchas = () => {
 
             <section className="mis-canchas__lista">
                 {canchas.map((cancha) => (
-                    <CanchaPropia key={cancha.idCancha} cancha={cancha} />
+                    <CanchaPropia key={cancha.idCancha} cancha={cancha} onCambio={actualizarCancha} />
                 ))}
             </section>
         </main>

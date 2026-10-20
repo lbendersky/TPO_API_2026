@@ -25,9 +25,14 @@ import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
+import com.uade.marketplace.repository.InscripcionRepository;
+import com.uade.marketplace.repository.ItemCarritoRepository;
+import com.uade.marketplace.repository.OfertaRepository;
 
 @Service
 public class TurnoServiceImpl implements TurnoService {
+
+    
 
     @Autowired
     private TurnoRepository turnoRepository;
@@ -37,6 +42,15 @@ public class TurnoServiceImpl implements TurnoService {
 
     @Autowired
     private CanchaRepository canchaRepository;
+
+    @Autowired
+    private InscripcionRepository inscripcionRepository;
+
+    @Autowired
+    private OfertaRepository ofertaRepository;
+
+    @Autowired
+    private ItemCarritoRepository itemCarritoRepository;
 
     @Autowired
     private OfertaService ofertaService;
@@ -122,6 +136,10 @@ public class TurnoServiceImpl implements TurnoService {
             throw new AccessDeniedException("Solo el dueño de la cancha puede cargarle turnos");
     }
 
+    private boolean tieneInscriptos(Long idTurno) {
+        return !inscripcionRepository.findByTurno_IdTurno(idTurno).isEmpty();
+    }
+
         @Override
     public TurnoResponse crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException, RecursoNoEncontradoException {
         Usuario usuario = usuarioRepository.findById(actor.getIdUsuario())
@@ -159,6 +177,11 @@ public class TurnoServiceImpl implements TurnoService {
         Turno turno = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
         validarOwnership(turno, actor);
+         if (tieneInscriptos(idTurno))
+            throw new SolicitudInvalidaException("El turno ya tiene jugadores inscriptos, no se puede borrar");
+        
+        ofertaRepository.deleteAll(ofertaRepository.findByTurno_IdTurno(idTurno));
+        itemCarritoRepository.deleteAll(itemCarritoRepository.findByTurno_IdTurno(idTurno));
         turnoRepository.delete(turno);
     }
 
@@ -167,6 +190,12 @@ public class TurnoServiceImpl implements TurnoService {
         Turno turnoActualizado = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno"));
         validarOwnership(turnoActualizado, actor);
+
+        boolean cambiaFecha = !turnoActualizado.getFechaHora().equals(turnoRequest.getFechaHora());
+        if (cambiaFecha && turnoRequest.getFechaHora().isBefore(LocalDateTime.now()))
+            throw new SolicitudInvalidaException("La fecha del turno tiene que ser futura");
+        if (cambiaFecha && tieneInscriptos(idTurno))
+            throw new SolicitudInvalidaException("El turno ya tiene inscriptos: solo se puede cambiar el precio y la descripción");
 
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico una cancha"));

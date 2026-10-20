@@ -29,6 +29,7 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
 
     @Query("SELECT t FROM Turno t WHERE " +
        "t.estado = com.uade.marketplace.entity.enums.EstadoTurno.INCOMPLETO AND " +
+       "t.cancha.activa = true AND " +
        "(:tipoFutbol IS NULL OR t.tipoFutbol = :tipoFutbol) AND " +
        "(:precioMin IS NULL OR t.precioPorJugador >= :precioMin) AND " +
        "(:precioMax IS NULL OR t.precioPorJugador <= :precioMax) AND " +
