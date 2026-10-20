@@ -1,0 +1,21 @@
+.moderar {
+    max-width: 37.5em;
+    margin: 2.5em auto;
+    padding: 1.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    letter-spacing: 0.08em;
+}
+
+.moderar__titulo {
+    margin: 0;
+    font-size: 3em;
+    text-align: center;
+}
+
+.moderar__texto {
+    text-align: center;
+    color: var(--gris);
+    margin: 0;
+}

@@ -10,7 +10,7 @@ import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
 // URL base del backend
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 
 const TIPO_FUTBOL_LABEL = {
     F5: 'Fútbol 5',
@@ -25,6 +25,7 @@ const Turno = () => {
     const { estaLogueado, token } = useAuth();
     const [turno, setTurno] = useState(null);
     const [imagenes, setImagenes] = useState([]);
+    const [indice, setIndice] = useState(0);
 
     const agregarAlCarrito = async () => {
         if (!estaLogueado) {
@@ -55,15 +56,19 @@ const Turno = () => {
             .catch((error) => console.error('Error al cargar turno', error));
     }, [id]);
 
-    useEffect(() => {
-        fetch(`${API_URL}/imagenes/turno/${id}`)
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudieron cargar las imágenes');
-                return response.json();
+        useEffect(() => {
+        if (!turno?.idCancha) return;
+        fetch(`${API_URL}/imagenes/cancha/${turno.idCancha}`)
+            .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+            .then((data) => {
+                setImagenes(data);
+                setIndice(0);
             })
-            .then((data) => setImagenes(data))
-            .catch((error) => console.error('Error al cargar las imágenes', error));
-    }, [id]);
+            .catch((e) => console.error('Error al cargar las imágenes', e));
+    }, [turno]);
+
+    const anterior = () => setIndice((i) => Math.max(i - 1, 0));
+    const siguiente = () => setIndice((i) => Math.min(i + 1, imagenes.length - 1));
 
     if (!turno) return <p className="turno__cargando">Cargando...</p>;
 
@@ -71,14 +76,21 @@ const Turno = () => {
         <main className="turno">
             {}
             <div className="turno__galeria">
-                {imagenes.map((imagen, index) => (
-                    <img
-                        key={index}
-                        className="turno__img"
-                        src={`data:image/jpeg;base64,${imagen.file}`}
-                        alt={`${turno.nombreCancha} - foto ${index + 1}`}
-                    />
-                ))}
+                {imagenes.length > 0 && (
+                    <>
+                        {imagenes.length > 1 && (
+                            <button type="button" className="turno__flecha turno__flecha--izq" onClick={anterior} disabled={indice === 0}>‹</button>
+                        )}
+                        <img
+                            className="turno__img"
+                            src={`data:image/jpeg;base64,${imagenes[indice].file}`}
+                            alt={`${turno.nombreCancha} - foto ${indice + 1}`}
+                        />
+                        {imagenes.length > 1 && (
+                            <button type="button" className="turno__flecha turno__flecha--der" onClick={siguiente} disabled={indice === imagenes.length - 1}>›</button>
+                        )}
+                    </>
+                )}
             </div>
 
             {}

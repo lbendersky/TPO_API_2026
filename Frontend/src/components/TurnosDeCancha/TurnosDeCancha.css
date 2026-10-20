@@ -1,0 +1,18 @@
+.turnos-cancha {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7em;
+    margin-top: 1.4em;
+    padding-top: 1.2em;
+    border-top: 0.1em solid #e4ebe4;
+}
+
+.turnos-cancha__titulo {
+    font-size: 1.15rem;
+    color: var(--verdeOscuro);
+}
+
+.turnos-cancha__vacio {
+    color: var(--gris);
+}

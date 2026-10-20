@@ -13,12 +13,14 @@ import com.uade.marketplace.exceptions.AccesoDenegadoException;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 
 public interface ImagenService {
-    List<Imagen> guardar(Long idTurno, List<MultipartFile> archivos, Usuario actor)
+    List<Imagen> guardar(Long idCancha, List<MultipartFile> archivos, Usuario actor)
             throws RecursoNoEncontradoException, AccesoDenegadoException, IOException, SQLException;
-
+            
     ImagenResponse buscarPorId(Long idImagen) throws RecursoNoEncontradoException, SQLException;
-
-    List<ImagenResponse> buscarPorTurno(Long idTurno) throws SQLException, IOException;
+    List<ImagenResponse> buscarPorCancha(Long idCancha) throws SQLException, IOException;
+    List<ImagenResponse> buscarPrecargadas() throws SQLException;
+    Imagen asignarPrecargada(Long idCancha, Long idImagenPrecargada, Usuario actor)
+            throws RecursoNoEncontradoException, AccesoDenegadoException, SQLException;
 
     void eliminar(Long idImagen, Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException;
 }

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
+@AllArgsConstructor 
 public class CanchaResponse {
     private Long idCancha;
     private String nombre;
@@ -22,6 +22,7 @@ public class CanchaResponse {
     private String nombrePublicador;
     private boolean activa;
     private String motivoBaja;
+    private Long idLocalidad;
 
     public static CanchaResponse from(Cancha c) {
         return new CanchaResponse(
@@ -36,7 +37,8 @@ public class CanchaResponse {
                 c.getDescripcion(),
                 c.getPublicador() != null ? c.getPublicador().getNombre() : null,
                 c.getActiva(),
-                c.getMotivoBaja()
+                c.getMotivoBaja(),
+                c.getLocalidad() != null ? c.getLocalidad().getIdLocalidad() : null
         );
     }
 }

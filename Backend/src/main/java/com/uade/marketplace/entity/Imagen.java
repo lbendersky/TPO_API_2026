@@ -25,12 +25,15 @@ public class Imagen {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idImagen;
 
+    @Column
+    private String nombre;
+
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private Blob imagen;
 
     @ManyToOne
-    @JoinColumn(name = "id_turno", nullable = false)
-    private Turno turno;
+    @JoinColumn(name = "id_cancha")
+    private Cancha cancha;
 
 }

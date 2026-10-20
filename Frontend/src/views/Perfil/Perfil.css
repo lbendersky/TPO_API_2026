@@ -38,12 +38,12 @@
 
 .perfil__guardar {
     padding: 0.75em;
-    border: none;
+    border: 0.0625em solid var(--verdeMuyOscuro);
     border-radius: 0.375em;
     background: var(--verdeMuyOscuro);
     color: var(--blanco);
     cursor: pointer;
-    transition: background 0.3s, border 0.2s;
+    transition: all 0.2s;
     margin-top: 0.5em;
 }
 
@@ -62,6 +62,23 @@
     color: var(--rojo);
     text-align: center;
     margin: 0;
+}
+
+.perfil__moderar {
+    width: 100%;
+    padding: 0.75em;
+    border: 0.0625em solid var(--verdeClaro);
+    border-radius: 0.375em;
+    background: var(--verdeMuyOscuro);
+    color: var(--blanco);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.5em;
+}
+
+.perfil__moderar:hover {
+    background: var(--verdeOscuro);
+    border: 0.0625em solid var(--blanco);
 }
 
 .perfil__acciones {
@@ -95,5 +112,37 @@
 
 .perfil__eliminar:hover {
     background: var(--rojo);
+    color: var(--blanco);
+}
+
+.perfil__encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.8em;
+    border-bottom: 0.1em solid rgba(255, 255, 255, 0.3);
+}
+
+.perfil__encabezado .perfil__titulo {
+    margin: 0;
+}
+
+.perfil__mis-canchas {
+    padding: 0.5em 1.4em;
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--verdeOscuro);
+    background: var(--blanco);
+    border: 0.12em solid var(--blanco);
+    border-radius: 2em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.perfil__mis-canchas:hover {
+    background: var(--verdeMuyOscuro);
     color: var(--blanco);
 }

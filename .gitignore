@@ -1,1 +1,5 @@
 .claude/
+/target/
+/src/
+Backend/target/
+Backend/src/main/resources/application.properties

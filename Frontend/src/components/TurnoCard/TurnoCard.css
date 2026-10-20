@@ -18,10 +18,66 @@
     box-shadow: 0 0.5rem 2rem var(--negro);
 }
 
+.turno-card__carrusel {
+    position: relative;
+}
+
 .turno-card__img {
     width: 100%;
     height: 10rem;
     object-fit: cover;
+    display: block;
+}
+
+.turno-card__img--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e4e4e4;
+}
+
+.turno-card__img-icono {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--gris);
+    opacity: 0.6;
+}
+
+.turno-card__flecha {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.8rem;
+    height: 1.8rem;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--blanco);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.turno-card__flecha:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.turno-card__flecha:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.turno-card__flecha:disabled:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.turno-card__flecha--izq {
+    left: 0.4rem;
+}
+
+.turno-card__flecha--der {
+    right: 0.4rem;
 }
 
 .turno-card__body {
@@ -38,26 +94,55 @@
     font-size: 1.5rem;
     color: var(--negro);
     letter-spacing: 0.05rem;
+    margin: 0;
+    line-height: 1.25;
+    /* Reserva 2 lineas siempre, nombres largos de cancha cortan con "..." */
+    height: 2.5em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .turno-card__localidadTipo {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: var(--gris);
-    font-weight: 500;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .turno-card__fechaCupos {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: var(--verdeOscuro);
+    font-weight: 700;
+}
+
+.turno-card__fechaCupos--fecha {
+    /* Reserva 2 lineas siempre, para que una fecha larga que hace wrap no desnivele la fila */
+    height: 2.6em;
+    line-height: 1.3;
+    overflow: hidden;
+}
+
+.turno-card__fechaCupos--cupos {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .turno-card__precio {
     margin: 0;
-    font-size: 1.25rem;
-    font-weight: normal;
+    font-size: 1.45rem;
+    font-weight: 700;
     color: var(--negro);
+    line-height: 1.3;
+    /* La version con oferta (tachado + precio nuevo) ocupa mas que la normal */
+    height: 2.6em;
+    overflow: hidden;
 }
 
 .turno-card__precio--tachado {
@@ -73,13 +158,25 @@
 
 .turno-card__organizador {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: var(--gris);
     font-style: italic;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .turno-card__descripcion {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: 1rem;
     color: var(--gris);
+    font-weight: 700;
+    line-height: 1.3;
+    /* Altura fija de 2 lineas: con descripcion larga, corta con "..."; sin descripcion, deja el espacio vacio igual */
+    height: 2.6em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }

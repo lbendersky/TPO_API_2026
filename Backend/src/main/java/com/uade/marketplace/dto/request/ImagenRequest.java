@@ -8,6 +8,6 @@ import lombok.Data;
 
 @Data
 public class ImagenRequest {
-    private Long idTurno;
+    private Long idCancha;
     private List<MultipartFile> files;
 }

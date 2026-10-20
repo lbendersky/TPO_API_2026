@@ -25,10 +25,14 @@ import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
-import com.uade.marketplace.repository.ImagenRepository;
+import com.uade.marketplace.repository.InscripcionRepository;
+import com.uade.marketplace.repository.ItemCarritoRepository;
+import com.uade.marketplace.repository.OfertaRepository;
 
 @Service
 public class TurnoServiceImpl implements TurnoService {
+
+    
 
     @Autowired
     private TurnoRepository turnoRepository;
@@ -40,10 +44,16 @@ public class TurnoServiceImpl implements TurnoService {
     private CanchaRepository canchaRepository;
 
     @Autowired
-    private OfertaService ofertaService;
+    private InscripcionRepository inscripcionRepository;
 
     @Autowired
-    private ImagenRepository imagenRepository;
+    private OfertaRepository ofertaRepository;
+
+    @Autowired
+    private ItemCarritoRepository itemCarritoRepository;
+
+    @Autowired
+    private OfertaService ofertaService;
 
     private TurnoResponse convertirATurnoResponse(Turno t, Map<Long, Oferta> mapaOfertas) {
         Oferta ofertaActiva = mapaOfertas.get(t.getIdTurno());
@@ -120,12 +130,27 @@ public class TurnoServiceImpl implements TurnoService {
                 });
     }
 
+    private void validarDuenioCancha(Cancha cancha, Usuario actor) {
+        if (actor.getRol() == Rol.ADMIN) return;
+        if (cancha.getPublicador() == null || !cancha.getPublicador().getIdUsuario().equals(actor.getIdUsuario()))
+            throw new AccessDeniedException("Solo el dueño de la cancha puede cargarle turnos");
+    }
+
+    private boolean tieneInscriptos(Long idTurno) {
+        return !inscripcionRepository.findByTurno_IdTurno(idTurno).isEmpty();
+    }
+
         @Override
     public TurnoResponse crearTurno(TurnoRequest turnoRequest, Usuario actor) throws TurnoDuplicateException, RecursoNoEncontradoException {
         Usuario usuario = usuarioRepository.findById(actor.getIdUsuario())
                 .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
                 .orElseThrow(() -> new RecursoNoEncontradoException("Cancha no encontrada"));
+        
+        validarDuenioCancha(cancha, actor);
+
+        if (turnoRequest.getFechaHora() == null || turnoRequest.getFechaHora().isBefore(LocalDateTime.now()))
+            throw new SolicitudInvalidaException("La fecha del turno tiene que ser futura");
 
         if (Boolean.FALSE.equals(cancha.getActiva()))
             throw new SolicitudInvalidaException("No se puede crear un turno en una cancha inactiva");
@@ -152,7 +177,11 @@ public class TurnoServiceImpl implements TurnoService {
         Turno turno = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
         validarOwnership(turno, actor);
-        imagenRepository.deleteAll(imagenRepository.findByTurno_IdTurno(idTurno));
+         if (tieneInscriptos(idTurno))
+            throw new SolicitudInvalidaException("El turno ya tiene jugadores inscriptos, no se puede borrar");
+        
+        ofertaRepository.deleteAll(ofertaRepository.findByTurno_IdTurno(idTurno));
+        itemCarritoRepository.deleteAll(itemCarritoRepository.findByTurno_IdTurno(idTurno));
         turnoRepository.delete(turno);
     }
 
@@ -162,8 +191,16 @@ public class TurnoServiceImpl implements TurnoService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno"));
         validarOwnership(turnoActualizado, actor);
 
+        boolean cambiaFecha = !turnoActualizado.getFechaHora().equals(turnoRequest.getFechaHora());
+        if (cambiaFecha && turnoRequest.getFechaHora().isBefore(LocalDateTime.now()))
+            throw new SolicitudInvalidaException("La fecha del turno tiene que ser futura");
+        if (cambiaFecha && tieneInscriptos(idTurno))
+            throw new SolicitudInvalidaException("El turno ya tiene inscriptos: solo se puede cambiar el precio y la descripción");
+
         Cancha cancha = canchaRepository.findById(turnoRequest.getIdCancha())
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se identifico una cancha"));
+
+        validarDuenioCancha(cancha, actor);
 
         if (Boolean.FALSE.equals(cancha.getActiva()))
             throw new SolicitudInvalidaException("No se puede mover un turno a una cancha inactiva");

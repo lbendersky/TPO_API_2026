@@ -29,28 +29,6 @@
     color: var(--verdeOscuro);
 }
 
-.navbar .buscador {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    list-style: none;
-    align-items: center;
-    color: var(--verdeOscuro);
-}
-
-.buscador__input {
-    padding: 0.17em 0.58em;
-    font-size: 1.5rem;
-    border: 0.125em solid var(--verdeOscuro);
-    border-radius: 0.83em;
-    background-color: var(--blanco);
-    color: var(--negro);
-    width: 20.83em;
-    font-family: inherit;
-    outline: none;
-}
-
 .navbar .titulo {
     display: flex;
     flex-direction: column;
@@ -80,4 +58,31 @@
 
 .carrito-navbar__icono:hover {
     background-color: var(--gris);
+}
+
+.boton-publicar {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.42em 1.05em;
+    font-family: inherit;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--blanco);
+    background-color: var(--verdeOscuro);
+    border: 0.12em solid var(--verdeOscuro);
+    border-radius: 2em;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.15s;
+}
+
+.boton-publicar:hover {
+    background-color: var(--verdeMuyOscuro);
+    color: var(--blanco);
+}
+
+.boton-publicar__icono {
+    width: 1.3em;
+    height: 1.3em;
 }
