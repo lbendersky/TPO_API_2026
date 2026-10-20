@@ -7,6 +7,7 @@ import Login from './views/Login/Login';
 import Perfil from './views/Perfil/Perfil';
 import PublicarCancha from './views/PublicarCancha/PublicarCancha'; 
 import MisCanchas from './views/MisCanchas/MisCanchas';
+import Moderar from './views/Moderar/Moderar';
 import { Routes, Route } from 'react-router-dom';
 // Importa el Provider del contexto de búsqueda para compartir el texto entre NavBar y TurnoList
 import { BusquedaProvider } from './context/BusquedaContext';
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/perfil" element={<Perfil />} />
                     <Route path="/publicar-cancha" element={<PublicarCancha />} />
                     <Route path="/mis-canchas" element={<MisCanchas />} />
+                    <Route path="/moderar" element={<Moderar />} />
                 </Routes>
             </BusquedaProvider>
         </AuthProvider>

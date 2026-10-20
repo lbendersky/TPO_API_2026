@@ -24,14 +24,15 @@
     font-size: 1.1rem;
     color: var(--verdeOscuro);
     background-color: var(--blanco);
-    border: none;
+    border: 0.5em solid var(--verdeOscuro);
     border-radius: 2em;
     cursor: pointer;
-    transition: transform 0.15s;
+    transition: all 0.2s;
 }
 
 .mis-canchas__nueva:hover {
-    transform: translateY(-0.1em);
+    color: var(--blanco);
+    background-color: var(--verdeMuyOscuro);
 }
 
 .mis-canchas__aviso {

@@ -4,7 +4,7 @@
     gap: 0.8em 1.2em;
     margin-top: 1.2em;
     padding-top: 1.2em;
-    border-top: 0.1em dashed #d5dfd5;
+    border-top: 0.1em dashed var(--verdeOscuro);
 }
 
 .form-turno label {
@@ -21,9 +21,10 @@
     padding: 0.5em 0.7em;
     font-family: inherit;
     font-size: 1rem;
-    border: 0.12em solid #d5dfd5;
+    border: 0.12em solid var(--verdeOscuro);
     border-radius: 0.6em;
     outline: none;
+    padding: 0.5em;
 }
 
 .form-turno input:focus {
@@ -41,12 +42,18 @@
     gap: 0.6em;
 }
 
+.form-turno__botones button:hover {
+    background-color: var(--verdeMuyOscuro);
+    color: var(--blanco);
+}
+
 .form-turno__botones button {
     padding: 0.5em 1.3em;
     font-family: inherit;
     font-size: 1rem;
     border-radius: 2em;
     cursor: pointer;
+    transition: all 0.2s;
 }
 
 .form-turno__cancelar {

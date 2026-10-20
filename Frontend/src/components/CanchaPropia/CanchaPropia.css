@@ -20,8 +20,8 @@
     margin-left: 0.5em;
     padding: 0.15em 0.6em;
     font-size: 0.8rem;
-    color: #8a1c1c;
-    background-color: #fde2e2;
+    color: var(--rojo);
+    background-color: var(--rojoClaro);
     border-radius: 1em;
     vertical-align: middle;
 }
@@ -51,10 +51,10 @@
 
 .cancha-propia__mensaje {
     color: var(--verdeOscuro);
-    background-color: #e3f2e3;
+    background-color: var(--blanco);
 }
 
 .cancha-propia__error {
-    color: #8a1c1c;
-    background-color: #fde2e2;
+    color: var(--rojo);
+    background-color: var(--rojoClaro);
 }

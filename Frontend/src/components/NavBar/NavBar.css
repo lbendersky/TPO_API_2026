@@ -99,9 +99,8 @@
 }
 
 .boton-publicar:hover {
-    background-color: var(--blanco);
-    color: var(--verdeOscuro);
-    transform: translateY(-0.1em);
+    background-color: var(--verdeMuyOscuro);
+    color: var(--blanco);
 }
 
 .boton-publicar__icono {

@@ -38,12 +38,12 @@
 
 .perfil__guardar {
     padding: 0.75em;
-    border: none;
+    border: 0.0625em solid var(--verdeMuyOscuro);
     border-radius: 0.375em;
     background: var(--verdeMuyOscuro);
     color: var(--blanco);
     cursor: pointer;
-    transition: background 0.3s, border 0.2s;
+    transition: all 0.2s;
     margin-top: 0.5em;
 }
 
@@ -62,6 +62,23 @@
     color: var(--rojo);
     text-align: center;
     margin: 0;
+}
+
+.perfil__moderar {
+    width: 100%;
+    padding: 0.75em;
+    border: 0.0625em solid var(--verdeClaro);
+    border-radius: 0.375em;
+    background: var(--verdeMuyOscuro);
+    color: var(--blanco);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.5em;
+}
+
+.perfil__moderar:hover {
+    background: var(--verdeOscuro);
+    border: 0.0625em solid var(--blanco);
 }
 
 .perfil__acciones {

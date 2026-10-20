@@ -18,8 +18,8 @@
     max-width: 50em;
     margin: 0 auto 1em;
     padding: 0.8em 1em;
-    color: #8a1c1c;
-    background-color: #fde2e2;
+    color: var(--rojo);
+    background-color: var(--rojoClaro);
     border-radius: 0.6em;
     text-align: center;
 }
