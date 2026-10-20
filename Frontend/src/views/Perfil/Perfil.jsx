@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 import './Perfil.css';
 
 const Perfil = () => {
@@ -9,33 +9,21 @@ const Perfil = () => {
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState('');
 
-    const [datos, setDatos] = useState({
-        nombreUsuario: '',
-        nombre: '',
-        apellido: '',
-        email: '',
-        telefono: '',
-        dni: '',
-        contrasena: '',
-    });
+    const [datos, setDatos] = useState(() => ({
+    nombreUsuario: usuario?.nombreUsuario ?? '',
+    nombre: usuario?.nombre ?? '',
+    apellido: usuario?.apellido ?? '',
+    email: usuario?.email ?? '',
+    telefono: usuario?.telefono ?? '',
+    dni: usuario?.dni ?? '',
+    contrasena: '',
+}));
 
     useEffect(() => {
         if (!estaLogueado) {
             navigate('/login');
-            return;
         }
-        if (usuario) {
-            setDatos((prev) => ({
-                ...prev,
-                nombreUsuario: usuario.nombreUsuario ?? '',
-                nombre: usuario.nombre ?? '',
-                apellido: usuario.apellido ?? '',
-                email: usuario.email ?? '',
-                telefono: usuario.telefono ?? '',
-                dni: usuario.dni ?? '',
-            }));
-        }
-    }, [estaLogueado, usuario, navigate]);
+    }, [estaLogueado, navigate]);
 
     const handleCambio = (campo) => (e) => {
         setDatos({ ...datos, [campo]: e.target.value });

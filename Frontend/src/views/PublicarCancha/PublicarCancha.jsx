@@ -2,7 +2,7 @@ import './PublicarCancha.css';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import FormularioCancha from '../../components/FormularioCancha/FormularioCancha';
 
