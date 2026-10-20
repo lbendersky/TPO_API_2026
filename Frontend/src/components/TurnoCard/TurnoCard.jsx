@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 
 const TurnoCard = ({
     idTurno,
+    idCancha,
     fechaHora,
     tipoFutbol,
     lugaresDisponibles,
@@ -18,23 +19,46 @@ const TurnoCard = ({
     tieneOfertaActiva,
 }) => {
 
-    const [imagen, setImagen] = useState('');
+    const [imagenes, setImagenes] = useState([]);
+    const [indice, setIndice] = useState(0);
     
     //Pide imagen/es a back
     useEffect(() => {
-        fetch(`${API_URL}/imagenes/turno/${idTurno}`)
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudo cargar la imagen');
-                return response.json();
+        if (!idCancha) return;
+        fetch(`${API_URL}/imagenes/cancha/${idCancha}`)
+            .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+            .then((data) => {
+                setImagenes(data.map((img) => img.file));
+                setIndice(0);
             })
-            .then((data) => setImagen(data[0].file))
-            .catch((error) => console.error('Error al cargar la imagen', error));
-    }, [idTurno]);
+            .catch((e) => console.error('Error al cargar la imagen', e));
+    }, [idCancha]);
+
+    const anterior = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIndice((i) => Math.max(i - 1, 0));
+    };
+    const siguiente = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIndice((i) => Math.min(i + 1, imagenes.length - 1));
+    };
     
     return (
         <Link to={`/turno/${idTurno}`} className="turno-card-link">
         <article className="turno-card">
-            {imagen && <img className="turno-card__img" src={`data:image/jpeg;base64,${imagen}`} alt={nombreCancha} />}
+            {imagenes.length > 0 && (
+                <div className="turno-card__carrusel">
+                    {imagenes.length > 1 && (
+                        <button type="button" className="turno-card__flecha turno-card__flecha--izq" onClick={anterior} disabled={indice === 0}>‹</button>
+                    )}
+                    <img className="turno-card__img" src={`data:image/jpeg;base64,${imagenes[indice]}`} alt={nombreCancha} />
+                    {imagenes.length > 1 && (
+                        <button type="button" className="turno-card__flecha turno-card__flecha--der" onClick={siguiente} disabled={indice === imagenes.length - 1}>›</button>
+                    )}
+                </div>
+            )}
             <div className="turno-card__body">
                 <h3 className="turno-card__titulo">{nombreCancha}</h3>
                 <p className="turno-card__localidadTipo">{localidad} - {tipoFutbol}</p>

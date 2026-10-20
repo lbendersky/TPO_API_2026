@@ -11,6 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class TurnoResponse {
     private Long idTurno;
+    private Long idCancha;
     private LocalDateTime fechaHora;
     private TipoFutbol tipoFutbol;
     private Integer lugaresDisponibles;
@@ -27,6 +28,7 @@ public class TurnoResponse {
     public static TurnoResponse from(Turno t, Double porcentajeDescuento, Float precioConDescuento, boolean tieneOfertaActiva) {
         return new TurnoResponse(
                 t.getIdTurno(),
+                t.getCancha() != null ? t.getCancha().getIdCancha() : null,
                 t.getFechaHora(),
                 t.getTipoFutbol(),
                 t.getLugaresDisponibles(),

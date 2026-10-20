@@ -1,6 +1,6 @@
 import './CanchaPropia.css';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { API_URL } from '../../config';
 import FormularioTurno from '../FormularioTurno/FormularioTurno';
@@ -10,6 +10,21 @@ const CanchaPropia = ({ cancha }) => {
     const [abierto, setAbierto] = useState(false);
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState('');
+    const [imagenes, setImagenes] = useState([]);
+    const [indice, setIndice] = useState(0);
+
+    useEffect(() => {
+        fetch(`${API_URL}/imagenes/cancha/${cancha.idCancha}`)
+            .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+            .then((data) => {
+                setImagenes(data.map((img) => img.file));
+                setIndice(0);
+            })
+            .catch((e) => console.error('Error al cargar la imagen', e));
+    }, [cancha.idCancha]);
+
+    const anterior = () => setIndice((i) => Math.max(i - 1, 0));
+    const siguiente = () => setIndice((i) => Math.min(i + 1, imagenes.length - 1));
 
     const crearTurno = (datos) => {
         setMensaje('');
@@ -34,8 +49,19 @@ const CanchaPropia = ({ cancha }) => {
             .catch((err) => setError(err.message));
     };
 
-    return (
+        return (
         <article className="cancha-propia">
+            {imagenes.length > 0 && (
+                <div className="cancha-propia__carrusel">
+                    {imagenes.length > 1 && (
+                        <button type="button" className="cancha-propia__flecha cancha-propia__flecha--izq" onClick={anterior} disabled={indice === 0}>‹</button>
+                    )}
+                    <img className="cancha-propia__img" src={`data:image/jpeg;base64,${imagenes[indice]}`} alt={cancha.nombre} />
+                    {imagenes.length > 1 && (
+                        <button type="button" className="cancha-propia__flecha cancha-propia__flecha--der" onClick={siguiente} disabled={indice === imagenes.length - 1}>›</button>
+                    )}
+                </div>
+            )}
             <div className="cancha-propia__info">
                 <h2 className="cancha-propia__nombre">
                     {cancha.nombre} {!cancha.activa && <span className="cancha-propia__baja">Dada de baja</span>}

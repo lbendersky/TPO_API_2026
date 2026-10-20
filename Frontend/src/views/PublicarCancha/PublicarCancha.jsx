@@ -19,7 +19,27 @@ const PublicarCancha = () => {
         }
     }, [estaLogueado, navigate]);
 
-    const publicar = (datos) => {
+    const subirFoto = (idCancha, idImagenPrecargada) => {
+        return fetch(`${API_URL}/imagenes/precargada`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ idCancha, idImagenPrecargada }),
+        });
+    };
+
+    const subirFotos = (idCancha, idsImagenes) => {
+        // Las manda una por una (podría ser en paralelo con Promise.all, pero así
+        // si una falla no se cortan las demás)
+        return idsImagenes.reduce(
+            (promesa, id) => promesa.then(() => subirFoto(idCancha, id)),
+            Promise.resolve()
+        ).catch((err) => console.error('La cancha se publicó, pero fallaron algunas fotos', err));
+    };
+
+    const publicar = (datos, fotosElegidas) => {
         setError('');
         const cancha = {
             ...datos,
@@ -39,6 +59,7 @@ const PublicarCancha = () => {
                 if (!response.ok) throw new Error('No se pudo publicar la cancha');
                 return response.json();
             })
+            .then((data) => fotosElegidas.length > 0 ? subirFotos(data.idCancha, fotosElegidas).then(() => data) : data)
             .then((data) => setPublicada(data))
             .catch((err) => {
                 console.error('Error al publicar la cancha', err);

@@ -73,3 +73,23 @@
         grid-template-columns: 1fr;
     }
 }
+
+.form-cancha__fotos {
+    display: flex;
+    gap: 0.75em;
+    flex-wrap: wrap;
+}
+.form-cancha__foto {
+    width: 9em;
+    height: 9em;
+    object-fit: contain;
+    padding: 0.75em;
+    border: 3px solid #ccc;
+    border-radius: 0.75em;
+    cursor: pointer;
+    background: #fff;
+}
+.form-cancha__foto--elegida {
+    border-color: var(--verdeOscuro, #2e7d32);
+    box-shadow: 0 0 0 2px var(--verdeOscuro, #2e7d32);
+}

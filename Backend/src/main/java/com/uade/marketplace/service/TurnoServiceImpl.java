@@ -25,7 +25,6 @@ import com.uade.marketplace.exceptions.TurnoDuplicateException;
 import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
-import com.uade.marketplace.repository.ImagenRepository;
 
 @Service
 public class TurnoServiceImpl implements TurnoService {
@@ -41,9 +40,6 @@ public class TurnoServiceImpl implements TurnoService {
 
     @Autowired
     private OfertaService ofertaService;
-
-    @Autowired
-    private ImagenRepository imagenRepository;
 
     private TurnoResponse convertirATurnoResponse(Turno t, Map<Long, Oferta> mapaOfertas) {
         Oferta ofertaActiva = mapaOfertas.get(t.getIdTurno());
@@ -163,7 +159,6 @@ public class TurnoServiceImpl implements TurnoService {
         Turno turno = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
         validarOwnership(turno, actor);
-        imagenRepository.deleteAll(imagenRepository.findByTurno_IdTurno(idTurno));
         turnoRepository.delete(turno);
     }
 
