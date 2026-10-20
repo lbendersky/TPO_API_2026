@@ -12,6 +12,8 @@
     margin-bottom: 1.5em;
     text-align: center;
     color: var(--blanco);
+    font-size: 1.3rem;
+    font-weight: 700;
 }
 
 .publicar-cancha__error {
