@@ -79,8 +79,12 @@ const Perfil = () => {
             )}
             <div className="perfil__encabezado">
                 <h1 className="perfil__titulo">Mi perfil</h1>
-                <button type="button" className="perfil__mis-canchas" onClick={() => navigate('/mis-canchas')}> Mis canchas
-                </button>
+                <div className="perfil__encabezado-botones">
+                    <button type="button" className="perfil__mis-canchas" onClick={() => navigate('/mis-canchas')}> Mis canchas
+                    </button>
+                    <button type="button" className="perfil__mis-canchas" onClick={() => navigate('/mis-inscripciones')}> Mis inscripciones
+                    </button>
+                </div>
             </div>
 
             <form className="perfil__form" onSubmit={handleGuardar}>

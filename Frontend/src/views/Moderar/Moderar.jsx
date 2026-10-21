@@ -40,6 +40,9 @@ const Moderar = () => {
 
     const buscarTurno = (id) => pedir(`${API_URL}/turnos/${encodeURIComponent(id)}`);
     const eliminarTurno = (t) => pedir(`${API_URL}/turnos/${t.idTurno}`, { method: 'DELETE' });
+
+    const buscarInscripcion = (id) => pedir(`${API_URL}/inscripciones/${encodeURIComponent(id)}`);
+    const eliminarInscripcion = (i) => pedir(`${API_URL}/inscripciones/${i.idInscripcion}`, { method: 'DELETE' });
     const crearOferta = (body) => pedir(`${API_URL}/ofertas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -96,6 +99,25 @@ const Moderar = () => {
                         <dt>Organizador</dt><dd>{t.nombreOrganizador ?? '-'}</dd>
                         <dt>Estado</dt><dd>{t.estado}</dd>
                         <dt>Precio</dt><dd>{t.precioPorJugador}</dd>
+                    </dl>
+                )}
+            />
+
+            <BuscadorModeracion
+                titulo="Inscripciones"
+                tituloSingular="esta inscripción"
+                placeholder="ID de la inscripción"
+                onBuscar={buscarInscripcion}
+                onEliminar={eliminarInscripcion}
+                renderResultado={(i) => (
+                    <dl>
+                        <dt>ID</dt><dd>{i.idInscripcion}</dd>
+                        <dt>Comprador</dt><dd>{i.nombreComprador ?? '-'}</dd>
+                        <dt>Cancha</dt><dd>{i.nombreCancha ?? i.idTurno}</dd>
+                        <dt>Fecha del turno</dt><dd>{formatearFechaHora(i.fechaHoraTurno)}</dd>
+                        <dt>Fecha de compra</dt><dd>{formatearFechaHora(i.fechaCompra)}</dd>
+                        <dt>Monto pagado</dt><dd>{i.montoPagado}</dd>
+                        <dt>Estado de pago</dt><dd>{i.estadoPago}</dd>
                     </dl>
                 )}
             />

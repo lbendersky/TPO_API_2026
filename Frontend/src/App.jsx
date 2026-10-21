@@ -9,6 +9,7 @@ import PublicarCancha from './views/PublicarCancha/PublicarCancha';
 import MisCanchas from './views/MisCanchas/MisCanchas';
 import Moderar from './views/Moderar/Moderar';
 import Checkout from './views/Checkout/Checkout'
+import MisInscripciones from './views/MisInscripciones/MisInscripciones';
 import { Routes, Route } from 'react-router-dom';
 // Importa el Provider del contexto de búsqueda para compartir el texto entre NavBar y TurnoList
 import { AuthProvider } from './context/AuthContext';
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/mis-canchas" element={<MisCanchas />} />
                     <Route path="/moderar" element={<Moderar />} />
                     <Route path="/carrito/checkout" element={<Checkout/>} />
+                    <Route path="/mis-inscripciones" element={<MisInscripciones/>} />
                 </Routes>
         </AuthProvider>
     );

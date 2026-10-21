@@ -2,7 +2,7 @@ import './BuscadorModeracion.css';
 
 import { useState } from 'react';
 
-const BuscadorModeracion = ({ titulo, placeholder, onBuscar, onEliminar, renderResultado, puedeEliminar, renderExtra }) => {
+const BuscadorModeracion = ({ titulo, tituloSingular, placeholder, onBuscar, onEliminar, renderResultado, puedeEliminar, renderExtra }) => {
     const [query, setQuery] = useState('');
     const [resultado, setResultado] = useState(null);
     const [error, setError] = useState('');
@@ -31,7 +31,8 @@ const BuscadorModeracion = ({ titulo, placeholder, onBuscar, onEliminar, renderR
 
     const eliminar = async () => {
         if (!resultado) return;
-        if (!window.confirm(`¿Eliminar este ${titulo.toLowerCase().slice(0, -1)}? Esta acción no se puede deshacer.`)) return;
+        const nombre = tituloSingular ?? `este ${titulo.toLowerCase().slice(0, -1)}`;
+        if (!window.confirm(`¿Eliminar ${nombre}? Esta acción no se puede deshacer.`)) return;
         setError('');
         try {
             await onEliminar(resultado);

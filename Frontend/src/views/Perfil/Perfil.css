@@ -117,12 +117,19 @@
 
 .perfil__encabezado {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 1em;
     margin-bottom: 1em;
     padding-bottom: 0.8em;
     border-bottom: 0.1em solid rgba(255, 255, 255, 0.3);
+}
+
+.perfil__encabezado-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
 }
 
 .perfil__encabezado .perfil__titulo {
