@@ -72,3 +72,18 @@
     text-align: center;
     margin: 0;
 }
+
+.login__aviso {
+    color: var(--verdeMuyOscuro);
+    text-align: center;
+    margin: 0;
+}
+
+.login__olvide {
+    align-self: center;
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--blanco);
+    font-size: 0.9em;
+    letter-spacing: 0.1em;
+}

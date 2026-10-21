@@ -7,6 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
+import { Alerta } from '../../utils/alerta';
 // URL base del backend
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
@@ -45,7 +46,7 @@ const Turno = () => {
             navigate('/carrito');
         } catch (error) {
             console.error('Error al agregar al carrito', error);
-            alert('No se pudo agregar al carrito');
+            Alerta.fire({ icon: 'error', title: 'Error', text: 'No se pudo agregar al carrito' });
         }
     };
 

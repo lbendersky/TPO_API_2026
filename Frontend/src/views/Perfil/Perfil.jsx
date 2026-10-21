@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Alerta } from '../../utils/alerta';
 import { useAuth } from '../../context/useAuth';
 import './Perfil.css';
 
@@ -54,8 +55,16 @@ const Perfil = () => {
     };
 
     const handleEliminar = async () => {
-        const confirmado = window.confirm('¿Seguro que querés eliminar tu cuenta? Esta acción no se puede deshacer.');
-        if (!confirmado) return;
+        const resultado = await Alerta.fire({
+            title: '¿Eliminar cuenta?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#c0392b',
+        });
+        if (!resultado.isConfirmed) return;
         try {
             await eliminarCuenta();
             navigate('/');
