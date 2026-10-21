@@ -70,7 +70,7 @@ const Perfil = () => {
                     className="perfil__moderar"
                     onClick={() => navigate('/moderar')}
                 >
-                    Moderar turnos y usuarios
+                    Moderar
                 </button>
             )}
             <div className="perfil__encabezado">

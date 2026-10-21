@@ -28,7 +28,7 @@
     font-family: inherit;
     font-size: 1.15rem;
     color: var(--negro);
-    border: 0.12em solid var(--blanco);
+    border: 0.12em solid var(--verdeOscuro);
     border-radius: 0.6em;
     outline: none;
     transition: border-color 0.2s;

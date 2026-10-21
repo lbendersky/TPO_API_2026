@@ -19,7 +19,8 @@
       "Bash(curl -s http://localhost:5174/src/main.jsx)",
       "Bash(curl -s http://localhost:5174/src/App.jsx)",
       "Bash(curl -s http://localhost:5174/src/components/Filtros/Filtros.jsx)",
-      "Bash(curl -s http://localhost:5174/src/components/NavBar/NavBar.jsx)"
+      "Bash(curl -s http://localhost:5174/src/components/NavBar/NavBar.jsx)",
+      "Bash(git branch *)"
     ]
   }
 }
