@@ -1,0 +1,83 @@
+.formulario-oferta {
+    display: contents;
+}
+
+.formulario-oferta__toggle {
+    padding: 0.6em 1.2em;
+    border: none;
+    border-radius: 0.5em;
+    background: var(--verdeOscuro);
+    color: var(--blanco);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.formulario-oferta__toggle:hover {
+    background-color: var(--verdeMuyOscuro);
+
+}
+
+.formulario-oferta__form {
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75em;
+    padding: 0.75em;
+    border: 1px solid var(--verdeOscuro);
+    border-radius: 0.5em;
+    background: var(--verdeOscuro);
+    color: var(--blanco);
+}
+
+.formulario-oferta__label {
+    flex: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    color: var(--blanco);
+}
+
+.formulario-oferta__label input {
+    padding: 0.5em 0.6em;
+    border: 1px solid var(--blanco);
+    background-color: var(--blanco);
+    color: var(--verdeOscuro);
+    border-radius: 0.4em;
+    font-size: 1em;
+}
+
+.formulario-oferta__enviar {
+    align-self: center;
+    padding: 0.6em 1.2em;
+    border: none;
+    border-radius: 0.5em;
+    background: var(--verdeMuyOscuro);
+    color: var(--blanco);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 0.1em solid var(--verdeMuyOscuro);    
+}
+
+.formulario-oferta__enviar:hover:not(:disabled) {
+    background-color: var(--verdeOscuro);
+    border: 0.1em solid var(--blanco);
+}
+
+.formulario-oferta__enviar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.formulario-oferta__error {
+    width: 100%;
+    margin: 0;
+    color: var(--rojo);
+}
+
+.formulario-oferta__ok {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--verdeOscuro);
+}
