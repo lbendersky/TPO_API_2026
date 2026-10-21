@@ -1,0 +1,118 @@
+.buscador-moderacion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+    padding: 1.25em;
+    border: 1px solid var(--verdeOscuro);
+    border-radius: 0.75em;
+    background: var(--blanco);
+}
+
+.buscador-moderacion__titulo {
+    margin: 0;
+    font-size: 1.4em;
+    color: var(--verdeOscuro);
+}
+
+.buscador-moderacion__fila {
+    display: flex;
+    gap: 0.5em;
+    color: var(--verdeOscuro);
+}
+
+.buscador-moderacion__input {
+    flex: 1;
+    padding: 0.6em 0.8em;
+    border: 1px solid var(--verdeOscuro);
+    border-radius: 0.5em;
+    font-size: 1em;
+}
+
+.buscador-moderacion__buscar,
+.buscador-moderacion__eliminar {
+    padding: 0.6em 1.2em;
+    border: none;
+    border-radius: 0.5em;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.buscador-moderacion__buscar {
+    background: var(--verdeOscuro);
+    color: var(--blanco);
+    transition: background-color 0.15s ease;
+}
+
+.buscador-moderacion__buscar:hover:not(:disabled) {
+    background-color: var(--verdeMuyOscuro);
+}
+
+.buscador-moderacion__buscar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.buscador-moderacion__eliminar {
+    background: var(--rojo);
+    color: var(--blanco);
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.buscador-moderacion__eliminar:hover:not(:disabled) {
+    background-color: var(--rojoClaro);
+    color: var(--rojo);
+}
+
+.buscador-moderacion__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    align-items: center;
+    justify-content: center;
+}
+
+.buscador-moderacion__eliminar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.buscador-moderacion__resultado {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+    padding: 1em;
+    background: var(--blanco);
+    border-radius: 0.5em;
+    color: var(--verdeOscuro);
+}
+
+.buscador-moderacion__resultado dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.3em 1em;
+    margin: 0;
+}
+
+.buscador-moderacion__resultado dt {
+    font-weight: 600;
+    color: var(--gris);
+}
+
+.buscador-moderacion__resultado dd {
+    margin: 0;
+}
+
+.buscador-moderacion__aviso {
+    margin: 0;
+    color: var(--gris);
+}
+
+.buscador-moderacion__error {
+    margin: 0;
+    color: var(--rojo);
+}
+
+.buscador-moderacion__ok {
+    margin: 0;
+    color: var(--verdeOscuro);
+}

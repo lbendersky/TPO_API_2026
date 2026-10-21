@@ -37,7 +37,7 @@ public class TurnoResponse {
                 t.getEstado(),
                 t.getCancha() != null ? t.getCancha().getNombre() : null,
                 t.getCancha() != null && t.getCancha().getLocalidad() != null ? t.getCancha().getLocalidad().getNombre() : null,
-                t.getUsuario() != null ? t.getUsuario().getNombre() : null,
+                t.getUsuario() != null ? t.getUsuario().getNombreUsuario() : null,
                 porcentajeDescuento,
                 precioConDescuento,
                 tieneOfertaActiva

@@ -10,12 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.marketplace.dto.request.UsuarioRequest;
 import com.uade.marketplace.dto.response.UsuarioResponse;
+import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.UsuarioDuplicadoException;
+import com.uade.marketplace.repository.CanchaRepository;
 import com.uade.marketplace.repository.CarritoRepository;
+import com.uade.marketplace.repository.ImagenRepository;
 import com.uade.marketplace.repository.InscripcionRepository;
+import com.uade.marketplace.repository.ItemCarritoRepository;
+import com.uade.marketplace.repository.OfertaRepository;
 import com.uade.marketplace.repository.TurnoRepository;
 import com.uade.marketplace.repository.UsuarioRepository;
 
@@ -32,6 +37,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private TurnoRepository turnoRepository;
+
+    @Autowired
+    private CanchaRepository canchaRepository;
+
+    @Autowired
+    private ImagenRepository imagenRepository;
+
+    @Autowired
+    private OfertaRepository ofertaRepository;
+
+    @Autowired
+    private ItemCarritoRepository itemCarritoRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -86,11 +103,14 @@ public class UsuarioServiceImpl implements UsuarioService {
         inscripcionRepository.deleteAll(
                 inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario));
 
-        // Borrar los turnos que organiza y sus inscripciones asociadas
+        // Borrar los turnos que organiza (con todas sus dependencias)
         for (Turno turno : turnoRepository.findByUsuario_IdUsuario(idUsuario)) {
-            inscripcionRepository.deleteAll(
-                    inscripcionRepository.findByTurno_IdTurno(turno.getIdTurno()));
-            turnoRepository.delete(turno);
+            eliminarTurnoEnCascada(turno);
+        }
+
+        // Borrar las canchas publicadas (con sus turnos e imagenes)
+        for (Cancha cancha : canchaRepository.findByPublicador_IdUsuario(idUsuario)) {
+            eliminarCanchaEnCascada(cancha);
         }
 
         // Borrar el carrito del usuario (los items se borran por orphanRemoval)
@@ -98,6 +118,22 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .ifPresent(carritoRepository::delete);
 
         usuarioRepository.deleteById(idUsuario);
+    }
+
+    private void eliminarTurnoEnCascada(Turno turno) {
+        Long idTurno = turno.getIdTurno();
+        ofertaRepository.deleteAll(ofertaRepository.findByTurno_IdTurno(idTurno));
+        itemCarritoRepository.deleteAll(itemCarritoRepository.findByTurno_IdTurno(idTurno));
+        inscripcionRepository.deleteAll(inscripcionRepository.findByTurno_IdTurno(idTurno));
+        turnoRepository.delete(turno);
+    }
+
+    private void eliminarCanchaEnCascada(Cancha cancha) {
+        imagenRepository.deleteAll(imagenRepository.findByCancha_IdCancha(cancha.getIdCancha()));
+        for (Turno turno : turnoRepository.findByCancha_IdCancha(cancha.getIdCancha())) {
+            eliminarTurnoEnCascada(turno);
+        }
+        canchaRepository.delete(cancha);
     }
 
     @Override
