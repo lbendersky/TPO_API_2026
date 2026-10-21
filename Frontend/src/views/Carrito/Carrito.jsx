@@ -7,9 +7,12 @@ import { HeaderCarrito } from "../../Components/Carrito/HeaderCarrito";
 import AvisoPrioridadBloqueada from "../../Components/Carrito/AvisoPrioridadBloqueada";
 import { TarjetaCarrito } from "../../Components/Carrito/TarjetaCarrito";
 import { CanchasSeleccionadas } from "../../Components/Carrito/CanchasSeleccionadas";
+import { ResumenDeCompraCarrito } from "../../Components/Carrito/SideBar/ResumenDeCompraCarrito"
+import { BotonConfirmarReserva } from "../../Components/Carrito/SideBar/BotonConfirmarReserva";
+import { Navigate } from "react-router-dom";
 
 const Carrito = () => {
-    const [items, setItems] = useState([]);
+    const [carrito, setCarrito] = useState({ items: [], total: 0 });
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState("");
     const { token } = useAuth();
@@ -30,7 +33,7 @@ const Carrito = () => {
                 return response.json();
             })
             .then((data) => {
-                setItems(data);
+                setCarrito(data);
             })
             .catch((error) => {
                 console.error("Error al cargar el carrito:", error);
@@ -38,6 +41,13 @@ const Carrito = () => {
             })
             .finally(() => setCargando(false));
     }, [token]);
+    const navigate = useNavigate();
+
+    const onConfirmarReserva = () => {
+        Navigate('/carrito/checkout')
+    }
+
+    const items = carrito.items;
 
     return (
         <>
@@ -61,6 +71,10 @@ const Carrito = () => {
                     />
                 ))}
             </section>
+            <aside>
+                <ResumenDeCompraCarrito total={carrito.total} items={items}/>
+                <BotonConfirmarReserva onConfirmarReserva={onConfirmarReserva}/>
+            </aside>
         </>
     );
 };
