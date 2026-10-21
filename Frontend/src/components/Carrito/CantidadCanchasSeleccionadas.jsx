@@ -1,7 +1,9 @@
 import React from 'react'
 
-export const CantidadCanchasSeleccionadas = ({cantidad}) => {
+export const CantidadCanchasSeleccionadas = ({ cantidad, className = '', children }) => {
   return (
-    <p>{cantidad}</p>
+    <p className={className}>
+      {cantidad}{children ? ` ${children}` : ''}
+    </p>
   )
 }

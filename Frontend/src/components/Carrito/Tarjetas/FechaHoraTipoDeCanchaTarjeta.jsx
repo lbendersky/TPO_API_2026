@@ -1,4 +1,6 @@
 import React from 'react'
+import { FechaTarjetaCarrito } from './FechaTarjetaCarrito'
+import { TipoDeCanchaTarjetaCarrito } from './TipoDeCanchaTarjetaCarrito'
 
 export const FechaHoraTipoDeCanchaTarjeta = ({ fechaHora, tipoSuperficie }) => {
   return (

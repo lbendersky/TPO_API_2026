@@ -12,7 +12,7 @@ import { BotonConfirmarReserva } from "../../components/Carrito/SideBar/BotonCon
 
 import "./Carrito.css";
 import "../../components/Carrito/Header/CarritoHeader.css";
-import "../../components/Carrito//SideBar/SideBar.css";
+import "../../components/Carrito/SideBar/SideBar.css";
 import "../../components/Carrito/Tarjetas/TarjetaCarrito.css";
 
 const Carrito = () => {
@@ -52,6 +52,38 @@ const Carrito = () => {
         navigate("/carrito/checkout");
     };
 
+    const quitarItem = (idItem) => {
+        fetch(`${API_URL}/carrito/items/${idItem}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error("No se pudo quitar el turno del carrito.");
+                return response.json();
+            })
+            .then((data) => setCarrito(data))
+            .catch((error) => console.error("Error al quitar el item del carrito:", error));
+    };
+
+    const actualizarCantidad = (idItem, cantidad) => {
+        fetch(`${API_URL}/carrito/items/${idItem}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ cantidad }),
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error("No se pudo actualizar la cantidad.");
+                return response.json();
+            })
+            .then((data) => setCarrito(data))
+            .catch((error) => console.error("Error al actualizar la cantidad del carrito:", error));
+    };
+
     const items = carrito.items;
 
     return (
@@ -77,13 +109,15 @@ const Carrito = () => {
                         <TarjetaCarrito
                             key={item.idItem}
                             item={item}
+                            onQuitar={quitarItem}
+                            onCambiarCantidad={actualizarCantidad}
                         />
                     ))}
                 </section>
 
                 <aside className="carrito-sidebar">
                     <ResumenDeCompraCarrito total={carrito.total} items={items} />
-                    <BotonConfirmarReserva onConfirmarReserva={onConfirmarReserva} />
+                    <BotonConfirmarReserva onConfirmarReserva={onConfirmarReserva} disabled={items.length === 0} />
                 </aside>
             </div>
         </main>

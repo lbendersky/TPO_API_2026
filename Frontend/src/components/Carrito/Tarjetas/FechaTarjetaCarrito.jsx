@@ -3,6 +3,7 @@ import React from 'react'
 const capitalizar = (t) => t.charAt(0).toUpperCase() + t.slice(1)
 
 export const FechaTarjetaCarrito = ({ fecha }) => {
+  if (!fecha) return null
   const d = new Date(fecha)
 
   const dia = capitalizar(

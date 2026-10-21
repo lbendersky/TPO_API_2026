@@ -2,17 +2,23 @@ import { useState } from 'react'
 import { BotonAgregarTurno } from './BotonAgregarTurno'
 import { BotonSacarTurno } from './BotonSacarTurno'
 
-
-export const AgregaraTurnosDesdeTarjeta = ({ cantidad, lugaresDisponibles }) => {
-  const [cantidad, setCantidad] = useState(1)
+export const AgregarTurnosDesdeTarjeta = ({ cantidad, lugaresDisponibles, onCambiar }) => {
+  const [cantidadSeleccionada, setCantidadSeleccionada] = useState(cantidad ?? 1)
 
   const aumentarCantidad = () => {
-    if (cantidad < lugaresDisponibles)
-        setCantidad(cantidad+1)
+    if (cantidadSeleccionada < lugaresDisponibles) {
+      const nueva = cantidadSeleccionada + 1
+      setCantidadSeleccionada(nueva)
+      onCambiar?.(nueva)
+    }
   }
 
   const sacarCantidad = () => {
-    setCantidad(cantidad-1)
+    if (cantidadSeleccionada > 1) {
+      const nueva = cantidadSeleccionada - 1
+      setCantidadSeleccionada(nueva)
+      onCambiar?.(nueva)
+    }
   }
 
   return (
@@ -21,11 +27,11 @@ export const AgregaraTurnosDesdeTarjeta = ({ cantidad, lugaresDisponibles }) => 
 
       <div className="turnos-control__selector">
         <BotonSacarTurno onDecrecer={sacarCantidad} />
-        <span className="turnos-control__cantidad">{cantidad}</span>
+        <span className="turnos-control__cantidad">{cantidadSeleccionada}</span>
         <BotonAgregarTurno onAumentar={aumentarCantidad} />
       </div>
 
       <span className="estado-congelado">Congelado</span>
-  </div>
+    </div>
   )
 }
