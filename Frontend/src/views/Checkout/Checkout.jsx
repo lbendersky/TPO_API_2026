@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { API_URL } from '../../config'
 import { useAuth } from '../../context/useAuth'
-import { BotonCheckout } from '../../Components/Checkout/BotonCheckout'
-import { HeaderCarrito } from '../../Components/Carrito/Header/HeaderCarrito'
+import { BotonCheckout } from '../../components/Checkout/BotonCheckout'
+import { HeaderCarrito } from '../../components/Carrito/Header/HeaderCarrito'
 
 import '../Carrito/Carrito.css'
-import '../../Components/Carrito/Header/CarritoHeader.css'
+import '../../components/Carrito/Header/CarritoHeader.css'
 import './Checkout.css'
 
 const Checkout = () => {
