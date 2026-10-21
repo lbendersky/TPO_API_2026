@@ -191,6 +191,9 @@ public class TurnoServiceImpl implements TurnoService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno"));
         validarOwnership(turnoActualizado, actor);
 
+        if (turnoRequest.getFechaHora() == null)
+            throw new SolicitudInvalidaException("La fecha del turno tiene que ser futura");
+
         boolean cambiaFecha = !turnoActualizado.getFechaHora().equals(turnoRequest.getFechaHora());
         if (cambiaFecha && turnoRequest.getFechaHora().isBefore(LocalDateTime.now()))
             throw new SolicitudInvalidaException("La fecha del turno tiene que ser futura");

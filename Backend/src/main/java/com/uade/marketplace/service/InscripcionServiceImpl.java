@@ -79,8 +79,9 @@ public class InscripcionServiceImpl implements InscripcionService{
         if (request.getIdTurno() == null)
             throw new RecursoNoEncontradoException("Falta indicar el turno de la inscripcion");
 
-        Turno turno = turnoRepository.findById(request.getIdTurno())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + request.getIdTurno()));
+        Turno turno = turnoRepository.findByIdParaInscribir(request.getIdTurno())
+        .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + request.getIdTurno()));
+
         Usuario comprador = usuarioRepository.findById(actor.getIdUsuario())
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + actor.getIdUsuario()));
 

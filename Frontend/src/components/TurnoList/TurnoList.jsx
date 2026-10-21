@@ -30,7 +30,7 @@ const TurnoList = () => {
         if (filtros.tipoFutbol) url = url + `tipoFutbol=${filtros.tipoFutbol}&`;
         if (filtros.precioMin != null) url = url + `precioMin=${filtros.precioMin}&`;
         if (filtros.precioMax != null) url = url + `precioMax=${filtros.precioMax}&`;
-        if (filtros.texto) url = url + `texto=${filtros.texto}&`;
+        if (filtros.texto) url = url + `texto=${encodeURIComponent(filtros.texto)}&`;
 
         fetch(url)
             .then((response) => response.json())

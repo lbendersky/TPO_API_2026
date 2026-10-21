@@ -38,31 +38,46 @@ public class OfertaServiceImpl implements OfertaService {
 
     @Override
     public OfertaResponse crearOferta(OfertaRequest request) throws RecursoNoEncontradoException {
-        if (request.getIdTurno() == null)
-            throw new RecursoNoEncontradoException("Falta indicar el turno de la oferta");
-        Turno turno = turnoRepository.findById(request.getIdTurno())
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "No existe el turno " + request.getIdTurno()));
-        validarDatos(request);
-        Oferta oferta = Oferta.builder()
-                .porcentajeDescuento(request.getPorcentajeDescuento())
-                .fechaInicio(request.getFechaInicio())
-                .fechaFin(request.getFechaFin())
-                .turno(turno)
-                .build();
-        return OfertaResponse.from(ofertaRepository.save(oferta));
-    }
+    if (request.getIdTurno() == null)
+        throw new RecursoNoEncontradoException("Falta indicar el turno de la oferta");
+    Turno turno = turnoRepository.findById(request.getIdTurno())
+            .orElseThrow(() -> new RecursoNoEncontradoException(
+                    "No existe el turno " + request.getIdTurno()));
+    validarDatos(request);
+
+    boolean seSuperpone = ofertaRepository.findByTurno_IdTurno(turno.getIdTurno()).stream()
+            .anyMatch(o -> !request.getFechaInicio().isAfter(o.getFechaFin())
+                    && !request.getFechaFin().isBefore(o.getFechaInicio()));
+    if (seSuperpone)
+        throw new SolicitudInvalidaException("Ya existe una oferta para este turno que se superpone con esas fechas");
+
+    Oferta oferta = Oferta.builder()
+            .porcentajeDescuento(request.getPorcentajeDescuento())
+            .fechaInicio(request.getFechaInicio())
+            .fechaFin(request.getFechaFin())
+            .turno(turno)
+            .build();
+    return OfertaResponse.from(ofertaRepository.save(oferta));
+}
 
     @Override
     public OfertaResponse actualizarOferta(Long idOferta, OfertaRequest request) throws RecursoNoEncontradoException {
-        Oferta oferta = ofertaRepository.findById(idOferta)
-                .orElseThrow(() -> new RecursoNoEncontradoException("No existe la oferta " + idOferta));
-        validarDatos(request);
-        oferta.setPorcentajeDescuento(request.getPorcentajeDescuento());
-        oferta.setFechaInicio(request.getFechaInicio());
-        oferta.setFechaFin(request.getFechaFin());
-        return OfertaResponse.from(ofertaRepository.save(oferta));
-    }
+    Oferta oferta = ofertaRepository.findById(idOferta)
+            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la oferta " + idOferta));
+    validarDatos(request);
+
+    boolean seSuperpone = ofertaRepository.findByTurno_IdTurno(oferta.getTurno().getIdTurno()).stream()
+            .filter(o -> !o.getIdOferta().equals(idOferta))
+            .anyMatch(o -> !request.getFechaInicio().isAfter(o.getFechaFin())
+                    && !request.getFechaFin().isBefore(o.getFechaInicio()));
+    if (seSuperpone)
+        throw new SolicitudInvalidaException("Ya existe una oferta para este turno que se superpone con esas fechas");
+
+    oferta.setPorcentajeDescuento(request.getPorcentajeDescuento());
+    oferta.setFechaInicio(request.getFechaInicio());
+    oferta.setFechaFin(request.getFechaFin());
+    return OfertaResponse.from(ofertaRepository.save(oferta));
+}
 
     @Override
     public void eliminarOferta(Long idOferta) throws RecursoNoEncontradoException {
