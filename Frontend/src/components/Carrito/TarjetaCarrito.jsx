@@ -4,10 +4,12 @@ import { API_URL } from "../../config";
 import { ImagenTarjetaCarrito } from './ImagenTarjetaCarrito'
 import { NombreDeLaCanchaTarjeta } from './NombreDeLaCanchaTarjeta'
 
+import { formatearFechaHora } from "../../utils/fecha";
+
 export const TarjetaCarrito = ({ item }) => {
   const [turno, setTurno] = useState([]);
-  const [cancha, setCancha] = useState([])
-  const [imgcancha, setImgcancha] = useState(null)
+  const [cancha, setCancha] = useState([]);
+  const [imgcancha, setImgcancha] = useState(null);
 
   useEffect(() => {
     fetch('${API_URL}/turnos/${item.idTurno}')
@@ -47,13 +49,17 @@ export const TarjetaCarrito = ({ item }) => {
         console.error("Error al cargar el carrito:", error);
     })
   }, [])
+
+  const fechaHora = formatearFechaHora(turno.fechaHora);
   
   return (
     <>
       <ImagenTarjetaCarrito imagen={`data:image/png;base64,${imgcancha.file}`} tipoCancha={turno.tipoFutbol}/>
       <NombreDeLaCanchaTarjeta nombre={item.nombreCancha}/>
       <LocalizacionDeLaCanchaTarjeta localizacion={cancha.localidad}/>
-      <FechaHoraTipoDeCanchaTarjeta fechaHora={item.fechaHora} tipoCancha={item.tipoFutbol}/>
+      <FechaHoraTipoDeCanchaTarjeta fechaHora={fechaHora} tipoCancha={cancha.tipoSuperficie}/>
+      <AgregarTurnosDesdeTarjeta cantidad={item.cantidad} lugaresDisponibles={turno.lugaresDisponibles}/>
+      <PrecioDelTurno precioConDescuento={item.subtotal}/>
     </>
   )
 }

@@ -1,10 +1,10 @@
 import React from 'react'
 
-export const FechaHoraTipoDeCanchaTarjeta = () => {
+export const FechaHoraTipoDeCanchaTarjeta = ({ fechaHora, tipoSuperficie}) => {
   return (
     <>
-        <FechaTarjetaCarrito fecha={item.fechaHora}/>
-        <TipoDeCanchaTarjetaCarrito tipoCancha={item.tipoCancha}/>
+        <FechaTarjetaCarrito fecha={fechaHora}/>
+        <TipoDeCanchaTarjetaCarrito tipoCancha={tipoSuperficie}/>
     </>
   )
 }
