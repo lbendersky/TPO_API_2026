@@ -84,7 +84,7 @@
   font-size: 0.75em;
 }
  
-/* ---------- 4. AvisoPrioridadBloqueada.jsx + ContadorAvisoCarrito.jsx --- */
+/* ---------- 4. AvisoPrioridadBloqueada.jsx ------------------------------ */
 .aviso-prioridad {
   display: flex;
   align-items: center;
@@ -127,32 +127,7 @@
 .aviso-prioridad__texto strong {
   color: var(--c-texto);
 }
- 
-/* ContadorAvisoCarrito */
-.contador-aviso {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  background: #fff;
-  border-radius: 0.625em;
-  padding: 0.5625em 0.875em;
-  border: 0.0625em solid var(--c-borde);
-  font-size: 0.625em;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--c-texto-suave);
-}
- 
-.contador-aviso__tiempo {
-  font-size: 0.9375em;
-  font-weight: 800;
-  letter-spacing: 0;
-  color: var(--c-texto);
-  font-variant-numeric: tabular-nums;
-}
- 
+  
 /* ---------- Responsive del header --------------------------------------- */
 @media (max-width: 56.25em) {
   .aviso-prioridad {
