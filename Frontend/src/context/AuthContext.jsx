@@ -42,7 +42,13 @@ export const AuthProvider = ({ children }) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos),
         });
-        if (!response.ok) throw new Error('No se pudo registrar el usuario');
+        if (!response.ok) {
+            // El backend devuelve 403 sin body cuando el email ya está registrado
+            if (response.status === 403) {
+                throw new Error('Ese email ya está registrado. Iniciá sesión en vez de crear una cuenta nueva.');
+            }
+            throw new Error('No se pudo registrar el usuario');
+        }
         const data = await response.json();
         const user = await fetchUsuarioPorEmail(datos.email, data.access_token);
         guardarSesion(data.access_token, user);

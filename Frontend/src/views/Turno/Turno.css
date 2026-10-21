@@ -141,6 +141,10 @@
     background-color: var(--verdeClaro);
 }
 
+.turno__cta:disabled {
+    background-color: var(--gris);
+    cursor: not-allowed;
+}
 .turno__cargando {
     text-align: center;
     padding: 3rem;

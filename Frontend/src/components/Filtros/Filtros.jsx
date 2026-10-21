@@ -3,6 +3,7 @@ import './Filtros.css';
 import { useState } from 'react';
 
 import { MapPin, Trophy, DollarSign, Search } from 'lucide-react';
+import { FORMATOS } from '../../utils/opcionesCancha';
 
 // Recibe por props una lista de localidades disponibles
 const Filtros = ({ localidades = [], onFiltrar }) => {
@@ -100,10 +101,9 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
                     >
                         {}
                         <option value="">Todos</option>
-                        {}
-                        <option value="F5">Fútbol 5</option>
-                        <option value="F7">Fútbol 7</option>
-                        <option value="F11">Fútbol 11</option>
+                        {FORMATOS.map((f) => (
+                            <option key={f.valor} value={f.valor}>{f.texto}</option>
+                        ))}
                     </select>
                 </div>
             </div>

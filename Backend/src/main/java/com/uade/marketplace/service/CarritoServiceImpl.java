@@ -140,8 +140,8 @@ public class CarritoServiceImpl implements CarritoService {
         List<Inscripcion> inscripciones = new ArrayList<>();
 
         for (ItemCarrito item : carrito.getItems()) {
-            Turno turno = turnoRepository.findById(item.getTurno().getIdTurno())
-                    .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + item.getTurno().getIdTurno()));
+            Turno turno = turnoRepository.findByIdParaInscribir(item.getTurno().getIdTurno())
+        .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + item.getTurno().getIdTurno()));
 
             if (turno.getLugaresDisponibles() < item.getCantidad())
                 throw new TurnoSinCuposException();

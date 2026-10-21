@@ -95,6 +95,8 @@ public class ImagenServiceImpl implements ImagenService {
     public void eliminar(Long idImagen, Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException {
         Imagen imagen = imagenRepository.findById(idImagen)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe la imagen " + idImagen));
+        if (imagen.getCancha() == null)
+            throw new AccesoDenegadoException("No se puede borrar una imagen precargada");
         validarDuenio(imagen.getCancha(), actor);
         imagenRepository.delete(imagen);
     }

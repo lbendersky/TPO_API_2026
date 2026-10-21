@@ -56,7 +56,7 @@ const TurnosDeCancha = ({ cancha }) => {
             )}
             {error && <p className="cancha-propia__error">{error}</p>}
             {abierto && (
-                <FormularioTurno precioSugerido={Math.round(cancha.precioUnitario / cancha.cantidadJugadores)}
+                <FormularioTurno precioSugerido={cancha.cantidadJugadores ? Math.round(cancha.precioUnitario / cancha.cantidadJugadores) : ''}
                     onCrear={crearTurno} onCancelar={() => setAbierto(false)} />
             )}
         </section>
