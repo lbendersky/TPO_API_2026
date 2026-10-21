@@ -2,36 +2,36 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 16px;
+  gap: 1em;
   flex-wrap: wrap;
 }
  
 .header-carrito__etiqueta {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 0.375em;
   background: #fff;
   color: var(--c-verde-texto);
-  font-size: 10px;
+  font-size: 0.625em;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 5px 10px;
-  border-radius: 999px;
-  margin-bottom: 8px;
+  padding: 0.3125em 0.625em;
+  border-radius: 50em;
+  margin-bottom: 0.5em;
 }
  
 .header-carrito__titulo {
-  font-size: 30px;
+  font-size: 1.875em;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--c-sobre-fondo);
 }
  
 .header-carrito__subtitulo {
-  font-size: 13px;
+  font-size: 0.8125em;
   color: rgba(255, 255, 255, 0.85);
-  margin-top: 4px;
+  margin-top: 0.25em;
 }
  
 /* ---------- 3. EtapasChekcout.jsx + EtapaDelCheckout.jsx ---------------- */
@@ -39,21 +39,21 @@
 .etapas-checkout {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5em;
   background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 14px;
-  padding: 6px;
+  border: 0.0625em solid rgba(255, 255, 255, 0.28);
+  border-radius: 0.875em;
+  padding: 0.375em;
 }
  
 /* EtapaDelCheckout = una etapa */
 .etapa {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 12px;
-  border-radius: 10px;
-  font-size: 11px;
+  gap: 0.5em;
+  padding: 0.4375em 0.75em;
+  border-radius: 0.625em;
+  font-size: 0.6875em;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.85);
 }
@@ -61,11 +61,11 @@
 .etapa__numero {
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 1.25em;
+  height: 1.25em;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.22);
-  font-size: 10px;
+  font-size: 0.625em;
   font-weight: 800;
 }
  
@@ -81,28 +81,28 @@
  
 .etapa__separador {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
+  font-size: 0.75em;
 }
  
 /* ---------- 4. AvisoPrioridadBloqueada.jsx + ContadorAvisoCarrito.jsx --- */
 .aviso-prioridad {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-top: 20px;
-  padding: 16px 20px;
+  gap: 0.875em;
+  margin-top: 1.25em;
+  padding: 1em 1.25em;
   border-radius: var(--radio-tarjeta);
   background: var(--c-tarjeta);
   box-shadow: var(--sombra);
-  border-left: 6px solid var(--c-verde-boton);
+  border-left: 0.375em solid var(--c-verde-boton);
 }
  
 .aviso-prioridad__icono {
   flex: none;
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 2.375em;
+  height: 2.375em;
   border-radius: 50%;
   background: var(--c-verde-oscuro);
   color: #fff;
@@ -110,14 +110,14 @@
  
 .aviso-prioridad__texto {
   flex: 1;
-  font-size: 12px;
+  font-size: 0.75em;
   color: var(--c-texto-suave);
   line-height: 1.5;
 }
  
 .aviso-prioridad__titulo {
   display: block;
-  font-size: 11px;
+  font-size: 0.6875em;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -133,12 +133,12 @@
   flex: none;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5em;
   background: #fff;
-  border-radius: 10px;
-  padding: 9px 14px;
-  border: 1px solid var(--c-borde);
-  font-size: 10px;
+  border-radius: 0.625em;
+  padding: 0.5625em 0.875em;
+  border: 0.0625em solid var(--c-borde);
+  font-size: 0.625em;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -146,7 +146,7 @@
 }
  
 .contador-aviso__tiempo {
-  font-size: 15px;
+  font-size: 0.9375em;
   font-weight: 800;
   letter-spacing: 0;
   color: var(--c-texto);
@@ -154,14 +154,14 @@
 }
  
 /* ---------- Responsive del header --------------------------------------- */
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .aviso-prioridad {
     flex-wrap: wrap;
   }
 }
  
-@media (max-width: 560px) {
+@media (max-width: 35em) {
   .header-carrito__titulo {
-    font-size: 24px;
+    font-size: 1.5em;
   }
 }

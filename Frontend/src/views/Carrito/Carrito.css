@@ -12,14 +12,14 @@
   --c-gris-chip: #f3f3f3;
   --c-gris-boton: #f3f3f3;
   --c-sobre-fondo: var(--blanco);
-  --radio-tarjeta: 18px;
-  --radio-chip: 8px;
-  --sombra: 0 6px 18px rgba(0, 0, 0, 0.18);
+  --radio-tarjeta: 1.125em;
+  --radio-chip: 0.5em;
+  --sombra: 0 0.375em 1.125em rgba(0, 0, 0, 0.18);
  
   color: var(--c-texto);
   background: var(--c-fondo);
   min-height: 100vh;
-  padding: 24px 24px 64px;
+  padding: 1.5em 1.5em 4em;
   box-sizing: border-box;
 }
  
@@ -43,37 +43,37 @@
  
 .carrito-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) 18.75em;
+  gap: 1.5em;
   align-items: start;
-  margin-top: 24px;
+  margin-top: 1.5em;
 }
  
 .carrito-principal {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1em;
 }
  
 .carrito-sidebar {
   position: sticky;
-  top: 16px;
+  top: 1em;
   display: flex;
   flex-direction: column;
   gap: 0;
   background: var(--c-tarjeta);
   border-radius: var(--radio-tarjeta);
   box-shadow: var(--sombra);
-  padding: 20px;
+  padding: 1.25em;
 }
 
 .carrito-mensaje {
   background: var(--c-tarjeta);
   border-radius: var(--radio-tarjeta);
   box-shadow: var(--sombra);
-  padding: 28px;
+  padding: 1.75em;
   text-align: center;
-  font-size: 13px;
+  font-size: 0.8125em;
   color: var(--c-texto-suave);
 }
  
@@ -82,7 +82,7 @@
   background: #fdecea;
 }
  
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .carrito-layout {
     grid-template-columns: 1fr;
   }
@@ -92,8 +92,8 @@
   }
 }
  
-@media (max-width: 560px) {
+@media (max-width: 35em) {
   .carrito-page {
-    padding: 16px 12px 48px;
+    padding: 1em 0.75em 3em;
   }
 }
