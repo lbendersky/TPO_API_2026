@@ -1,5 +1,5 @@
 import './App.css';
-import NavBar from './Components/NavBar/NavBar';
+import NavBar from './components/NavBar/NavBar';
 import Inicio from './views/Inicio/Inicio'
 import Carrito from './views/Carrito/Carrito';
 import Turno from './views/Turno/Turno';

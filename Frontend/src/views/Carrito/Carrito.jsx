@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../config";
 import { useAuth } from "../../context/useAuth";
 
-import { HeaderCarrito } from "../../Components/Carrito/Header/HeaderCarrito";
-import AvisoPrioridadBloqueada from "../../Components/Carrito/Header/AvisoPrioridadBloqueada";
-import { TarjetaCarrito } from "../../Components/Carrito/Tarjetas/TarjetaCarrito";
-import { CanchasSeleccionadas } from "../../Components/Carrito/CanchasSeleccionadas";
-import { ResumenDeCompraCarrito } from "../../Components/Carrito/SideBar/ResumenDeCompraCarrito";
-import { BotonConfirmarReserva } from "../../Components/Carrito/SideBar/BotonConfirmarReserva";
+import { HeaderCarrito } from "../../components/Carrito/Header/HeaderCarrito";
+import AvisoPrioridadBloqueada from "../../components/Carrito/Header/AvisoPrioridadBloqueada";
+import { TarjetaCarrito } from "../../components/Carrito/Tarjetas/TarjetaCarrito";
+import { CanchasSeleccionadas } from "../../components/Carrito/CanchasSeleccionadas";
+import { ResumenDeCompraCarrito } from "../../components/Carrito/SideBar/ResumenDeCompraCarrito";
+import { BotonConfirmarReserva } from "../../components/Carrito/SideBar/BotonConfirmarReserva";
 
 import "./Carrito.css";
-import "../../Components/Carrito/Header/CarritoHeader.css";
-import "../../Components/Carrito//SideBar/SideBar.css";
-import "../../Components/Carrito/Tarjetas/TarjetaCarrito.css";
+import "../../components/Carrito/Header/CarritoHeader.css";
+import "../../components/Carrito//SideBar/SideBar.css";
+import "../../components/Carrito/Tarjetas/TarjetaCarrito.css";
 
 const Carrito = () => {
     const [carrito, setCarrito] = useState({ items: [], total: 0 });
