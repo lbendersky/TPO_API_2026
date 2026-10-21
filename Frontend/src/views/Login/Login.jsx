@@ -25,7 +25,7 @@ const Login = () => {
         setError('');
         try {
             await login(loginData.email, loginData.contrasena);
-            navigate('/');
+            navigate(-1);
         } catch (err) {
             setError(err.message);
         }
