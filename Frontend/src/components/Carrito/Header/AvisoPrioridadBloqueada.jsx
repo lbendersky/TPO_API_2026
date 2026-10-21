@@ -1,5 +1,3 @@
-import { ContadorAvisoCarrito } from './ContadorAvisoCarrito';
-
 const AvisoPrioridadBloqueada = () => {
   return (
     <div className="aviso-prioridad">
@@ -12,8 +10,6 @@ const AvisoPrioridadBloqueada = () => {
           El precio queda congelado al momento de agregarlos.
         </p>
       </div>
-
-      <ContadorAvisoCarrito />
     </div>
   )
 }

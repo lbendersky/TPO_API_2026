@@ -1,16 +1,26 @@
 package com.uade.marketplace.service;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.marketplace.dto.response.CarritoResponse;
 import com.uade.marketplace.dto.response.InscripcionResponse;
 import com.uade.marketplace.entity.Carrito;
+import com.uade.marketplace.entity.Imagen;
 import com.uade.marketplace.entity.Inscripcion;
 import com.uade.marketplace.entity.ItemCarrito;
 import com.uade.marketplace.entity.Turno;
@@ -21,6 +31,7 @@ import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.SolicitudInvalidaException;
 import com.uade.marketplace.exceptions.TurnoSinCuposException;
 import com.uade.marketplace.repository.CarritoRepository;
+import com.uade.marketplace.repository.ImagenRepository;
 import com.uade.marketplace.repository.InscripcionRepository;
 import com.uade.marketplace.repository.ItemCarritoRepository;
 import com.uade.marketplace.repository.TurnoRepository;
@@ -28,6 +39,8 @@ import com.uade.marketplace.repository.UsuarioRepository;
 
 @Service
 public class CarritoServiceImpl implements CarritoService {
+
+    private static final String IMAGEN_POR_DEFECTO = "static/imagenes/Pelota.png";
 
     @Autowired
     private CarritoRepository carritoRepository;
@@ -39,7 +52,9 @@ public class CarritoServiceImpl implements CarritoService {
     private TurnoRepository turnoRepository;
     @Autowired
     private InscripcionRepository inscripcionRepository;
-    @Autowired 
+    @Autowired
+    private ImagenRepository imagenRepository;
+    @Autowired
     private OfertaService ofertaService;
 
     private Carrito getOrCreateCarrito(Long idUsuario) throws RecursoNoEncontradoException {
@@ -55,9 +70,50 @@ public class CarritoServiceImpl implements CarritoService {
                 });
     }
 
-        @Override
+    private CarritoResponse construirResponse(Carrito carrito) {
+        Set<Long> idsCancha = new HashSet<>();
+        for (ItemCarrito item : carrito.getItems()) {
+            if (item.getTurno() != null && item.getTurno().getCancha() != null)
+                idsCancha.add(item.getTurno().getCancha().getIdCancha());
+        }
+
+        Map<Long, String> imagenes = new HashMap<>();
+        if (!idsCancha.isEmpty()) {
+            for (Imagen imagen : imagenRepository.findByCancha_IdCanchaIn(idsCancha)) {
+                Long idCancha = imagen.getCancha().getIdCancha();
+                imagenes.computeIfAbsent(idCancha, k -> aBase64Silencioso(imagen.getImagen()));
+            }
+        }
+
+        String porDefecto = imagenPorDefecto();
+        for (Long id : idsCancha) imagenes.putIfAbsent(id, porDefecto);
+
+        return CarritoResponse.from(carrito, imagenes);
+    }
+
+    private String aBase64Silencioso(Blob blob) {
+        if (blob == null) return null;
+        try {
+            byte[] bytes = blob.getBytes(1, (int) blob.length());
+            return Base64.getEncoder().encodeToString(bytes);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    private String imagenPorDefecto() {
+        try {
+            byte[] bytes = new ClassPathResource(IMAGEN_POR_DEFECTO).getInputStream().readAllBytes();
+            return Base64.getEncoder().encodeToString(bytes);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public CarritoResponse getPorUsuario(Long idUsuario) throws RecursoNoEncontradoException {
-        return CarritoResponse.from(getOrCreateCarrito(idUsuario));
+        return construirResponse(getOrCreateCarrito(idUsuario));
     }
 
     @Override
@@ -88,7 +144,7 @@ public class CarritoServiceImpl implements CarritoService {
             item.setPrecioUnitario(precioActual);
         }
         itemCarritoRepository.save(item);
-        return CarritoResponse.from(carrito);
+        return construirResponse(carrito);
     }
 
     @Override
@@ -105,7 +161,7 @@ public class CarritoServiceImpl implements CarritoService {
 
         item.setCantidad(cantidad);
         itemCarritoRepository.save(item);
-        return CarritoResponse.from(carrito);
+        return construirResponse(carrito);
     }
 
     @Override
@@ -119,7 +175,7 @@ public class CarritoServiceImpl implements CarritoService {
 
         carrito.getItems().removeIf(i -> i.getIdItem().equals(idItem));
         itemCarritoRepository.delete(item);
-        return CarritoResponse.from(carrito);
+        return construirResponse(carrito);
     }
 
     @Override

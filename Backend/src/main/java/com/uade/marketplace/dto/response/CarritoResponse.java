@@ -1,8 +1,11 @@
 package com.uade.marketplace.dto.response;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import com.uade.marketplace.entity.Carrito;
+import com.uade.marketplace.entity.ItemCarrito;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,9 +18,9 @@ public class CarritoResponse {
     private List<ItemCarritoResponse> items;
     private Float total;
 
-    public static CarritoResponse from(Carrito c) {
+    public static CarritoResponse from(Carrito c, Function<ItemCarrito, String> imagenPorItem) {
         List<ItemCarritoResponse> items = c.getItems().stream()
-                .map(ItemCarritoResponse::from)
+                .map(i -> ItemCarritoResponse.from(i, imagenPorItem.apply(i)))
                 .toList();
         float total = (float) items.stream().mapToDouble(ItemCarritoResponse::getSubtotal).sum();
         return new CarritoResponse(
@@ -26,5 +29,12 @@ public class CarritoResponse {
                 items,
                 total
         );
+    }
+
+    public static CarritoResponse from(Carrito c, Map<Long, String> imagenesPorCancha) {
+        return from(c, item -> {
+            if (item.getTurno() == null || item.getTurno().getCancha() == null) return null;
+            return imagenesPorCancha.get(item.getTurno().getCancha().getIdCancha());
+        });
     }
 }

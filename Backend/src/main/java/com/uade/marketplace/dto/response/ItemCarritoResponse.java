@@ -1,6 +1,12 @@
 package com.uade.marketplace.dto.response;
 
+import java.time.LocalDateTime;
+
+import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.ItemCarrito;
+import com.uade.marketplace.entity.Turno;
+import com.uade.marketplace.entity.enums.TipoFutbol;
+import com.uade.marketplace.entity.enums.TipoSuperficie;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,14 +21,31 @@ public class ItemCarritoResponse {
     private Float precioUnitario;
     private Float subtotal;
 
-    public static ItemCarritoResponse from(ItemCarrito i) {
+    private TipoFutbol tipoFutbol;
+    private TipoSuperficie tipoSuperficie;
+    private String localidad;
+    private String direccion;
+    private LocalDateTime fechaHora;
+    private Integer lugaresDisponibles;
+    private String imagen;
+
+    public static ItemCarritoResponse from(ItemCarrito i, String imagenBase64) {
+        Turno turno = i.getTurno();
+        Cancha cancha = turno != null ? turno.getCancha() : null;
         return new ItemCarritoResponse(
                 i.getIdItem(),
-                i.getTurno() != null ? i.getTurno().getIdTurno() : null,
-                i.getTurno() != null && i.getTurno().getCancha() != null ? i.getTurno().getCancha().getNombre() : null,
+                turno != null ? turno.getIdTurno() : null,
+                cancha != null ? cancha.getNombre() : null,
                 i.getCantidad(),
                 i.getPrecioUnitario(),
-                i.getPrecioUnitario() * i.getCantidad()
+                i.getPrecioUnitario() * i.getCantidad(),
+                turno != null ? turno.getTipoFutbol() : null,
+                cancha != null ? cancha.getTipoSuperficie() : null,
+                cancha != null && cancha.getLocalidad() != null ? cancha.getLocalidad().getNombre() : null,
+                cancha != null ? cancha.getDireccion() : null,
+                turno != null ? turno.getFechaHora() : null,
+                turno != null ? turno.getLugaresDisponibles() : null,
+                imagenBase64
         );
     }
 }

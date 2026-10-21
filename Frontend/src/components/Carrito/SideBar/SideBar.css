@@ -2,137 +2,137 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 0.5em;
+  margin-bottom: 1em;
 }
- 
+
 .resumen-compra__titulo {
-  font-size: 16px;
+  font-size: 1em;
   font-weight: 800;
 }
- 
+
 .resumen-compra__lineas {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 0.5625em;
 }
- 
+
 .resumen-linea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  font-size: 11px;
+  gap: 0.5em;
+  font-size: 1em;
   color: var(--c-texto-suave);
 }
- 
+
 .resumen-linea__monto {
   font-weight: 700;
   color: var(--c-texto);
   white-space: nowrap;
 }
- 
+
 .resumen-linea--descuento,
 .resumen-linea--descuento .resumen-linea__monto {
   color: var(--c-verde-texto);
 }
- 
+
 .resumen-linea__promo {
   background: var(--c-verde-fondo);
   color: var(--c-verde-texto);
-  font-size: 8px;
+  font-size: 0.5em;
   font-weight: 800;
-  padding: 2px 5px;
-  border-radius: 4px;
-  margin-left: 4px;
+  padding: 0.125em 0.3125em;
+  border-radius: 0.25em;
+  margin-left: 0.25em;
 }
 
 .sidebar-precio {
-  margin-top: 16px;
-  padding: 16px;
+  margin-top: 1em;
+  padding: 1em;
   background: var(--c-gris-chip);
-  border-radius: 14px;
+  border-radius: 0.875em;
 }
- 
+
 .sidebar-precio__fila {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 0.5em;
 }
- 
+
 .sidebar-precio__etiqueta {
-  font-size: 13px;
+  font-size: 0.8125em;
   font-weight: 800;
 }
- 
+
 .sidebar-precio__monto {
-  font-size: 26px;
+  font-size: 1.625em;
   font-weight: 800;
   color: var(--c-verde-oscuro);
   text-align: right;
   line-height: 1.1;
 }
- 
+
 .sidebar-precio__moneda {
   display: block;
-  font-size: 8px;
+  font-size: 0.5em;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--c-texto-suave);
   text-align: right;
-  margin-top: 2px;
+  margin-top: 0.125em;
 }
- 
+
 .sidebar-precio__sena {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--c-borde);
-  font-size: 10px;
+  gap: 0.5em;
+  margin-top: 0.75em;
+  padding-top: 0.625em;
+  border-top: 0.0625em solid var(--c-borde);
+  font-size: 0.625em;
   color: var(--c-texto-suave);
 }
- 
+
 .sidebar-precio__sena strong {
   color: var(--c-texto);
 }
- 
+
 .sidebar-precio__sin-comision {
   font-weight: 700;
   color: var(--c-verde-texto);
   text-decoration: underline;
 }
- 
+
 .boton-confirmar-reserva {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.5em;
   width: 100%;
-  margin-top: 18px;
-  padding: 15px 16px;
+  margin-top: 1.125em;
+  padding: 0.9375em 1em;
   border: 0;
-  border-radius: 12px;
+  border-radius: 0.75em;
   background: var(--c-verde-boton);
   color: #fff;
-  font-size: 12px;
+  font-size: 0.75em;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   transition: background 0.15s ease, transform 0.1s ease;
 }
- 
+
 .boton-confirmar-reserva:hover:not(:disabled) {
   background: var(--c-verde-boton-hover);
 }
- 
+
 .boton-confirmar-reserva:active:not(:disabled) {
-  transform: translateY(1px);
+  transform: translateY(0.0625em);
 }
- 
+
 .boton-confirmar-reserva:disabled {
   opacity: 0.5;
   cursor: not-allowed;
