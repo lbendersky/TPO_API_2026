@@ -16,17 +16,16 @@ export const AgregaraTurnosDesdeTarjeta = ({ cantidad, lugaresDisponibles }) => 
   }
 
   return (
-    <>
-        <p>Turnos</p>
-        <div>
-            <BotonSacarTurno
-                onDecrecer={sacarCantidad}
-            />
-            <p>{cantidad}</p>
-            <BotonAgregarTurno
-                onAumentar={aumentarCantidad}
-            />
-        </div>
-    </>
+    <div className="turnos-control">
+      <span className="turnos-control__etiqueta">Turnos:</span>
+
+      <div className="turnos-control__selector">
+        <BotonSacarTurno onDecrecer={sacarCantidad} />
+        <span className="turnos-control__cantidad">{cantidad}</span>
+        <BotonAgregarTurno onAumentar={aumentarCantidad} />
+      </div>
+
+      <span className="estado-congelado">Congelado</span>
+  </div>
   )
 }

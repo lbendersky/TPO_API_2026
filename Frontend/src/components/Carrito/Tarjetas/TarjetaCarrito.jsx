@@ -1,10 +1,10 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { API_URL } from "../../config";
+import { API_URL } from "../../../config";
 import { ImagenTarjetaCarrito } from './ImagenTarjetaCarrito'
 import { NombreDeLaCanchaTarjeta } from './NombreDeLaCanchaTarjeta'
 
-import { formatearFechaHora } from "../../utils/fecha";
+import { formatearFechaHora } from "../../../utils/fecha";
 
 export const TarjetaCarrito = ({ item }) => {
   const [turno, setTurno] = useState([]);
@@ -53,13 +53,39 @@ export const TarjetaCarrito = ({ item }) => {
   const fechaHora = formatearFechaHora(turno.fechaHora);
   
   return (
-    <>
-      <ImagenTarjetaCarrito imagen={`data:image/png;base64,${imgcancha.file}`} tipoCancha={turno.tipoFutbol}/>
-      <NombreDeLaCanchaTarjeta nombre={item.nombreCancha}/>
-      <LocalizacionDeLaCanchaTarjeta localizacion={cancha.localidad}/>
-      <FechaHoraTipoDeCanchaTarjeta fechaHora={fechaHora} tipoCancha={cancha.tipoSuperficie}/>
-      <AgregarTurnosDesdeTarjeta cantidad={item.cantidad} lugaresDisponibles={turno.lugaresDisponibles}/>
-      <PrecioDelTurno precioConDescuento={item.subtotal}/>
-    </>
-  )
+  <article className="tarjeta-carrito">
+    <ImagenTarjetaCarrito
+      imagen={`data:image/png;base64,${imgcancha.file}`}
+      tipoCancha={turno.tipoFutbol}
+    />
+
+    <div className="tarjeta-carrito__cuerpo">
+      <div className="tarjeta-carrito__encabezado">
+        <NombreDeLaCanchaTarjeta nombre={item.nombreCancha} />
+        <button
+          className="tarjeta-carrito__eliminar"
+          onClick={onEliminar}
+          aria-label="Quitar del carrito"
+        >
+          🗑
+        </button>
+      </div>
+
+      <LocalizacionDeLaCanchaTarjeta localizacion={cancha.localidad} direccion={cancha.direccion}/>
+
+      <FechaHoraTipoDeCanchaTarjeta
+        fechaHora={fechaHora}
+        tipoCancha={cancha.tipoSuperficie}
+      />
+
+      <div className="tarjeta-carrito__pie">
+        <AgregarTurnosDesdeTarjeta
+          cantidad={item.cantidad}
+          lugaresDisponibles={turno.lugaresDisponibles}
+        />
+        <PrecioDelTurno precioConDescuento={item.subtotal} />
+      </div>
+    </div>
+  </article>
+)
 }

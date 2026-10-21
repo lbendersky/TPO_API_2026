@@ -1,0 +1,326 @@
+
+.canchas-seleccionadas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+ 
+.canchas-seleccionadas__titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--c-sobre-fondo);
+}
+ 
+/* CantidadCanchasSeleccionadas: pastilla "2 Partidos" */
+.cantidad-canchas {
+  display: inline-block;
+  background: #fff;
+  color: var(--c-verde-oscuro);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+ 
+/* En el sidebar la misma etiqueta se ve verde ("2 TURNOS") */
+.cantidad-canchas--verde {
+  background: var(--c-verde-fondo);  /* en el sidebar (fondo blanco) */
+  color: var(--c-verde-texto);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+ 
+.canchas-seleccionadas__sumar {
+  background: none;
+  border: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-sobre-fondo);
+}
+ 
+.canchas-seleccionadas__sumar:hover {
+  text-decoration: underline;
+}
+ 
+/* ---------- 6. TarjetaCarrito.jsx (contenedor de cada ítem) ------------- */
+.tarjeta-carrito {
+  display: grid;
+  grid-template-columns: 175px minmax(0, 1fr);
+  gap: 18px;
+  background: var(--c-tarjeta);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra);
+  padding: 18px;
+}
+ 
+.tarjeta-carrito__cuerpo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+ 
+/* ---------- 7. ImagenTarjetaCarrito.jsx + ImagenTarjeta.jsx ------------- */
+/* ImagenTarjetaCarrito = contenedor | ImagenTarjeta = <img> */
+.tarjeta-carrito__imagen {
+  position: relative;
+  width: 175px;
+  height: 125px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--c-gris-chip);
+}
+ 
+.tarjeta-carrito__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+ 
+/* TipoFutbolTarjeta.jsx: "FÚTBOL 5" arriba a la izquierda sobre la imagen */
+.tarjeta-carrito__tipo-futbol {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+ 
+/* Insignia "Verificado" abajo a la izquierda (opcional) */
+.tarjeta-carrito__verificado {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--c-verde-oscuro);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+ 
+/* ---------- 8. NombreDeLaCanchaTarjeta.jsx + botón eliminar ------------- */
+.tarjeta-carrito__encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+ 
+.tarjeta-carrito__nombre {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+ 
+.tarjeta-carrito__eliminar {
+  flex: none;
+  background: none;
+  border: 0;
+  color: var(--c-texto-suave);
+  padding: 4px;
+  border-radius: 6px;
+  line-height: 0;
+}
+ 
+.tarjeta-carrito__eliminar:hover {
+  color: #b3261e;
+  background: #fdecea;
+}
+ 
+/* ---------- 9. LocalizacionDeLaCanchaTarjeta.jsx ------------------------ */
+.tarjeta-carrito__ubicacion {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--c-texto-suave);
+}
+ 
+/* ---------- 10. Chips: FechaHoraTipoDeCanchaTarjeta.jsx (contenedor),
+        FechaTarjetaCarrito.jsx (fecha y hora), TipoDeCanchaTarjetaCarrito.jsx */
+.tarjeta-carrito__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+ 
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--c-gris-chip);
+  border-radius: var(--radio-chip);
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c-texto);
+}
+ 
+/* El horario va destacado en verde oscuro */
+.chip--hora {
+  background: var(--c-verde-oscuro);
+  color: #fff;
+  font-weight: 700;
+}
+ 
+.chip--tipo {
+  font-size: 10px;
+  font-weight: 700;
+}
+ 
+/* ---------- 11. Pie de la tarjeta: AgregarTurnosDesdeTarjeta.jsx
+        (+ BotonAgregarTurno.jsx, BotonSacarTurno.jsx) y PrecioDelTurno.jsx */
+.tarjeta-carrito__pie {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+ 
+.turnos-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+ 
+.turnos-control__etiqueta {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-texto-suave);
+}
+ 
+.turnos-control__selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--c-gris-boton);
+  border-radius: 10px;
+  padding: 3px;
+}
+ 
+.turnos-control__cantidad {
+  min-width: 26px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+ 
+/* BotonAgregarTurno y BotonSacarTurno comparten esta clase */
+.boton-turno {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--c-texto-suave);
+  font-size: 16px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+}
+ 
+.boton-turno:hover:not(:disabled) {
+  background: #fff;
+  color: var(--c-texto);
+}
+ 
+.boton-turno:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+ 
+.estado-congelado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--c-texto-suave);
+}
+ 
+.estado-congelado::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-verde-texto);
+}
+ 
+/* PrecioDelTurno.jsx */
+.precio-turno {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  margin-left: auto;
+  text-align: right;
+}
+ 
+.precio-turno__fila {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+ 
+.precio-turno__original {
+  font-size: 11px;
+  color: var(--c-texto-suave);
+  text-decoration: line-through;
+}
+ 
+.precio-turno__descuento {
+  background: var(--c-verde-fondo);
+  color: var(--c-verde-texto);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 6px;
+  border-radius: 5px;
+}
+ 
+.precio-turno__final {
+  font-size: 18px;
+  font-weight: 800;
+}
+ 
+.precio-turno__moneda {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--c-texto-suave);
+}
+ 
+/* ---------- Responsive de las tarjetas ---------------------------------- */
+@media (max-width: 560px) {
+  .tarjeta-carrito {
+    grid-template-columns: 1fr;
+  }
+ 
+  .tarjeta-carrito__imagen {
+    width: 100%;
+    height: 170px;
+  }
+ 
+  .tarjeta-carrito__pie {
+    flex-wrap: wrap;
+  }
+}

@@ -1,21 +1,26 @@
-
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../config";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/useAuth";
 
-import { HeaderCarrito } from "../../Components/Carrito/HeaderCarrito";
-import AvisoPrioridadBloqueada from "../../Components/Carrito/AvisoPrioridadBloqueada";
-import { TarjetaCarrito } from "../../Components/Carrito/TarjetaCarrito";
+import { HeaderCarrito } from "../../Components/Carrito/Header/HeaderCarrito";
+import AvisoPrioridadBloqueada from "../../Components/Carrito/Header/AvisoPrioridadBloqueada";
+import { TarjetaCarrito } from "../../Components/Carrito/Tarjetas/TarjetaCarrito";
 import { CanchasSeleccionadas } from "../../Components/Carrito/CanchasSeleccionadas";
-import { ResumenDeCompraCarrito } from "../../Components/Carrito/SideBar/ResumenDeCompraCarrito"
+import { ResumenDeCompraCarrito } from "../../Components/Carrito/SideBar/ResumenDeCompraCarrito";
 import { BotonConfirmarReserva } from "../../Components/Carrito/SideBar/BotonConfirmarReserva";
-import { Navigate } from "react-router-dom";
+
+import "./Carrito.css";
+import "../../Components/Carrito/Header/CarritoHeader.css";
+import "../../Components/Carrito//SideBar/SideBar.css";
+import "../../Components/Carrito/Tarjetas/TarjetaCarrito.css";
 
 const Carrito = () => {
     const [carrito, setCarrito] = useState({ items: [], total: 0 });
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState("");
     const { token } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!token) {
@@ -30,6 +35,7 @@ const Carrito = () => {
             },
         })
             .then((response) => {
+                if (!response.ok) throw new Error("Respuesta inválida del servidor");
                 return response.json();
             })
             .then((data) => {
@@ -41,41 +47,46 @@ const Carrito = () => {
             })
             .finally(() => setCargando(false));
     }, [token]);
-    const navigate = useNavigate();
 
     const onConfirmarReserva = () => {
-        Navigate('/carrito/checkout')
-    }
+        navigate("/carrito/checkout");
+    };
 
     const items = carrito.items;
 
     return (
-        <>
+        <main className="carrito-page">
             <HeaderCarrito />
             <AvisoPrioridadBloqueada />
 
-            <section>
-                <CanchasSeleccionadas cantidad={items.length} />
+            <div className="carrito-layout">
+                <section className="carrito-principal">
+                    <CanchasSeleccionadas cantidad={items.length} />
 
-                {cargando && <p>Cargando carrito...</p>}
-                {error && <p>{error}</p>}
+                    {cargando && <p className="carrito-mensaje">Cargando carrito...</p>}
 
-                {!cargando && !error && items.length === 0 && (
-                    <p>Tu carrito está vacío.</p>
-                )}
+                    {error && (
+                        <p className="carrito-mensaje carrito-mensaje--error">{error}</p>
+                    )}
 
-                {!cargando && !error && items.map((item) => (
-                    <TarjetaCarrito
-                        key={item.idItem}
-                        item={item}
-                    />
-                ))}
-            </section>
-            <aside>
-                <ResumenDeCompraCarrito total={carrito.total} items={items}/>
-                <BotonConfirmarReserva onConfirmarReserva={onConfirmarReserva}/>
-            </aside>
-        </>
+                    {!cargando && !error && items.length === 0 && (
+                        <p className="carrito-mensaje">Tu carrito está vacío.</p>
+                    )}
+
+                    {!cargando && !error && items.map((item) => (
+                        <TarjetaCarrito
+                            key={item.idItem}
+                            item={item}
+                        />
+                    ))}
+                </section>
+
+                <aside className="carrito-sidebar">
+                    <ResumenDeCompraCarrito total={carrito.total} items={items} />
+                    <BotonConfirmarReserva onConfirmarReserva={onConfirmarReserva} />
+                </aside>
+            </div>
+        </main>
     );
 };
 

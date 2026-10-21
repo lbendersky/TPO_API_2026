@@ -3,7 +3,7 @@ import React from 'react'
 export const NombreDeLaCanchaTarjeta = ({ nombre }) => {
   return (
     <>
-        <h3>{nombre}</h3>
+        <h3 className="tarjeta-carrito__nombre">{nombre}</h3>
     </>
   )
 }

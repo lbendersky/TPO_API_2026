@@ -1,10 +1,15 @@
 import React from 'react'
 
-export const SubtotalCarrito = ({ subtotal }) => {
+const formatear = (n) =>
+  new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n)
+
+export const SubtotalCarrito = ({ etiqueta = 'Subtotal', subtotal = 0, descuento = false }) => {
   return (
-    <>
-        <p>Subtotal</p>
-        <p>{subtotal}</p>
-    </>
+    <div className={`resumen-linea ${descuento ? 'resumen-linea--descuento' : ''}`}>
+      <span>{etiqueta}</span>
+      <span className="resumen-linea__monto">
+        {descuento ? '-' : ''}{formatear(subtotal)}
+      </span>
+    </div>
   )
 }

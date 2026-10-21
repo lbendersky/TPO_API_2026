@@ -1,9 +1,15 @@
 import React from 'react'
 
-export const BotonConfirmarReserva = ({ onConfirmarReserva }) => {
+export const BotonConfirmarReserva = ({
+  onConfirmarReserva,
+}) => {
   return (
-    <>
-        <button onClick={onConfirmarReserva}>Confirmar reserva</button>
-    </>
+    <button
+      type="button"
+      className="boton-confirmar-reserva"
+      onClick={onConfirmarReserva}
+    >
+      Confirmar Reserva
+    </button>
   )
 }

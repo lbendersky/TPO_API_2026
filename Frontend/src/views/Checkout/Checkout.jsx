@@ -1,8 +1,11 @@
 import React from 'react'
 
-export const Checkout = () => {
+const Checkout = () => {
   return (
     <>
+        <p>Hola</p>
     </>
   )
 }
+
+export default Checkout;
