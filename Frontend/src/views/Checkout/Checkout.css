@@ -38,3 +38,45 @@
   font-weight: 700;
   color: #d33;
 }
+
+.checkout-confirmacion__lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+.checkout-confirmacion__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--c-fondo-suave, rgba(0, 0, 0, 0.03));
+  font-size: 13px;
+}
+
+.checkout-confirmacion__turno {
+  font-weight: 700;
+}
+
+.checkout-confirmacion__fecha {
+  color: var(--c-texto-suave);
+}
+
+.checkout-confirmacion__monto {
+  font-weight: 700;
+}
+
+.checkout-confirmacion__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
