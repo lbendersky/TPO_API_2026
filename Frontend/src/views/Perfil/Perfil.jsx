@@ -36,6 +36,10 @@ const Perfil = () => {
         try {
             const payload = { ...datos };
             if (!payload.contrasena) delete payload.contrasena;
+            // El backend nunca nos manda el dni (UsuarioResponse no lo incluye), asi que
+            // datos.dni siempre arranca vacio. Si lo mandamos igual, pisamos el dni real
+            // del usuario con un string vacio.
+            if (!payload.dni) delete payload.dni;
             await actualizar(payload);
             setMensaje('Datos actualizados');
             setDatos({ ...datos, contrasena: '' });

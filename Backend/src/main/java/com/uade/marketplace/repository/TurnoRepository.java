@@ -2,11 +2,15 @@ package com.uade.marketplace.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import jakarta.persistence.LockModeType;
 
 import com.uade.marketplace.entity.Cancha;
 import com.uade.marketplace.entity.Turno;
@@ -35,9 +39,13 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
        "(:precioMax IS NULL OR t.precioPorJugador <= :precioMax) AND " +
        "(:localidad IS NULL OR LOWER(t.cancha.localidad.nombre) = LOWER(:localidad)) AND " +
        "(:texto IS NULL OR LOWER(t.cancha.nombre) LIKE LOWER(CONCAT('%', :texto, '%')))")
-List<Turno> filtrar(@Param("tipoFutbol") TipoFutbol tipoFutbol,
+    List<Turno> filtrar(@Param("tipoFutbol") TipoFutbol tipoFutbol,
                     @Param("precioMin") Float precioMin,
                     @Param("precioMax") Float precioMax,
                     @Param("localidad") String localidad,
                     @Param("texto") String texto);
+                    
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT t FROM Turno t WHERE t.idTurno = :idTurno")
+    Optional<Turno> findByIdParaInscribir(@Param("idTurno") Long idTurno);
 }

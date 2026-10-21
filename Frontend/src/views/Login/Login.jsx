@@ -25,7 +25,7 @@ const Login = () => {
         setError('');
         try {
             await login(loginData.email, loginData.contrasena);
-            navigate(-1);
+            navigate('/');
         } catch (err) {
             setError(err.message);
         }
@@ -36,7 +36,7 @@ const Login = () => {
         setError('');
         try {
             await register(registerData);
-            navigate(-1);
+            navigate('/');
         } catch (err) {
             setError(err.message);
         }

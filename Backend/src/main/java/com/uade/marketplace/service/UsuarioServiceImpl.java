@@ -13,6 +13,7 @@ import com.uade.marketplace.dto.response.UsuarioResponse;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
+import com.uade.marketplace.exceptions.UsuarioDuplicadoException;
 import com.uade.marketplace.repository.CarritoRepository;
 import com.uade.marketplace.repository.InscripcionRepository;
 import com.uade.marketplace.repository.TurnoRepository;
@@ -47,18 +48,32 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioResponse actualizar(Long idUsuario, UsuarioRequest request) throws RecursoNoEncontradoException{
-        Usuario usuarioActualizado = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + idUsuario));
-        if (request.getNombreUsuario() != null) usuarioActualizado.setNombreUsuario(request.getNombreUsuario());
-        if (request.getDni() != null) usuarioActualizado.setDni(request.getDni());
-        if (request.getNombre() != null) usuarioActualizado.setNombre(request.getNombre());
-        if (request.getApellido() != null) usuarioActualizado.setApellido(request.getApellido());
-        if (request.getEmail() != null) usuarioActualizado.setEmail(request.getEmail());
-        if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
-            usuarioActualizado.setContrasena(passwordEncoder.encode(request.getContrasena()));
-        }
-        if (request.getTelefono() != null) usuarioActualizado.setTelefono(request.getTelefono());
-        return UsuarioResponse.from(usuarioRepository.save(usuarioActualizado));
+    Usuario usuarioActualizado = usuarioRepository.findById(idUsuario)
+            .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + idUsuario));
+
+    if (request.getNombreUsuario() != null && !request.getNombreUsuario().equals(usuarioActualizado.getNombreUsuario())
+            && usuarioRepository.existsByNombreUsuario(request.getNombreUsuario()))
+        throw new UsuarioDuplicadoException();
+    if (request.getDni() != null && !request.getDni().equals(usuarioActualizado.getDni())
+            && usuarioRepository.existsByDni(request.getDni()))
+        throw new UsuarioDuplicadoException();
+    if (request.getEmail() != null && !request.getEmail().equals(usuarioActualizado.getEmail())
+            && usuarioRepository.existsByEmail(request.getEmail()))
+        throw new UsuarioDuplicadoException();
+    if (request.getTelefono() != null && !request.getTelefono().equals(usuarioActualizado.getTelefono())
+            && usuarioRepository.existsByTelefono(request.getTelefono()))
+        throw new UsuarioDuplicadoException();
+
+    if (request.getNombreUsuario() != null) usuarioActualizado.setNombreUsuario(request.getNombreUsuario());
+    if (request.getDni() != null) usuarioActualizado.setDni(request.getDni());
+    if (request.getNombre() != null) usuarioActualizado.setNombre(request.getNombre());
+    if (request.getApellido() != null) usuarioActualizado.setApellido(request.getApellido());
+    if (request.getEmail() != null) usuarioActualizado.setEmail(request.getEmail());
+    if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
+        usuarioActualizado.setContrasena(passwordEncoder.encode(request.getContrasena()));
+    }
+    if (request.getTelefono() != null) usuarioActualizado.setTelefono(request.getTelefono());
+    return UsuarioResponse.from(usuarioRepository.save(usuarioActualizado));
     }
 
     @Override

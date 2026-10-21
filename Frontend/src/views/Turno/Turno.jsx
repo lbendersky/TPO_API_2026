@@ -72,6 +72,8 @@ const Turno = () => {
 
     if (!turno) return <p className="turno__cargando">Cargando...</p>;
 
+    const sinCupos = turno.lugaresDisponibles <= 0;
+
     return (
         <main className="turno">
             {}
@@ -162,8 +164,13 @@ const Turno = () => {
                         )}
                     </div>
 
-                    <button className="turno__cta" type="button" onClick={agregarAlCarrito}>
-                        Sumarme
+                    <button
+                        className="turno__cta"
+                        type="button"
+                        onClick={agregarAlCarrito}
+                        disabled={sinCupos}
+                    >
+                        {sinCupos ? 'Sin cupos disponibles' : 'Sumarme'}
                     </button>
                 </div>
             </section>
