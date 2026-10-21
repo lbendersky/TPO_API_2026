@@ -1,0 +1,35 @@
+.checkout-contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 520px;
+  margin: 24px auto 0;
+  padding: 24px;
+  background: var(--c-tarjeta);
+  border-radius: var(--radio-tarjeta);
+  box-shadow: var(--sombra);
+  color: var(--c-texto);
+}
+ 
+.checkout-contenido__titulo {
+  font-size: 20px;
+  font-weight: 800;
+}
+ 
+.checkout-contenido__texto {
+  font-size: 13px;
+  color: var(--c-texto-suave);
+  line-height: 1.5;
+}
+ 
+.checkout-contenido .carrito-mensaje {
+  box-shadow: none;
+}
+ 
+@media (max-width: 560px) {
+  .checkout-contenido {
+    margin-top: 16px;
+    padding: 18px;
+  }
+}
+ 

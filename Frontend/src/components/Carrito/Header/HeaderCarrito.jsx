@@ -1,6 +1,6 @@
 import { EtapasCheckout } from "./EtapasChekcout";
 
-export const HeaderCarrito = () => {
+export const HeaderCarrito = ({ etapaActual}) => {
   return (
     <header className="header-carrito">
       <div>
@@ -11,7 +11,7 @@ export const HeaderCarrito = () => {
         </p>
       </div>
 
-      <EtapasCheckout etapaActual={1} />
+      <EtapasCheckout etapaActual={etapaActual} />
     </header>
   )
 }
