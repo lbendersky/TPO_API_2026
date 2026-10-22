@@ -89,6 +89,10 @@
     background: #c99a2e;
 }
 
+.tarjeta-inscripcion__estado--efectivo {
+    background: #2f6fa8;
+}
+
 .tarjeta-inscripcion__estado--cancelado,
 .tarjeta-inscripcion__estado--reembolsado {
     background: var(--rojo);

@@ -1,82 +1,225 @@
 .checkout-contenido {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  max-width: 32.5em;
-  margin: 1.5em auto 0;
-  padding: 1.5em;
-  background: var(--c-tarjeta);
-  border-radius: var(--radio-tarjeta);
-  box-shadow: var(--sombra);
-  color: var(--c-texto);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 32.5rem;
+    margin: 1.5rem auto 0;
+    padding: 1.5rem;
+    background: var(--blanco);
+    border: 0.0625rem solid var(--blanco);
+    border-radius: 0.5rem;
+    color: var(--negro);
 }
- 
+
 .checkout-contenido__titulo {
-  font-size: 1.25em;
-  font-weight: 800;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--verdeMuyOscuro);
+    letter-spacing: 0.05rem;
+    margin: 0;
 }
- 
+
 .checkout-contenido__texto {
-  font-size: 0.8125em;
-  color: var(--c-texto-suave);
-  line-height: 1.5;
+    font-size: 1rem;
+    color: var(--gris);
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0;
 }
- 
+
 .checkout-contenido .carrito-mensaje {
-  box-shadow: none;
-}
- 
-@media (max-width: 35em) {
-  .checkout-contenido {
-    margin-top: 1em;
-    padding: 1.125em;
-  }
+    box-shadow: none;
 }
 
 .checkout-contenido__error {
-  font-size: 0.8125em;
-  font-weight: 700;
-  color: #d33;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--rojo);
+    margin: 0;
+}
+
+.checkout-metodo {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.checkout-metodo__opcion {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 0.0625rem solid var(--gris);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    background: var(--blanco);
+    color: var(--negro);
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.checkout-metodo__opcion:hover {
+    border-color: var(--verdeOscuro);
+    background: var(--verdeMuyOscuro);
+    color: var(--blanco);
+}
+
+.checkout-metodo__opcion--activa {
+    border-color: var(--verdeOscuro);
+    background: var(--verdeOscuro);
+    color: var(--blanco);
+}
+
+.checkout-metodo__opcion--activa:hover {
+    background: var(--verdeMuyOscuro);
+    border-color: var(--verdeMuyOscuro);
+}
+
+.checkout-metodo__opcion input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+}
+
+.checkout-tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.checkout-tarjeta__campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--negro);
+    letter-spacing: 0.05rem;
+}
+
+.checkout-tarjeta__campo input {
+    padding: 0.5rem 0.75rem;
+    border: 0.0625rem solid var(--gris);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--negro);
+    background: var(--blanco);
+    transition: border-color 0.2s;
+}
+
+.checkout-tarjeta__campo input:hover {
+    border-color: var(--verdeOscuro);
+}
+
+.checkout-tarjeta__campo input:focus {
+    outline: none;
+    border-color: var(--verdeOscuro);
+    box-shadow: 0 0 0 0.125rem var(--verdeOscuro);
+}
+
+.checkout-tarjeta__fila {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.checkout-tarjeta__fila .checkout-tarjeta__campo {
+    flex: 1;
 }
 
 .checkout-confirmacion__lista {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
 }
 
 .checkout-confirmacion__item {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5em;
-  padding: 0.625em 0.75em;
-  border-radius: 0.625em;
-  background: var(--c-fondo-suave, rgba(0, 0, 0, 0.03));
-  font-size: 0.8125em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 0.0625rem solid var(--gris);
+    border-radius: 0.5rem;
+    background: var(--blanco);
+    font-size: 1rem;
+    font-weight: 700;
+    transition: box-shadow 0.2s;
+}
+
+.checkout-confirmacion__item:hover {
+    box-shadow: 0 0.25rem 1rem var(--negro);
 }
 
 .checkout-confirmacion__turno {
-  font-weight: 700;
+    color: var(--verdeMuyOscuro);
 }
 
 .checkout-confirmacion__fecha {
-  color: var(--c-texto-suave);
+    color: var(--gris);
 }
 
 .checkout-confirmacion__monto {
-  font-weight: 700;
+    color: var(--negro);
 }
 
 .checkout-confirmacion__total {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.9375em;
-  padding-top: 0.5em;
-  border-top: 0.0625em solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--verdeMuyOscuro);
+    padding-top: 0.75rem;
+    border-top: 0.0625rem solid var(--gris);
+}
+
+.checkout-contenido .boton-confirmar-reserva {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.875rem 1rem;
+    border: 0.0625rem solid var(--verdeOscuro);
+    border-radius: 0.5rem;
+    background: var(--verdeOscuro);
+    color: var(--blanco);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.checkout-contenido .boton-confirmar-reserva:hover:not(:disabled) {
+    background: var(--verdeMuyOscuro);
+    border-color: var(--verdeMuyOscuro);
+}
+
+.checkout-contenido .boton-confirmar-reserva:active:not(:disabled) {
+    transform: translateY(0.0625rem);
+}
+
+.checkout-contenido .boton-confirmar-reserva:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@media (max-width: 35rem) {
+    .checkout-contenido {
+        margin-top: 1rem;
+        padding: 1.125rem;
+    }
 }

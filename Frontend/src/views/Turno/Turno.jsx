@@ -12,6 +12,7 @@ import { Alerta } from '../../utils/alerta';
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
 import { useAuth } from '../../context/useAuth';
+import ParticipantesTurno from '../../components/ParticipantesTurno/ParticipantesTurno';
 
 const TIPO_FUTBOL_LABEL = {
     F5: 'Fútbol 5',
@@ -175,6 +176,8 @@ const Turno = () => {
                     </button>
                 </div>
             </section>
+
+            <ParticipantesTurno idTurno={turno.idTurno} />
         </main>
     );
 };
