@@ -28,10 +28,14 @@ public class ItemCarritoResponse {
     private LocalDateTime fechaHora;
     private Integer lugaresDisponibles;
     private String imagen;
+    private LocalDateTime fechaReserva;
+    private LocalDateTime fechaExpiracion;
 
-    public static ItemCarritoResponse from(ItemCarrito i, String imagenBase64) {
+    public static ItemCarritoResponse from(ItemCarrito i, String imagenBase64, int minutosReserva) {
         Turno turno = i.getTurno();
         Cancha cancha = turno != null ? turno.getCancha() : null;
+        LocalDateTime fechaReserva = i.getFechaReserva();
+        LocalDateTime fechaExpiracion = fechaReserva != null ? fechaReserva.plusMinutes(minutosReserva) : null;
         return new ItemCarritoResponse(
                 i.getIdItem(),
                 turno != null ? turno.getIdTurno() : null,
@@ -45,7 +49,9 @@ public class ItemCarritoResponse {
                 cancha != null ? cancha.getDireccion() : null,
                 turno != null ? turno.getFechaHora() : null,
                 turno != null ? turno.getLugaresDisponibles() : null,
-                imagenBase64
+                imagenBase64,
+                fechaReserva,
+                fechaExpiracion
         );
     }
 }

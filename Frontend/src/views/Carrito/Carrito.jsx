@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../config";
 import { useAuth } from "../../context/useAuth";
@@ -15,6 +15,36 @@ import "../../components/Carrito/Header/CarritoHeader.css";
 import "../../components/Carrito/SideBar/SideBar.css";
 import "../../components/Carrito/Tarjetas/TarjetaCarrito.css";
 
+const formatearTiempoRestante = (ms) => {
+    if (ms <= 0) return "00:00";
+    const totalSegundos = Math.floor(ms / 1000);
+    const minutos = Math.floor(totalSegundos / 60);
+    const segundos = totalSegundos % 60;
+    return `${String(minutos).padStart(2, "0")}:${String(segundos).padStart(2, "0")}`;
+};
+
+const CountdownItem = ({ fechaExpiracion }) => {
+    const [restante, setRestante] = useState(() => new Date(fechaExpiracion).getTime() - Date.now());
+
+    useEffect(() => {
+        const objetivo = new Date(fechaExpiracion).getTime();
+        setRestante(objetivo - Date.now());
+        const id = setInterval(() => {
+            setRestante(objetivo - Date.now());
+        }, 1000);
+        return () => clearInterval(id);
+    }, [fechaExpiracion]);
+
+    const vencido = restante <= 0;
+    return (
+        <div className={`carrito-countdown${vencido ? " carrito-countdown--vencido" : ""}`}>
+            {vencido
+                ? "Reserva expirada"
+                : `Reserva vence en ${formatearTiempoRestante(restante)}`}
+        </div>
+    );
+};
+
 const Carrito = () => {
     const [carrito, setCarrito] = useState({ items: [], total: 0 });
     const [cargando, setCargando] = useState(true);
@@ -22,14 +52,8 @@ const Carrito = () => {
     const { token } = useAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!token) {
-            setError("Tenés que iniciar sesión para ver tu carrito.");
-            setCargando(false);
-            return;
-        }
-
-        fetch(`${API_URL}/carrito`, {
+    const cargarCarrito = useCallback(() => {
+        return fetch(`${API_URL}/carrito`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -38,15 +62,44 @@ const Carrito = () => {
                 if (!response.ok) throw new Error("Respuesta inválida del servidor");
                 return response.json();
             })
-            .then((data) => {
-                setCarrito(data);
-            })
+            .then((data) => setCarrito(data));
+    }, [token]);
+
+    useEffect(() => {
+        if (!token) {
+            setError("Tenés que iniciar sesión para ver tu carrito.");
+            setCargando(false);
+            return;
+        }
+
+        cargarCarrito()
             .catch((error) => {
                 console.error("Error al cargar el carrito:", error);
                 setError("No se pudo cargar el carrito.");
             })
             .finally(() => setCargando(false));
-    }, [token]);
+    }, [token, cargarCarrito]);
+
+    const proximaExpiracion = useMemo(() => {
+        const fechas = (carrito.items || [])
+            .map((i) => i.fechaExpiracion)
+            .filter(Boolean)
+            .map((f) => new Date(f).getTime());
+        return fechas.length ? Math.min(...fechas) : null;
+    }, [carrito.items]);
+
+    const yaRefrescadoRef = useRef(null);
+    useEffect(() => {
+        if (!proximaExpiracion) return;
+        const msHastaVencer = proximaExpiracion - Date.now();
+        if (msHastaVencer <= 0) return;
+        const id = setTimeout(() => {
+            if (yaRefrescadoRef.current === proximaExpiracion) return;
+            yaRefrescadoRef.current = proximaExpiracion;
+            cargarCarrito().catch(() => {});
+        }, msHastaVencer + 500);
+        return () => clearTimeout(id);
+    }, [proximaExpiracion, cargarCarrito]);
 
     const onConfirmarReserva = () => {
         navigate("/carrito/checkout");
@@ -106,12 +159,16 @@ const Carrito = () => {
                     )}
 
                     {!cargando && !error && items.map((item) => (
-                        <TarjetaCarrito
-                            key={item.idItem}
-                            item={item}
-                            onQuitar={quitarItem}
-                            onCambiarCantidad={actualizarCantidad}
-                        />
+                        <div key={item.idItem} className="carrito-item-con-contador">
+                            {item.fechaExpiracion && (
+                                <CountdownItem fechaExpiracion={item.fechaExpiracion} />
+                            )}
+                            <TarjetaCarrito
+                                item={item}
+                                onQuitar={quitarItem}
+                                onCambiarCantidad={actualizarCantidad}
+                            />
+                        </div>
                     ))}
                 </section>
 

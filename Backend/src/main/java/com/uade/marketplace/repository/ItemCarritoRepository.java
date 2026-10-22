@@ -1,5 +1,6 @@
 package com.uade.marketplace.repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 
@@ -12,4 +13,5 @@ import com.uade.marketplace.entity.ItemCarrito;
 public interface ItemCarritoRepository extends JpaRepository<ItemCarrito, Long> {
     Optional<ItemCarrito> findByCarrito_IdCarritoAndTurno_IdTurno(Long idCarrito, Long idTurno);
     List<ItemCarrito> findByTurno_IdTurno(Long idTurno);
+    List<ItemCarrito> findByFechaReservaBefore(LocalDateTime limite);
 }

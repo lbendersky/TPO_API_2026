@@ -7,13 +7,23 @@
     --gris: #888888;
     --rojo: #c0392b;
     --rojoClaro: #fbcec9;
+    --amarilloLima: #d4ff3a;
+    --verdeNeon: #7bff5a;
+    --verdeLima: #a8e063;
+    --sombraNegra: rgba(0, 0, 0, 0.35);
+    --sombraVerde: rgba(66, 164, 66, 0.55);
+    --brilloBlanco: rgba(255, 255, 255, 0.15);
+    --gradienteFondo: radial-gradient(circle at 20% 10%, var(--verdeClaro) 0%, var(--verdeOscuro) 45%, var(--verdeMuyOscuro) 100%);
+    --gradienteAcento: linear-gradient(135deg, var(--verdeClaro), var(--amarilloLima));
 }
 
 :root {
     font-family: 'Passion One', system-ui;
     font-size: 1em;
     color: var(--blanco);
-    background: var(--verdeOscuro);
+    background: var(--gradienteFondo);
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
 body {

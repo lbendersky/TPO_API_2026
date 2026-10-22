@@ -77,6 +77,27 @@
   color: var(--c-texto-suave);
 }
  
+.carrito-item-con-contador {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.carrito-countdown {
+  align-self: flex-start;
+  background: var(--c-verde-fondo);
+  color: var(--c-verde-texto);
+  border-radius: var(--radio-chip);
+  padding: 1em 1em;
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.carrito-countdown--vencido {
+  background: #fdecea;
+  color: #b3261e;
+}
+
 .carrito-mensaje--error {
   color: #b3261e;
   background: #fdecea;

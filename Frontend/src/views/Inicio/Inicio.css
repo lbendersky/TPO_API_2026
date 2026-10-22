@@ -1,7 +1,36 @@
-﻿.inicio {
-    padding: 0 2rem 2rem;
+.inicio {
+    padding: 0 2rem 3rem;
     max-width: 75rem;
     margin: 0 auto;
+    position: relative;
+    animation: inicio-fade-in 0.8s ease-out both;
+}
+
+.inicio::before,
+.inicio::after {
+    content: '';
+    position: fixed;
+    width: 25rem;
+    height: 25rem;
+    border-radius: 50%;
+    filter: blur(6rem);
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.inicio::before {
+    background: var(--verdeNeon);
+    top: -8rem;
+    left: -8rem;
+    animation: inicio-flotar 9s ease-in-out infinite;
+}
+
+.inicio::after {
+    background: var(--amarilloLima);
+    bottom: -10rem;
+    right: -8rem;
+    animation: inicio-flotar 11s ease-in-out infinite reverse;
 }
 
 .inicio__titulo {
@@ -12,7 +41,36 @@
     text-align: center;
     -webkit-text-stroke: 0.05em var(--negro);
     text-shadow: -0.05em 0.1em 0.25em var(--negro);
-    paint-order: markers stroke fill; 
+    paint-order: markers stroke fill;
+    position: relative;
+    z-index: 1;
+}
+
+.inicio__hero {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0 1rem;
+    z-index: 1;
+    animation: inicio-desvanecer-scroll linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 60vh;
+    will-change: opacity, transform;
+}
+
+.inicio__hero-glow {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 70%;
+    height: 70%;
+    background: var(--gradienteAcento);
+    filter: blur(4rem);
+    opacity: 0.45;
+    border-radius: 50%;
+    animation: inicio-pulso 4s ease-in-out infinite;
+    z-index: -1;
 }
 
 .inicio__img {
@@ -20,4 +78,111 @@
     width: 100%;
     max-width: 40em;
     margin: 0 auto;
+    filter: drop-shadow(0 1rem 1.5rem var(--sombraNegra))
+            drop-shadow(0 0 1.2rem var(--sombraVerde));
+    transition: transform 0.6s ease, filter 0.6s ease;
+    animation: inicio-flotar-img 6s ease-in-out infinite;
+}
+
+.inicio__img:hover {
+    transform: scale(1.03) rotate(-0.5deg);
+    filter: drop-shadow(0 1.2rem 2rem var(--negro))
+            drop-shadow(0 0 2rem var(--amarilloLima));
+}
+
+.inicio__separador {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto 2.5rem;
+    max-width: 40rem;
+    position: relative;
+    z-index: 1;
+    will-change: opacity, transform;
+    animation:
+        inicio-flotar-img 6s ease-in-out infinite,
+        inicio-desvanecer-scroll linear both;
+    animation-timeline: auto, scroll(root);
+    animation-range: auto, 0 60vh;
+}
+
+.inicio__separador-linea {
+    flex: 1;
+    height: 0.2rem;
+    background: linear-gradient(90deg, transparent, var(--amarilloLima), transparent);
+    border-radius: 1rem;
+}
+
+.inicio__separador-bola {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--gradienteAcento);
+    box-shadow: 0 0 0.8rem var(--amarilloLima), 0 0 1.5rem var(--verdeNeon);
+    animation: inicio-pulso 2s ease-in-out infinite;
+}
+
+@keyframes inicio-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes inicio-flotar {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(2rem, 1.5rem);
+    }
+}
+
+@keyframes inicio-flotar-img {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-0.6rem);
+    }
+}
+
+@keyframes inicio-desvanecer-scroll {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-3rem) scale(0.92);
+        filter: blur(0.4rem);
+    }
+}
+
+@keyframes inicio-pulso {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .inicio,
+    .inicio__img,
+    .inicio__hero-glow,
+    .inicio__separador-bola,
+    .inicio::before,
+    .inicio::after {
+        animation: none;
+    }
 }
