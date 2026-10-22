@@ -18,9 +18,9 @@ public class CarritoResponse {
     private List<ItemCarritoResponse> items;
     private Float total;
 
-    public static CarritoResponse from(Carrito c, Function<ItemCarrito, String> imagenPorItem) {
+    public static CarritoResponse from(Carrito c, Function<ItemCarrito, String> imagenPorItem, int minutosReserva) {
         List<ItemCarritoResponse> items = c.getItems().stream()
-                .map(i -> ItemCarritoResponse.from(i, imagenPorItem.apply(i)))
+                .map(i -> ItemCarritoResponse.from(i, imagenPorItem.apply(i), minutosReserva))
                 .toList();
         float total = (float) items.stream().mapToDouble(ItemCarritoResponse::getSubtotal).sum();
         return new CarritoResponse(
@@ -31,10 +31,10 @@ public class CarritoResponse {
         );
     }
 
-    public static CarritoResponse from(Carrito c, Map<Long, String> imagenesPorCancha) {
+    public static CarritoResponse from(Carrito c, Map<Long, String> imagenesPorCancha, int minutosReserva) {
         return from(c, item -> {
             if (item.getTurno() == null || item.getTurno().getCancha() == null) return null;
             return imagenesPorCancha.get(item.getTurno().getCancha().getIdCancha());
-        });
+        }, minutosReserva);
     }
 }

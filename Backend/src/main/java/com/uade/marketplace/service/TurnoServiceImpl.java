@@ -238,4 +238,14 @@ public class TurnoServiceImpl implements TurnoService {
     public List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax, String localidad, String texto) {
         return mapear(turnoRepository.filtrar(tipoFutbol, precioMin, precioMax, localidad, texto));
     }
+
+    @Override
+    public List<String> getParticipantes(Long idTurno) throws RecursoNoEncontradoException {
+        if (!turnoRepository.existsById(idTurno))
+            throw new RecursoNoEncontradoException("No existe el turno " + idTurno);
+        return inscripcionRepository.findByTurno_IdTurno(idTurno).stream()
+                .map(i -> i.getUsuarioComprador() != null ? i.getUsuarioComprador().getNombreUsuario() : null)
+                .filter(n -> n != null)
+                .toList();
+    }
 }

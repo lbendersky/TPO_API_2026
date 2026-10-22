@@ -84,6 +84,11 @@ public class TurnoController {
         return turnoService.actualizarStock(turnoId, body.get("lugaresDisponibles"), actor);
     }
 
+    @GetMapping("/{turnoId}/participantes")
+    public List<String> getParticipantes(@PathVariable Long turnoId) throws RecursoNoEncontradoException {
+        return turnoService.getParticipantes(turnoId);
+    }
+
     @GetMapping("/filtrar")
     public List<TurnoResponse> filtrar(
             @org.springframework.web.bind.annotation.RequestParam(required = false) com.uade.marketplace.entity.enums.TipoFutbol tipoFutbol,

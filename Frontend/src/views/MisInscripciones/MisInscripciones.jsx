@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
+import { obtenerEstadosPago } from '../../utils/pagosLocales';
 
 const ESTADO_LABEL = {
     PENDIENTE: 'Pendiente',
     PAGADO: 'Pagado',
+    EFECTIVO: 'Efectivo',
     CANCELADO: 'Cancelado',
     REEMBOLSADO: 'Reembolsado',
 };
@@ -59,23 +61,31 @@ const MisInscripciones = () => {
             )}
 
             <section className="mis-inscripciones__lista">
-                {inscripciones.map((i) => (
-                    <article key={i.idInscripcion} className="tarjeta-inscripcion">
-                        <div className="tarjeta-inscripcion__principal">
-                            <h3 className="tarjeta-inscripcion__cancha">{i.nombreCancha ?? `Turno #${i.idTurno}`}</h3>
-                            {i.localidad && <span className="tarjeta-inscripcion__localidad">{i.localidad}</span>}
-                            <span className="tarjeta-inscripcion__fecha">{formatearFechaHora(i.fechaHoraTurno)}</span>
-                            {i.tipoFutbol && <span className="tarjeta-inscripcion__tipo">{i.tipoFutbol}</span>}
-                        </div>
+                {(() => {
+                    const estadosLocales = obtenerEstadosPago();
+                    return inscripciones.map((i) => {
+                        const estadoEfectivo = i.estadoPago === 'PENDIENTE'
+                            ? (estadosLocales[i.idInscripcion] ?? i.estadoPago)
+                            : i.estadoPago;
+                        return (
+                            <article key={i.idInscripcion} className="tarjeta-inscripcion">
+                                <div className="tarjeta-inscripcion__principal">
+                                    <h3 className="tarjeta-inscripcion__cancha">{i.nombreCancha ?? `Turno #${i.idTurno}`}</h3>
+                                    {i.localidad && <span className="tarjeta-inscripcion__localidad">{i.localidad}</span>}
+                                    <span className="tarjeta-inscripcion__fecha">{formatearFechaHora(i.fechaHoraTurno)}</span>
+                                    {i.tipoFutbol && <span className="tarjeta-inscripcion__tipo">{i.tipoFutbol}</span>}
+                                </div>
 
-                        <div className="tarjeta-inscripcion__secundaria">
-                            <span className={`tarjeta-inscripcion__estado tarjeta-inscripcion__estado--${i.estadoPago?.toLowerCase()}`}>
-                                {ESTADO_LABEL[i.estadoPago] ?? i.estadoPago}
-                            </span>
-                            <span className="tarjeta-inscripcion__monto">{formatearMonto(i.montoPagado)}</span>
-                        </div>
-                    </article>
-                ))}
+                                <div className="tarjeta-inscripcion__secundaria">
+                                    <span className={`tarjeta-inscripcion__estado tarjeta-inscripcion__estado--${estadoEfectivo?.toLowerCase()}`}>
+                                        {ESTADO_LABEL[estadoEfectivo] ?? estadoEfectivo}
+                                    </span>
+                                    <span className="tarjeta-inscripcion__monto">{formatearMonto(i.montoPagado)}</span>
+                                </div>
+                            </article>
+                        );
+                    });
+                })()}
             </section>
         </main>
     );
