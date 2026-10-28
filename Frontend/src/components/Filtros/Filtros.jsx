@@ -49,7 +49,7 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
                 {}
                 <Search className="filtros-bar__icono" />
                 <div className="filtros-bar__contenido">
-                    <label className="filtros-bar__label">NOMBRE DE LA CANCHA</label>
+                    <label className="filtros-bar__label">CANCHA</label>
                     <input
                         type="text"
                         className="filtros-bar__input"
@@ -68,7 +68,7 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
                 {}
                 <MapPin className="filtros-bar__icono" />
                 <div className="filtros-bar__contenido">
-                    <label className="filtros-bar__label">BARRIO O ZONA</label>
+                    <label className="filtros-bar__label">BARRIO</label>
                     <select
                         className="filtros-bar__input"
                         value={localidad}
@@ -92,7 +92,7 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
                 {}
                 <Trophy className="filtros-bar__icono" />
                 <div className="filtros-bar__contenido">
-                    <label className="filtros-bar__label">FORMATO</label>
+                    <label className="filtros-bar__label">TIPO</label>
                     {}
                     <select
                         className="filtros-bar__input"

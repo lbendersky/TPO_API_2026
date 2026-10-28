@@ -3,18 +3,42 @@
 }
 
 .formulario-oferta__toggle {
-    padding: 0.6em 1.2em;
+    padding: 0.65rem 1.3rem;
     border: none;
-    border-radius: 0.5em;
-    background: var(--verdeOscuro);
+    border-radius: 0.6rem;
+    background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     color: var(--blanco);
     cursor: pointer;
-    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0.3rem 0.8rem var(--sombraNegra);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.formulario-oferta__toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
 }
 
 .formulario-oferta__toggle:hover {
-    background-color: var(--verdeMuyOscuro);
+    transform: translateY(-0.2rem);
+    filter: brightness(1.1);
+    box-shadow: 0 0.5rem 1.1rem var(--sombraNegra), 0 0 0.8rem var(--sombraVerde);
+}
 
+.formulario-oferta__toggle:hover::before {
+    left: 100%;
 }
 
 .formulario-oferta__form {
@@ -23,46 +47,83 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 0.75em;
-    padding: 0.75em;
-    border: 0.0625em solid var(--verdeOscuro);
-    border-radius: 0.5em;
-    background: var(--verdeOscuro);
+    gap: 0.85rem;
+    padding: 1rem;
+    border: 1px solid var(--brilloBlanco);
+    border-radius: 0.8rem;
+    background: linear-gradient(135deg, var(--verdeMuyOscuro), var(--verdeOscuro));
     color: var(--blanco);
+    box-shadow: 0 0.6rem 1.2rem var(--sombraNegra);
+    position: relative;
+    overflow: hidden;
+    animation: form-oferta-fade-in 0.5s ease-out both;
+}
+
+.formulario-oferta__form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.3rem;
+    background: var(--gradienteAcento);
 }
 
 .formulario-oferta__label {
     flex: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.25em;
-    color: var(--blanco);
+    gap: 0.3rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--amarilloLima);
 }
 
 .formulario-oferta__label input {
-    padding: 0.5em 0.6em;
-    border: 0.0625em solid var(--blanco);
+    padding: 0.65rem 0.8rem;
+    border: 0.125rem solid var(--verdeOscuro);
     background-color: var(--blanco);
-    color: var(--verdeOscuro);
-    border-radius: 0.4em;
-    font-size: 1em;
+    color: var(--negro);
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 1.05rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.formulario-oferta__label input:hover {
+    border-color: var(--verdeClaro);
+}
+
+.formulario-oferta__label input:focus {
+    outline: none;
+    border-color: var(--amarilloLima);
+    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
+    transform: translateY(-0.1rem);
 }
 
 .formulario-oferta__enviar {
     align-self: center;
-    padding: 0.6em 1.2em;
-    border: none;
-    border-radius: 0.5em;
-    background: var(--verdeMuyOscuro);
-    color: var(--blanco);
+    padding: 0.7rem 1.4rem;
+    border: 0.125rem solid var(--amarilloLima);
+    border-radius: 0.6rem;
+    background: var(--gradienteAcento);
+    color: var(--verdeMuyOscuro);
     cursor: pointer;
-    transition: all 0.2s;
-    border: 0.1em solid var(--verdeMuyOscuro);    
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
 }
 
 .formulario-oferta__enviar:hover:not(:disabled) {
-    background-color: var(--verdeOscuro);
-    border: 0.1em solid var(--blanco);
+    transform: translateY(-0.2rem);
+    filter: brightness(1.1);
+    box-shadow: 0 0.5rem 1.1rem var(--sombraNegra), 0 0 0.8rem var(--sombraVerde);
 }
 
 .formulario-oferta__enviar:disabled {
@@ -73,11 +134,43 @@
 .formulario-oferta__error {
     width: 100%;
     margin: 0;
+    padding: 0.6rem 1rem;
     color: var(--rojo);
+    background: var(--rojoClaro);
+    border-radius: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-align: center;
+    animation: form-oferta-shake 0.4s ease-out;
 }
 
 .formulario-oferta__ok {
     flex-basis: 100%;
     margin: 0;
-    color: var(--verdeOscuro);
+    padding: 0.6rem 1rem;
+    color: var(--verdeMuyOscuro);
+    background: var(--gradienteAcento);
+    border-radius: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-align: center;
+    box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
+}
+
+@keyframes form-oferta-fade-in {
+    from { opacity: 0; transform: translateY(0.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes form-oferta-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-0.4rem); }
+    75% { transform: translateX(0.4rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .formulario-oferta__form,
+    .formulario-oferta__error {
+        animation: none;
+    }
 }

@@ -146,7 +146,16 @@ const Carrito = () => {
 
             <div className="carrito-layout">
                 <section className="carrito-principal">
-                    <CanchasSeleccionadas cantidad={items.length} />
+                    <div className="carrito-principal__encabezado">
+                        <CanchasSeleccionadas cantidad={items.length} />
+                        {!cargando && !error && items.some((i) => i.fechaExpiracion) && (
+                            <div className="carrito-principal__countdowns">
+                                {items.map((item) => item.fechaExpiracion && (
+                                    <CountdownItem key={item.idItem} fechaExpiracion={item.fechaExpiracion} />
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
                     {cargando && <p className="carrito-mensaje">Cargando carrito...</p>}
 
@@ -160,9 +169,6 @@ const Carrito = () => {
 
                     {!cargando && !error && items.map((item) => (
                         <div key={item.idItem} className="carrito-item-con-contador">
-                            {item.fechaExpiracion && (
-                                <CountdownItem fechaExpiracion={item.fechaExpiracion} />
-                            )}
                             <TarjetaCarrito
                                 item={item}
                                 onQuitar={quitarItem}

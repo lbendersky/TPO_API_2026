@@ -1,7 +1,8 @@
 .mis-canchas {
-    max-width: 60em;
+    max-width: 60rem;
     margin: 0 auto;
-    padding: 2em 1.5em 3em;
+    padding: 2.5rem 1.5rem 3rem;
+    animation: mis-canchas-fade-in 0.6s ease-out both;
 }
 
 .mis-canchas__header {
@@ -9,40 +10,101 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1em;
-    margin-bottom: 1.5em;
+    gap: 1rem;
+    margin-bottom: 1.6rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    position: relative;
+}
+
+.mis-canchas__header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 25%;
+    height: 2px;
+    background: var(--gradienteAcento);
+    border-radius: 2px;
 }
 
 .mis-canchas__titulo {
-    font-size: 2.5rem;
+    font-size: 2.6rem;
     color: var(--blanco);
+    text-shadow: 0 0.2rem 0.5rem var(--sombraNegra);
+    line-height: 1.1;
+    letter-spacing: 0.04em;
 }
 
 .mis-canchas__nueva {
-    padding: 0.6em 1.4em;
+    padding: 0.7rem 1.5rem;
     font-family: inherit;
     font-size: 1.1rem;
-    color: var(--verdeOscuro);
-    background-color: var(--blanco);
-    border: 0.5em solid var(--verdeOscuro);
-    border-radius: 2em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--verdeMuyOscuro);
+    background: var(--gradienteAcento);
+    border: 0.125rem solid var(--verdeOscuro);
+    border-radius: 2rem;
     cursor: pointer;
-    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0.4rem 1rem var(--sombraVerde);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.mis-canchas__nueva::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
 }
 
 .mis-canchas__nueva:hover {
-    color: var(--blanco);
-    background-color: var(--verdeMuyOscuro);
+    transform: translateY(-0.2rem);
+    filter: brightness(1.08);
+    box-shadow: 0 0.6rem 1.3rem var(--sombraNegra), 0 0 1rem var(--sombraVerde);
+}
+
+.mis-canchas__nueva:hover::before {
+    left: 100%;
 }
 
 .mis-canchas__aviso {
     font-size: 1.2rem;
     text-align: center;
     color: var(--blanco);
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--brilloBlanco);
+    border-radius: 0.8rem;
+    letter-spacing: 0.03em;
 }
 
 .mis-canchas__lista {
     display: flex;
     flex-direction: column;
-    gap: 1.2em;
+    gap: 1.3rem;
+}
+
+@keyframes mis-canchas-fade-in {
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 35rem) {
+    .mis-canchas__titulo {
+        font-size: 2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mis-canchas {
+        animation: none;
+    }
 }

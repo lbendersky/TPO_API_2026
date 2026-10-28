@@ -1,7 +1,8 @@
 .mis-inscripciones {
-    max-width: 60em;
+    max-width: 60rem;
     margin: 0 auto;
-    padding: 2em 1.5em 3em;
+    padding: 2.5rem 1.5rem 3rem;
+    animation: mis-insc-fade-in 0.6s ease-out both;
 }
 
 .mis-inscripciones__header {
@@ -9,29 +10,53 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1em;
-    margin-bottom: 1.5em;
+    gap: 1rem;
+    margin-bottom: 1.6rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    position: relative;
+}
+
+.mis-inscripciones__header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 25%;
+    height: 2px;
+    background: var(--gradienteAcento);
+    border-radius: 2px;
 }
 
 .mis-inscripciones__titulo {
-    font-size: 2.5rem;
+    font-size: 2.6rem;
     color: var(--blanco);
+    text-shadow: 0 0.2rem 0.5rem var(--sombraNegra);
+    line-height: 1.1;
+    letter-spacing: 0.04em;
 }
 
 .mis-inscripciones__aviso {
     font-size: 1.2rem;
     text-align: center;
     color: var(--blanco);
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--brilloBlanco);
+    border-radius: 0.8rem;
+    letter-spacing: 0.03em;
 }
 
 .mis-inscripciones__aviso--error {
     color: var(--rojo);
+    background: var(--rojoClaro);
+    border-color: var(--rojo);
 }
 
 .mis-inscripciones__lista {
     display: flex;
     flex-direction: column;
-    gap: 1.2em;
+    gap: 1.3rem;
 }
 
 .tarjeta-inscripcion {
@@ -39,58 +64,86 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1em;
-    padding: 1.2em 1.5em;
-    background: var(--blanco);
-    border-radius: 0.75em;
-    box-shadow: 0 0.15em 0.6em rgba(0, 0, 0, 0.12);
+    gap: 1rem;
+    padding: 1.3rem 1.6rem;
+    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    border: 1px solid var(--brilloBlanco);
+    border-radius: 1rem;
+    box-shadow: 0 0.8rem 1.8rem var(--sombraNegra);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tarjeta-inscripcion::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.3rem;
+    background: var(--gradienteAcento);
+}
+
+.tarjeta-inscripcion:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 1rem 2rem var(--sombraNegra), 0 0 0.9rem var(--sombraVerde);
 }
 
 .tarjeta-inscripcion__principal {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.6em;
+    gap: 0.7rem;
+    position: relative;
 }
 
 .tarjeta-inscripcion__cancha {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
     color: var(--verdeMuyOscuro);
 }
 
 .tarjeta-inscripcion__localidad,
 .tarjeta-inscripcion__fecha {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--gris);
+    letter-spacing: 0.03em;
 }
 
 .tarjeta-inscripcion__secundaria {
     display: flex;
     align-items: center;
-    gap: 1em;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: relative;
 }
 
 .tarjeta-inscripcion__estado {
-    padding: 0.3em 0.8em;
-    border-radius: 2em;
-    font-size: 0.8rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
     font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     background: var(--gris);
     color: var(--blanco);
+    box-shadow: 0 0.2rem 0.5rem var(--sombraNegra);
 }
 
 .tarjeta-inscripcion__estado--pagado {
-    background: var(--verdeOscuro);
+    background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
 }
 
 .tarjeta-inscripcion__estado--pendiente {
-    background: #c99a2e;
+    background: linear-gradient(135deg, #b8841a, #e0b43b);
+    color: var(--blanco);
 }
 
 .tarjeta-inscripcion__estado--efectivo {
-    background: #2f6fa8;
+    background: linear-gradient(135deg, #22577a, #38a3a5);
 }
 
 .tarjeta-inscripcion__estado--cancelado,
@@ -100,14 +153,38 @@
 
 .tarjeta-inscripcion__monto {
     font-weight: 700;
+    font-size: 1.1rem;
     color: var(--verdeMuyOscuro);
+    letter-spacing: 0.03em;
 }
 
 .tarjeta-inscripcion__tipo {
-    padding: 0.2em 0.6em;
-    border-radius: 0.5em;
-    border: 0.08em solid var(--verdeOscuro);
-    color: var(--verdeOscuro);
-    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.6rem;
+    background: var(--gradienteAcento);
+    color: var(--verdeMuyOscuro);
+    font-size: 0.8rem;
     font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 0.2rem 0.5rem var(--sombraVerde);
+}
+
+@keyframes mis-insc-fade-in {
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 35rem) {
+    .mis-inscripciones__titulo {
+        font-size: 2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mis-inscripciones,
+    .tarjeta-inscripcion:hover {
+        animation: none;
+        transform: none;
+    }
 }

@@ -1,13 +1,29 @@
 .navbar {
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     display: flex;
     align-items: center;
     padding: 0.75rem 5rem;
-    background-color: var(--blanco);
+    background: linear-gradient(180deg, var(--blanco) 0%, #f4fff0 100%);
     letter-spacing: 0.0em;
     line-height: 1.4;
     font-size: 1.5rem;
     gap: 1rem;
+    box-shadow: 0 0.4rem 1rem var(--sombraNegra), 0 0.1rem 0 var(--brilloBlanco) inset;
+    backdrop-filter: blur(0.6rem);
+    animation: navbar-fade-down 0.6s ease-out both;
+}
+
+.navbar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0.2rem;
+    background: var(--gradienteAcento);
+    opacity: 0.9;
 }
 
 .navbar > ul:nth-of-type(1) {
@@ -17,6 +33,13 @@
 .navbar .logo{
     height: 2.5em;
     display: block;
+    filter: drop-shadow(0 0.2rem 0.4rem var(--sombraVerde));
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.navbar .titulo:hover .logo {
+    transform: rotate(-6deg) scale(1.08);
+    filter: drop-shadow(0 0.3rem 0.6rem var(--sombraVerde));
 }
 
 .navbar ul {
@@ -24,7 +47,7 @@
     margin: 0;
     padding: 0;
     display: flex;
-    align-items: end;
+    align-items: center;
     gap: 1rem;
     color: var(--verdeOscuro);
 }
@@ -36,13 +59,15 @@
     gap: 0.25rem;
     color: var(--verdeOscuro);
     text-decoration: none;
-    padding: 0.25em 0.5em;
-    border-radius: 0.3em;
-    transition: background-color 0.2s;
+    padding: 0.25em 0.75em;
+    border-radius: 0.6em;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+    position: relative;
 }
 
 .navbar .titulo:hover {
-    background-color: var(--gris);
+    background-color: rgba(66, 164, 66, 0.12);
+    transform: translateY(-0.1rem);
 }
 
 .carrito-navbar__icono {
@@ -50,39 +75,88 @@
     height: 1.33em;
     color: var(--verdeOscuro);
     cursor: pointer;
-    transition: background-color 0.2s;
-    border-radius: 0.3em;
-    padding: 0.3em;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    border-radius: 0.5em;
+    padding: 0.35em;
     box-sizing: content-box;
 }
 
 .carrito-navbar__icono:hover {
-    background-color: var(--gris);
+    background: var(--gradienteAcento);
+    color: var(--verdeMuyOscuro);
+    transform: translateY(-0.15rem) scale(1.05);
+    box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
 }
 
 .boton-publicar {
     display: flex;
     align-items: center;
     gap: 0.4em;
-    padding: 0.42em 1.05em;
+    padding: 0.5em 1.2em;
     font-family: inherit;
     font-size: 1.3rem;
     font-weight: 700;
     letter-spacing: 0.03em;
     color: var(--blanco);
-    background-color: var(--verdeOscuro);
-    border: 0.12em solid var(--verdeOscuro);
+    background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
+    border: 0.12em solid transparent;
     border-radius: 2em;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s, transform 0.15s;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0.3rem 0.7rem var(--sombraNegra);
+}
+
+.boton-publicar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transition: left 0.6s ease;
 }
 
 .boton-publicar:hover {
-    background-color: var(--verdeMuyOscuro);
-    color: var(--blanco);
+    transform: translateY(-0.15rem);
+    filter: brightness(1.1);
+    box-shadow: 0 0.5rem 1.1rem var(--sombraNegra), 0 0 1rem var(--sombraVerde);
+}
+
+.boton-publicar:hover::before {
+    left: 100%;
+}
+
+.boton-publicar:active {
+    transform: translateY(0);
 }
 
 .boton-publicar__icono {
     width: 1.3em;
     height: 1.3em;
+}
+
+@keyframes navbar-fade-down {
+    from {
+        opacity: 0;
+        transform: translateY(-1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 48rem) {
+    .navbar {
+        padding: 0.75rem 1.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar {
+        animation: none;
+    }
 }

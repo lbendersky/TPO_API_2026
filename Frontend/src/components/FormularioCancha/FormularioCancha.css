@@ -1,97 +1,181 @@
 .form-cancha {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1em 1.5em;
-    max-width: 50em;
+    gap: 1.1rem 1.6rem;
+    max-width: 50rem;
     margin: 0 auto;
-    padding: 2em;
-    background-color: var(--blanco);
-    border-radius: 1.2em;
-    box-shadow: 0 0.6em 1.5em rgba(0, 0, 0, 0.25);
+    padding: 2.2rem;
+    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    border: 1px solid var(--brilloBlanco);
+    border-radius: 1.1rem;
+    box-shadow: 0 1rem 2rem var(--sombraNegra);
+    position: relative;
+    overflow: hidden;
+    animation: form-cancha-fade-in 0.6s ease-out both;
+}
+
+.form-cancha::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.3rem;
+    background: var(--gradienteAcento);
+    z-index: 2;
+}
+
+.form-cancha::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -20%;
+    width: 20rem;
+    height: 20rem;
+    background: var(--verdeClaro);
+    filter: blur(6rem);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.form-cancha > * {
+    position: relative;
+    z-index: 1;
 }
 
 .form-cancha label {
     display: flex;
     flex-direction: column;
-    gap: 0.35em;
-    font-size: 1.1rem;
+    gap: 0.4rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--verdeOscuro);
+    color: var(--verdeMuyOscuro);
 }
 
 .form-cancha input,
 .form-cancha select,
 .form-cancha textarea {
-    padding: 0.6em 0.8em;
+    padding: 0.75rem 0.9rem;
     font-family: inherit;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     color: var(--negro);
-    border: 0.12em solid var(--verdeOscuro);
-    border-radius: 0.6em;
+    background: var(--blanco);
+    border: 0.125rem solid var(--verdeOscuro);
+    border-radius: 0.6rem;
     outline: none;
-    transition: border-color 0.2s;
+    letter-spacing: 0.02em;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.form-cancha input:hover,
+.form-cancha select:hover,
+.form-cancha textarea:hover {
+    border-color: var(--verdeClaro);
 }
 
 .form-cancha input:focus,
 .form-cancha select:focus,
 .form-cancha textarea:focus {
-    border-color: var(--verdeOscuro);
+    border-color: var(--amarilloLima);
+    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
+    transform: translateY(-0.1rem);
 }
 
 .form-cancha textarea {
     resize: vertical;
 }
 
-/* La descripción y el botón ocupan las dos columnas */
 .form-cancha__completo,
 .form-cancha__boton {
     grid-column: 1 / -1;
 }
 
 .form-cancha__boton {
-    padding: 0.8em;
+    padding: 0.9rem;
     font-family: inherit;
-    font-size: 1.35rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--blanco);
-    background-color: var(--verdeOscuro);
+    background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     border: none;
-    border-radius: 2em;
+    border-radius: 2rem;
     cursor: pointer;
-    transition: transform 0.15s, filter 0.2s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0.4rem 1rem var(--sombraNegra);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.form-cancha__boton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
 }
 
 .form-cancha__boton:hover {
-    filter: brightness(1.15);
-    transform: translateY(-0.1em);
+    transform: translateY(-0.2rem);
+    filter: brightness(1.1);
+    box-shadow: 0 0.6rem 1.3rem var(--sombraNegra), 0 0 1rem var(--sombraVerde);
 }
 
-/* En celulares, una sola columna */
-@media (max-width: 40em) {
-    .form-cancha {
-        grid-template-columns: 1fr;
-    }
+.form-cancha__boton:hover::before {
+    left: 100%;
 }
 
 .form-cancha__fotos {
     display: flex;
-    gap: 0.75em;
+    gap: 0.85rem;
     flex-wrap: wrap;
 }
+
 .form-cancha__foto {
-    width: 9em;
-    height: 9em;
+    width: 9rem;
+    height: 9rem;
     object-fit: contain;
-    padding: 0.75em;
-    border: 0.1875em solid #ccc;
-    border-radius: 0.75em;
+    padding: 0.75rem;
+    border: 0.1875rem solid rgba(66, 164, 66, 0.25);
+    border-radius: 0.8rem;
     cursor: pointer;
-    background: #fff;
+    background: var(--blanco);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
 }
+
+.form-cancha__foto:hover {
+    transform: translateY(-0.2rem) scale(1.03);
+    border-color: var(--verdeClaro);
+    filter: brightness(1.05) saturate(1.1);
+    box-shadow: 0 0.5rem 1rem var(--sombraNegra);
+}
+
 .form-cancha__foto--elegida {
-    border-color: var(--verdeOscuro, #2e7d32);
-    box-shadow: 0 0 0 0.125em var(--verdeOscuro, #2e7d32);
+    border-color: var(--amarilloLima);
+    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
+}
+
+@media (max-width: 40rem) {
+    .form-cancha {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+    }
+}
+
+@keyframes form-cancha-fade-in {
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-cancha {
+        animation: none;
+    }
 }
