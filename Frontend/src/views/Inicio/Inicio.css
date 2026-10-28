@@ -80,14 +80,7 @@
     margin: 0 auto;
     filter: drop-shadow(0 1rem 1.5rem var(--sombraNegra))
             drop-shadow(0 0 1.2rem var(--sombraVerde));
-    transition: transform 0.6s ease, filter 0.6s ease;
     animation: inicio-flotar-img 6s ease-in-out infinite;
-}
-
-.inicio__img:hover {
-    transform: scale(1.03) rotate(-0.5deg);
-    filter: drop-shadow(0 1.2rem 2rem var(--negro))
-            drop-shadow(0 0 2rem var(--amarilloLima));
 }
 
 .inicio__separador {

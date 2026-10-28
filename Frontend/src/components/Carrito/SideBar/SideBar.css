@@ -2,28 +2,31 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5em;
-  margin-bottom: 1em;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .resumen-compra__titulo {
-  font-size: 1em;
+  font-size: 1.3rem;
   font-weight: 800;
+  color: var(--verdeMuyOscuro);
+  letter-spacing: 0.03em;
 }
 
 .resumen-compra__lineas {
   display: flex;
   flex-direction: column;
-  gap: 0.5625em;
+  gap: 0.6rem;
 }
 
 .resumen-linea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5em;
-  font-size: 1em;
+  gap: 0.5rem;
+  font-size: 1rem;
   color: var(--c-texto-suave);
+  font-weight: 600;
 }
 
 .resumen-linea__monto {
@@ -38,102 +41,135 @@
 }
 
 .resumen-linea__promo {
-  background: var(--c-verde-fondo);
-  color: var(--c-verde-texto);
-  font-size: 0.5em;
+  background: var(--gradienteAcento);
+  color: var(--verdeMuyOscuro);
+  font-size: 0.7rem;
   font-weight: 800;
-  padding: 0.125em 0.3125em;
-  border-radius: 0.25em;
-  margin-left: 0.25em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.4rem;
+  margin-left: 0.3rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .sidebar-precio {
-  margin-top: 1em;
-  padding: 1em;
-  background: var(--c-gris-chip);
-  border-radius: 0.875em;
+  margin-top: 1rem;
+  padding: 1.1rem;
+  background: linear-gradient(135deg, rgba(66, 164, 66, 0.08), rgba(212, 255, 58, 0.08));
+  border-radius: 0.9rem;
+  border: 1px solid rgba(66, 164, 66, 0.2);
 }
 
 .sidebar-precio__fila {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5em;
+  gap: 0.5rem;
 }
 
 .sidebar-precio__etiqueta {
-  font-size: 0.8125em;
+  font-size: 1rem;
   font-weight: 800;
+  color: var(--verdeMuyOscuro);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .sidebar-precio__monto {
-  font-size: 1.625em;
+  font-size: 2rem;
   font-weight: 800;
-  color: var(--c-verde-oscuro);
+  background: var(--gradienteAcento);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
   text-align: right;
   line-height: 1.1;
+  text-shadow: 0 0 1rem var(--sombraVerde);
 }
 
 .sidebar-precio__moneda {
   display: block;
-  font-size: 0.5em;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-texto-suave);
   text-align: right;
-  margin-top: 0.125em;
+  margin-top: 0.15rem;
+  -webkit-text-fill-color: var(--c-texto-suave);
 }
 
 .sidebar-precio__sena {
   display: flex;
   justify-content: space-between;
-  gap: 0.5em;
-  margin-top: 0.75em;
-  padding-top: 0.625em;
-  border-top: 0.0625em solid var(--c-borde);
-  font-size: 0.625em;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed rgba(66, 164, 66, 0.3);
+  font-size: 0.85rem;
   color: var(--c-texto-suave);
+  font-weight: 600;
 }
 
 .sidebar-precio__sena strong {
-  color: var(--c-texto);
+  color: var(--verdeMuyOscuro);
 }
 
 .sidebar-precio__sin-comision {
   font-weight: 700;
   color: var(--c-verde-texto);
-  text-decoration: underline;
 }
 
 .boton-confirmar-reserva {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5em;
+  gap: 0.5rem;
   width: 100%;
-  margin-top: 1.125em;
-  padding: 0.9375em 1em;
+  margin-top: 1.1rem;
+  padding: 1rem 1rem;
   border: 0;
-  border-radius: 0.75em;
-  background: var(--c-verde-boton);
-  color: #fff;
-  font-size: 0.75em;
+  border-radius: 0.8rem;
+  background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
+  color: var(--blanco);
+  font-size: 1rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  box-shadow: 0 0.4rem 1rem var(--sombraNegra);
+  position: relative;
+  overflow: hidden;
+}
+
+.boton-confirmar-reserva::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
 }
 
 .boton-confirmar-reserva:hover:not(:disabled) {
-  background: var(--c-verde-boton-hover);
+  transform: translateY(-0.2rem);
+  filter: brightness(1.1);
+  box-shadow: 0 0.6rem 1.3rem var(--sombraNegra), 0 0 1rem var(--sombraVerde);
+}
+
+.boton-confirmar-reserva:hover:not(:disabled)::before {
+  left: 100%;
 }
 
 .boton-confirmar-reserva:active:not(:disabled) {
-  transform: translateY(0.0625em);
+  transform: translateY(0);
 }
 
 .boton-confirmar-reserva:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  background: var(--gris);
 }

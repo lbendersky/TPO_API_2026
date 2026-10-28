@@ -1,25 +1,47 @@
-﻿.turno-card-link {
+.turno-card-link {
     text-decoration: none;
     color: inherit;
     display: block;
+    animation: turno-card-pop 0.5s ease-out both;
 }
 
 .turno-card {
-    border: 0.0625rem solid var(--blanco);
-    border-radius: 0.5rem;
+    border: 0.0625rem solid var(--brilloBlanco);
+    border-radius: 1rem;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background: var(--blanco);
-    transition: box-shadow 0.2s;
+    background: linear-gradient(170deg, var(--blanco) 0%, #f4fff0 100%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 0.4rem 1rem var(--sombraNegra);
+    position: relative;
+}
+
+.turno-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.25rem;
+    background: var(--gradienteAcento);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .turno-card:hover {
-    box-shadow: 0 0.5rem 2rem var(--negro);
+    transform: translateY(-0.4rem);
+    box-shadow: 0 0.9rem 2rem var(--sombraNegra), 0 0 1.2rem var(--sombraVerde);
+    border-color: rgba(66, 164, 66, 0.4);
+}
+
+.turno-card:hover::after {
+    opacity: 1;
 }
 
 .turno-card__carrusel {
     position: relative;
+    overflow: hidden;
 }
 
 .turno-card__img {
@@ -27,13 +49,19 @@
     height: 10rem;
     object-fit: cover;
     display: block;
+    transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.turno-card:hover .turno-card__img {
+    transform: scale(1.06);
+    filter: brightness(1.05) saturate(1.1);
 }
 
 .turno-card__img--placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #e4e4e4;
+    background: linear-gradient(135deg, #e4e4e4, #d0d0d0);
 }
 
 .turno-card__img-icono {
@@ -49,7 +77,7 @@
     transform: translateY(-50%);
     width: 1.8rem;
     height: 1.8rem;
-    border: none;
+    border: 1px solid var(--brilloBlanco);
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.5);
     color: var(--blanco);
@@ -57,10 +85,14 @@
     line-height: 1;
     cursor: pointer;
     z-index: 1;
+    backdrop-filter: blur(0.3rem);
+    transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .turno-card__flecha:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.75);
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 0 0.8rem var(--sombraVerde);
 }
 
 .turno-card__flecha:disabled {
@@ -70,6 +102,8 @@
 
 .turno-card__flecha:disabled:hover {
     background-color: rgba(0, 0, 0, 0.5);
+    transform: translateY(-50%);
+    box-shadow: none;
 }
 
 .turno-card__flecha--izq {
@@ -88,20 +122,25 @@
     text-align: center;
     letter-spacing: 0.0625em;
     line-height: 1.4;
+    position: relative;
 }
 
 .turno-card__titulo {
     font-size: 1.5rem;
-    color: var(--negro);
+    color: var(--verdeMuyOscuro);
     letter-spacing: 0.05rem;
     margin: 0;
     line-height: 1.25;
-    /* Reserva 2 lineas siempre, nombres largos de cancha cortan con "..." */
     height: 2.5em;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    transition: color 0.25s ease;
+}
+
+.turno-card:hover .turno-card__titulo {
+    color: var(--verdeOscuro);
 }
 
 .turno-card__localidadTipo {
@@ -122,7 +161,6 @@
 }
 
 .turno-card__fechaCupos--fecha {
-    /* Reserva 2 lineas siempre, para que una fecha larga que hace wrap no desnivele la fila */
     height: 2.6em;
     line-height: 1.3;
     overflow: hidden;
@@ -140,7 +178,6 @@
     font-weight: 700;
     color: var(--negro);
     line-height: 1.3;
-    /* La version con oferta (tachado + precio nuevo) ocupa mas que la normal */
     height: 2.6em;
     overflow: hidden;
 }
@@ -153,7 +190,12 @@
 }
 
 .turno-card__precio--oferta {
-    color: var(--negro);
+    background: var(--gradienteAcento);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: 0 0 0.8rem var(--sombraVerde);
 }
 
 .turno-card__organizador {
@@ -173,10 +215,32 @@
     color: var(--gris);
     font-weight: 700;
     line-height: 1.3;
-    /* Altura fija de 2 lineas: con descripcion larga, corta con "..."; sin descripcion, deja el espacio vacio igual */
     height: 2.6em;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+
+@keyframes turno-card-pop {
+    from {
+        opacity: 0;
+        transform: translateY(1rem) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .turno-card-link {
+        animation: none;
+    }
+    .turno-card:hover {
+        transform: none;
+    }
+    .turno-card:hover .turno-card__img {
+        transform: none;
+    }
 }

@@ -4,113 +4,192 @@
     align-items: center;
     text-align: center;
     width: 100%;
-    padding: 1.5em;
+    padding: 1.75rem;
     color: var(--negro);
-    background-color: var(--blanco);
-    border-radius: 1em;
-    box-shadow: 0 0.5em 1.2em rgba(0, 0, 0, 0.2);
+    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    border: 1px solid var(--brilloBlanco);
+    border-radius: 1rem;
+    box-shadow: 0 1rem 2rem var(--sombraNegra);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: cancha-propia-fade-in 0.6s ease-out both;
+}
+
+.cancha-propia::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.3rem;
+    background: var(--gradienteAcento);
+    z-index: 2;
+}
+
+.cancha-propia::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -25%;
+    width: 18rem;
+    height: 18rem;
+    background: var(--verdeClaro);
+    filter: blur(6rem);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.cancha-propia > * {
+    position: relative;
+    z-index: 1;
+}
+
+.cancha-propia:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 1.3rem 2.3rem var(--sombraNegra), 0 0 1rem var(--sombraVerde);
 }
 
 .cancha-propia__info {
     width: 100%;
 }
 
-.cancha-propia__acciones {
-    justify-content: center;
-}
-
 .cancha-propia__nombre {
-    font-size: 1.6rem;
-    color: var(--verdeOscuro);
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+    color: var(--verdeMuyOscuro);
 }
 
 .cancha-propia__info p {
-    margin-top: 0.2em;
+    margin-top: 0.3rem;
     color: var(--gris);
+    font-size: 1rem;
 }
 
 .cancha-propia__baja {
-    margin-left: 0.5em;
-    padding: 0.15em 0.6em;
-    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: var(--rojo);
     background-color: var(--rojoClaro);
-    border-radius: 1em;
+    border-radius: 1rem;
     vertical-align: middle;
 }
 
 .cancha-propia__boton {
-    margin-top: 1em;
-    padding: 0.5em 1.2em;
+    margin-top: 1rem;
+    padding: 0.65rem 1.4rem;
     font-family: inherit;
     font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--blanco);
-    background-color: var(--verdeOscuro);
+    background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     border: none;
-    border-radius: 2em;
+    border-radius: 2rem;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0.3rem 0.8rem var(--sombraNegra);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.cancha-propia__boton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
 }
 
 .cancha-propia__boton:hover {
-    filter: brightness(1.15);
+    transform: translateY(-0.2rem);
+    filter: brightness(1.1);
+    box-shadow: 0 0.5rem 1.1rem var(--sombraNegra), 0 0 0.8rem var(--sombraVerde);
+}
+
+.cancha-propia__boton:hover::before {
+    left: 100%;
 }
 
 .cancha-propia__mensaje,
 .cancha-propia__error {
-    margin-top: 1em;
-    padding: 0.6em 1em;
-    border-radius: 0.6em;
+    margin-top: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
 }
 
 .cancha-propia__mensaje {
-    color: var(--verdeOscuro);
-    background-color: var(--blanco);
+    color: var(--verdeMuyOscuro);
+    background: var(--gradienteAcento);
+    box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
 }
 
 .cancha-propia__error {
     color: var(--rojo);
     background-color: var(--rojoClaro);
+    animation: cancha-propia-shake 0.4s ease-out;
 }
 
 .cancha-propia__carrusel {
     position: relative;
     width: 100%;
-    max-width: 24em;
+    max-width: 24rem;
+    border-radius: 0.9rem;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1.2rem var(--sombraNegra);
 }
 
 .cancha-propia__img {
     width: 100%;
-    height: 16em;
+    height: 16rem;
     object-fit: cover;
-    border-radius: 0.75em;
     display: block;
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.cancha-propia__carrusel:hover .cancha-propia__img {
+    transform: scale(1.04);
+    filter: brightness(1.05) saturate(1.1);
 }
 
 .cancha-propia__flecha {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 2.2em;
-    height: 2.2em;
+    width: 2.4rem;
+    height: 2.4rem;
     border: none;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.55);
     color: var(--blanco);
     font-size: 1.4rem;
     line-height: 1;
     cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.25s ease;
 }
 
 .cancha-propia__flecha:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--verdeOscuro);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .cancha-propia__flecha--izq {
-    left: 0.5em;
+    left: 0.5rem;
 }
 
 .cancha-propia__flecha--der {
-    right: 0.5em;
+    right: 0.5rem;
 }
 
 .cancha-propia__flecha:disabled {
@@ -120,18 +199,47 @@
 
 .cancha-propia__flecha:disabled:hover {
     background-color: rgba(0, 0, 0, 0.5);
+    transform: translateY(-50%);
 }
 
 .cancha-propia__acciones {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6em;
-    margin-top: 1em;
+    gap: 0.7rem;
+    margin-top: 1.1rem;
+    justify-content: center;
 }
 
-/* Para acciones que borran o dan de baja */
 .cancha-propia__boton--peligro {
-    color: #8a1c1c;
-    background-color: var(--blanco);
-    border: 0.12em solid #8a1c1c;
+    color: var(--rojo);
+    background: var(--blanco);
+    border: 0.125rem solid var(--rojo);
+}
+
+.cancha-propia__boton--peligro:hover {
+    background: var(--rojo);
+    color: var(--blanco);
+    filter: none;
+    box-shadow: 0 0.5rem 1.1rem var(--sombraNegra);
+}
+
+@keyframes cancha-propia-fade-in {
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cancha-propia-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-0.4rem); }
+    75% { transform: translateX(0.4rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cancha-propia,
+    .cancha-propia__error {
+        animation: none;
+    }
+    .cancha-propia:hover {
+        transform: none;
+    }
 }

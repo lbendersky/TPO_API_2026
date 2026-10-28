@@ -1,41 +1,90 @@
 .turno-propio {
     width: 100%;
-    padding: 0.8em 1em;
-    background-color: #f4f8f4;
-    border-radius: 0.8em;
+    padding: 0.9rem 1.1rem;
+    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    border: 1px solid rgba(66, 164, 66, 0.2);
+    border-radius: 0.8rem;
+    box-shadow: 0 0.4rem 1rem var(--sombraNegra);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.turno-propio::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.2rem;
+    background: var(--gradienteAcento);
+}
+
+.turno-propio:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 0.7rem 1.4rem var(--sombraNegra), 0 0 0.8rem var(--sombraVerde);
 }
 
 .turno-propio__fila {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.6em 1.4em;
+    gap: 0.6rem 1.4rem;
+    position: relative;
 }
 
 .turno-propio__fecha {
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 0.05em;
     text-transform: capitalize;
-    color: var(--verdeOscuro);
+    color: var(--verdeMuyOscuro);
+    font-size: 1.05rem;
 }
 
 .turno-propio__acciones {
     display: flex;
-    gap: 0.4em;
+    gap: 0.5rem;
     margin-left: auto;
 }
 
 .turno-propio__acciones button {
-    padding: 0.3em 0.9em;
+    padding: 0.4rem 1rem;
     font-family: inherit;
     font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: var(--verdeOscuro);
     background-color: var(--blanco);
-    border: 0.12em solid var(--verdeOscuro);
-    border-radius: 2em;
+    border: 0.125rem solid var(--verdeOscuro);
+    border-radius: 2rem;
     cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.turno-propio__acciones button:hover {
+    transform: translateY(-0.15rem);
+    background: var(--gradienteAcento);
+    color: var(--verdeMuyOscuro);
+    border-color: transparent;
+    box-shadow: 0 0.4rem 0.9rem var(--sombraVerde);
 }
 
 .turno-propio__acciones .turno-propio__borrar {
-    color: #8a1c1c;
-    border-color: #8a1c1c;
+    color: var(--rojo);
+    border-color: var(--rojo);
+}
+
+.turno-propio__acciones .turno-propio__borrar:hover {
+    background: var(--rojo);
+    color: var(--blanco);
+    border-color: var(--rojo);
+    box-shadow: 0 0.4rem 0.9rem var(--sombraNegra);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .turno-propio:hover,
+    .turno-propio__acciones button:hover {
+        transform: none;
+    }
 }

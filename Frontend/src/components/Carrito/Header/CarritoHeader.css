@@ -2,132 +2,144 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 1em;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
 .header-carrito__etiqueta {
   display: inline-flex;
   align-items: center;
-  gap: 0.375em;
-  background: #fff;
+  gap: 0.4rem;
+  background: var(--blanco);
   color: var(--c-verde-texto);
-  font-size: 0.625em;
+  font-size: 0.9rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.3125em 0.625em;
-  border-radius: 62.4375em;
-  margin-bottom: 0.5em;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100em;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 0.3rem 0.8rem var(--sombraNegra);
+  border: 1px solid var(--brilloBlanco);
 }
 
 .header-carrito__titulo {
-  font-size: 1.875em;
+  font-size: 2.6rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--c-sobre-fondo);
+  letter-spacing: -0.01em;
+  color: var(--blanco);
+  text-shadow: 0 0.2rem 0.5rem var(--sombraNegra);
+  line-height: 1.1;
 }
 
 .header-carrito__subtitulo {
-  font-size: 0.8125em;
-  color: rgba(255, 255, 255, 0.85);
-  margin-top: 0.25em;
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.4rem;
+  font-weight: 600;
 }
 
-/* ---------- 3. EtapasChekcout.jsx + EtapaDelCheckout.jsx ---------------- */
-/* EtapasChekcout = contenedor */
+/* ---------- EtapasChekcout + EtapaDelCheckout -------------------------- */
 .etapas-checkout {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
-  background: rgba(255, 255, 255, 0.12);
-  border: 0.0625em solid rgba(255, 255, 255, 0.28);
-  border-radius: 0.875em;
-  padding: 0.375em;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  padding: 0.4rem;
+  backdrop-filter: blur(0.4rem);
 }
 
-/* EtapaDelCheckout = una etapa */
 .etapa {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
-  padding: 0.4375em 0.75em;
-  border-radius: 0.625em;
-  font-size: 1em;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.7rem;
+  font-size: 1rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.85);
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 
 .etapa__numero {
   display: grid;
   place-items: center;
-  width: 1.25em;
-  height: 1.25em;
+  width: 1.6rem;
+  height: 1.6rem;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.22);
-  font-size: 0.625em;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 0.85rem;
   font-weight: 800;
+  color: var(--blanco);
 }
 
 .etapa--activa {
   background: var(--blanco);
   color: var(--c-verde-oscuro);
+  box-shadow: 0 0.3rem 0.8rem var(--sombraNegra);
 }
 
 .etapa--activa .etapa__numero {
-  background: var(--c-verde-boton);
-  color: #fff;
+  background: var(--gradienteAcento);
+  color: var(--verdeMuyOscuro);
 }
 
 .etapa__separador {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.75em;
+  font-size: 0.9rem;
 }
 
-/* ---------- 4. AvisoPrioridadBloqueada.jsx --------------------------- */
+/* ---------- AvisoPrioridadBloqueada ------------------------------------ */
 .aviso-prioridad {
   display: flex;
   align-items: center;
-  gap: 0.875em;
-  margin-top: 1.25em;
-  padding: 1em 1.25em;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.3rem;
   border-radius: var(--radio-tarjeta);
-  background: var(--c-tarjeta);
+  background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
   box-shadow: var(--sombra);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  position: relative;
+  overflow: hidden;
 }
 
 .aviso-prioridad__icono {
   flex: none;
   display: grid;
   place-items: center;
-  width: 2.375em;
-  height: 2.375em;
+  width: 2.6rem;
+  height: 2.6rem;
   border-radius: 50%;
-  background: var(--c-verde-oscuro);
-  color: #fff;
+  background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
+  color: var(--blanco);
+  box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
 }
 
 .aviso-prioridad__texto {
   flex: 1;
-  font-size: 1em;
+  font-size: 1rem;
   color: var(--c-texto-suave);
   line-height: 1.5;
+  font-weight: 600;
 }
 
 .aviso-prioridad__titulo {
   display: block;
-  font-size: 0.6875em;
+  font-size: 0.85rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-verde-oscuro);
+  margin-bottom: 0.2rem;
 }
 
 .aviso-prioridad__texto strong {
-  color: var(--c-texto);
+  color: var(--verdeMuyOscuro);
 }
 
-/* ---------- Responsive del header --------------------------------------- */
 @media (max-width: 56.25em) {
   .aviso-prioridad {
     flex-wrap: wrap;
@@ -136,6 +148,9 @@
 
 @media (max-width: 35em) {
   .header-carrito__titulo {
-    font-size: 1.5em;
+    font-size: 2rem;
+  }
+  .header-carrito__subtitulo {
+    font-size: 1rem;
   }
 }
