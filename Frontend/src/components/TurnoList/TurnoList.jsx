@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
 import { API_URL } from '../../config';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLocalidades } from '../../redux/localidadesSlice';
 
 const TurnoList = () => {
     const [turnos, setTurnos] = useState([]);
-    const [localidades, setLocalidades] = useState([]);
     // Filtro en null por defecto
     const [filtros, setFiltros] = useState({
         texto: null,
@@ -17,12 +18,13 @@ const TurnoList = () => {
         precioMax: null,
     });
 
+    const dispatch = useDispatch();
+    const localidades = useSelector((state) => state.localidades.data);
+
     useEffect(() => {
-        fetch(`${API_URL}/localidades`)
-            .then((response) => response.json())
-            .then((data) => setLocalidades(data.map((l) => l.nombre)))
-            .catch((error) => console.error('Error al cargar localidades', error));
-    }, []);
+    if (localidades.length === 0) dispatch(fetchLocalidades());
+    }, [dispatch, localidades.length]);
+    
 
     useEffect(() => {
         let url = `${API_URL}/turnos/filtrar?`;
@@ -41,7 +43,7 @@ const TurnoList = () => {
     return (
         <>
             {}
-            <Filtros localidades={localidades} onFiltrar={setFiltros} />
+            <Filtros localidades={localidades.map((l) => l.nombre)} onFiltrar={setFiltros} />
 
             {}
             <section className="turno-list">
