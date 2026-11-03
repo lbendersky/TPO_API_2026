@@ -1,9 +1,9 @@
 .turno-propio {
     width: 100%;
     padding: 0.9rem 1.1rem;
-    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    background: linear-gradient(160deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     border: 1px solid rgba(66, 164, 66, 0.2);
-    border-radius: 0.8rem;
+    border-radius: var(--radio-mediano);
     box-shadow: 0 0.4rem 1rem var(--sombraNegra);
     position: relative;
     overflow: hidden;
@@ -57,7 +57,7 @@
     color: var(--verdeOscuro);
     background-color: var(--blanco);
     border: 0.125rem solid var(--verdeOscuro);
-    border-radius: 2rem;
+    border-radius: var(--radio-grande);
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }

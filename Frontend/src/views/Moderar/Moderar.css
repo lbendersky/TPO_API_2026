@@ -13,7 +13,7 @@
     background-size: 100% 0.3rem, 100% 100%;
     background-repeat: no-repeat, no-repeat;
     border: 1px solid var(--brilloBlanco);
-    border-radius: 1.2rem;
+    border-radius: var(--radio-tarjeta);
     box-shadow: 0 1rem 2.5rem var(--sombraNegra);
     backdrop-filter: blur(0.4rem);
     position: relative;

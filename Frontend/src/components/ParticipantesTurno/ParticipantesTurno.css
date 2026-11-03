@@ -2,7 +2,7 @@
     grid-column: 1 / -1;
     background: linear-gradient(135deg, var(--verdeMuyOscuro), var(--verdeOscuro));
     border: 1px solid var(--brilloBlanco);
-    border-radius: 0.9rem;
+    border-radius: var(--radio-mediano);
     padding: 1.5rem;
     box-shadow: 0 0.6rem 1.5rem var(--sombraNegra);
     display: flex;
@@ -67,7 +67,7 @@
     padding: 0.4rem 0.7rem;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid var(--brilloBlanco);
-    border-radius: 0.5rem;
+    border-radius: var(--radio-chico);
     font-size: 0.95rem;
     letter-spacing: 0.03em;
     transition: background 0.25s ease, transform 0.25s ease;

@@ -5,9 +5,9 @@
     max-width: 32.5rem;
     margin: 1.5rem auto 0;
     padding: 2rem 1.75rem;
-    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    background: linear-gradient(160deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     border: 0.0625rem solid var(--brilloBlanco);
-    border-radius: 1rem;
+    border-radius: var(--radio-tarjeta);
     color: var(--negro);
     position: relative;
     overflow: hidden;
@@ -72,7 +72,7 @@
     margin: 0;
     padding: 0.6rem 0.8rem;
     background: var(--rojoClaro);
-    border-radius: 0.4rem;
+    border-radius: var(--radio-chico);
     animation: checkout-shake 0.4s ease-out;
 }
 
@@ -89,7 +89,7 @@
     gap: 0.5rem;
     padding: 0.85rem;
     border: 0.125rem solid var(--gris);
-    border-radius: 0.7rem;
+    border-radius: var(--radio-mediano);
     cursor: pointer;
     font-size: 1rem;
     font-weight: 700;
@@ -135,7 +135,7 @@
     gap: 0.85rem;
     padding: 1rem;
     background: rgba(66, 164, 66, 0.06);
-    border-radius: 0.8rem;
+    border-radius: var(--radio-mediano);
     border: 1px dashed rgba(66, 164, 66, 0.3);
     animation: checkout-fade-in 0.4s ease-out both;
 }
@@ -153,9 +153,9 @@
 .checkout-tarjeta__campo input {
     padding: 0.65rem 0.85rem;
     border: 0.125rem solid var(--verdeOscuro);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-size: 1rem;
-    font-family: inherit;
+    font-family: var(--fuenteTexto);
     color: var(--negro);
     background: var(--blanco);
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
@@ -198,7 +198,7 @@
     gap: 0.5rem;
     padding: 0.85rem 1rem;
     border: 0.0625rem solid rgba(66, 164, 66, 0.3);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     background: var(--blanco);
     font-size: 1rem;
     font-weight: 700;
@@ -235,7 +235,7 @@
     margin-top: 0.3rem;
     border-top: 0.125rem dashed rgba(66, 164, 66, 0.4);
     background: linear-gradient(90deg, transparent, rgba(66, 164, 66, 0.08), transparent);
-    border-radius: 0.5rem;
+    border-radius: var(--radio-chico);
 }
 
 .checkout-confirmacion__total strong {
@@ -256,7 +256,7 @@
     margin-top: 0.5rem;
     padding: 0.95rem 1rem;
     border: none;
-    border-radius: 0.7rem;
+    border-radius: var(--radio-mediano);
     background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     color: var(--blanco);
     font-size: 1rem;

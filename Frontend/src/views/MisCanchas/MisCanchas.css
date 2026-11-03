@@ -46,7 +46,7 @@
     color: var(--verdeMuyOscuro);
     background: var(--gradienteAcento);
     border: 0.125rem solid var(--verdeOscuro);
-    border-radius: 2rem;
+    border-radius: var(--radio-grande);
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -82,7 +82,7 @@
     padding: 1.2rem;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid var(--brilloBlanco);
-    border-radius: 0.8rem;
+    border-radius: var(--radio-mediano);
     letter-spacing: 0.03em;
 }
 

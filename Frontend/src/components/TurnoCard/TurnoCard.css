@@ -7,11 +7,11 @@
 
 .turno-card {
     border: 0.0625rem solid var(--brilloBlanco);
-    border-radius: 1rem;
+    border-radius: var(--radio-tarjeta);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(170deg, var(--blanco) 0%, #f4fff0 100%);
+    background: linear-gradient(170deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     box-shadow: 0 0.4rem 1rem var(--sombraNegra);
     position: relative;
@@ -61,7 +61,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #e4e4e4, #d0d0d0);
+    background: linear-gradient(135deg, var(--grisClaro), var(--grisMedio));
 }
 
 .turno-card__img-icono {
@@ -213,6 +213,7 @@
     margin: 0;
     font-size: 1rem;
     color: var(--gris);
+    font-family: var(--fuenteTexto);
     font-weight: 700;
     line-height: 1.3;
     height: 2.6em;
