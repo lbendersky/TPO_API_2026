@@ -4,23 +4,21 @@ import { useState, useEffect } from 'react';
 import { API_URL } from '../../config';
 import { SUPERFICIES, FORMATOS } from '../../utils/opcionesCancha';
 import SelectorFotos from '../SelectorFotos/SelectorFotos';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLocalidades } from '../../redux/localidadesSlice';
 
 const FORM_VACIO = { nombre: '', direccion: '', idLocalidad: '', tipoSuperficie: '', tipoFutbol: '', precioUnitario: '', descripcion: '',};
 
 const FormularioCancha = ({ onPublicar, inicial}) => {
     const [form, setForm] = useState(inicial ? { ...FORM_VACIO, ...inicial } : FORM_VACIO);
-    const [localidades, setLocalidades] = useState([]);
     const [fotosElegidas, setFotosElegidas] = useState([]);
 
+    const dispatch = useDispatch();
+    const localidades = useSelector((state) => state.localidades.items);
+
     useEffect(() => {
-        fetch(`${API_URL}/localidades`)
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudieron cargar las localidades');
-                return response.json();
-            })
-            .then((data) => setLocalidades(data))
-            .catch((error) => console.error('Error al cargar localidades', error));
-    }, []);
+        if (localidades.length === 0) dispatch(fetchLocalidades());
+    }, [dispatch, localidades.length]);
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
