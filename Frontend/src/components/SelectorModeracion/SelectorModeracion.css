@@ -30,6 +30,7 @@
 
 .selector-moderacion__dropdown {
     position: relative;
+    z-index: 2;
 }
 
 .selector-moderacion__trigger {

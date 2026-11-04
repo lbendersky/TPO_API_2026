@@ -148,9 +148,12 @@
     font-weight: 700;
     color: var(--verdeMuyOscuro);
     letter-spacing: 0.05rem;
+    min-width: 0;
 }
 
 .checkout-tarjeta__campo input {
+    width: 100%;
+    box-sizing: border-box;
     padding: 0.65rem 0.85rem;
     border: 0.125rem solid var(--verdeOscuro);
     border-radius: var(--radio-mediano);
