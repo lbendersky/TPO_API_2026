@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alerta } from '../../utils/alerta';
 import { useAuth } from '../../context/useAuth';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './Perfil.css';
 
 const Perfil = () => {
@@ -77,6 +78,7 @@ const Perfil = () => {
 
     return (
         <main className="perfil">
+            <VolverAtras/>
             {usuario.rol === 'ADMIN' && (
                 <button
                     type="button"

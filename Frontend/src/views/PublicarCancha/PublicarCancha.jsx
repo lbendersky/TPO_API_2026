@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import FormularioCancha from '../../components/FormularioCancha/FormularioCancha';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
 
 const PublicarCancha = () => {
     const { estaLogueado, token } = useAuth();
@@ -69,6 +70,7 @@ const PublicarCancha = () => {
 
     return (
         <main className="publicar-cancha">
+            <VolverAtras/>
             <h1 className="publicar-cancha__titulo">Publicá tu cancha</h1>
             {publicada ? (
                 <section className="publicar-cancha__exito">

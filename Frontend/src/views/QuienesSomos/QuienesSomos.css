@@ -1,0 +1,48 @@
+.quienes-somos {
+    max-width: 42rem;
+    margin: 2.5rem auto;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid var(--brilloBlanco);
+    border-radius: var(--radio-tarjeta);
+    box-shadow: 0 1rem 2.5rem var(--sombraNegra);
+    backdrop-filter: blur(0.4rem);
+    position: relative;
+    overflow: hidden;
+}
+
+.quienes-somos::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.3rem;
+    background: var(--gradienteAcento);
+}
+
+.quienes-somos h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.quienes-somos p {
+    margin: 0;
+    font-family: var(--fuenteTexto);
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+}
+
+.quienes-somos a {
+    color: var(--verdeNeon);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.quienes-somos a:hover {
+    text-decoration: underline;
+}

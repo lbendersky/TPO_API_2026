@@ -1,0 +1,57 @@
+.terminos {
+    max-width: 48rem;
+    margin: 2.5rem auto 4rem;
+    padding: 2.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid var(--brilloBlanco);
+    border-radius: var(--radio-tarjeta);
+    box-shadow: 0 1rem 2.5rem var(--sombraNegra);
+    backdrop-filter: blur(0.4rem);
+    position: relative;
+    overflow: hidden;
+}
+
+.terminos::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0.3rem;
+    background: var(--gradienteAcento);
+}
+
+.terminos h1 {
+    margin: 0 0 0.2rem;
+    font-size: 2rem;
+}
+
+.terminos__actualizacion {
+    margin: 0 0 1rem;
+    font-family: var(--fuenteTexto);
+    font-size: 0.85rem;
+    color: var(--grisClaro);
+}
+
+.terminos h2 {
+    margin: 1rem 0 0.2rem;
+    font-size: 1.2rem;
+    color: var(--verdeNeon);
+}
+
+.terminos p {
+    margin: 0;
+    font-family: var(--fuenteTexto);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+}
+
+@media (max-width: 48rem) {
+    .terminos {
+        padding: 2rem 1.5rem;
+    }
+}

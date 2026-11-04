@@ -6,6 +6,7 @@ import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
 import { obtenerEstadosPago } from '../../utils/pagosLocales';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
 
 const ESTADO_LABEL = {
     PENDIENTE: 'Pendiente',
@@ -50,6 +51,7 @@ const MisInscripciones = () => {
 
     return (
         <main className="mis-inscripciones">
+            <VolverAtras/>
             <div className="mis-inscripciones__header">
                 <h1 className="mis-inscripciones__titulo">Mis inscripciones</h1>
             </div>

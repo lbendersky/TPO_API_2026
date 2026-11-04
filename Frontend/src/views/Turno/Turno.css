@@ -1,13 +1,20 @@
 .turno {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     max-width: 68.75em;
     margin: 2rem auto;
     padding: 0 1.5rem;
     position: relative;
     animation: turno-fade-in 0.7s ease-out both;
 }
+
+.turno__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+}
+
 
 .turno::before {
     content: '';
@@ -346,7 +353,7 @@
 }
 
 @media (max-width: 48rem) {
-    .turno {
+    .turno__grid {
         grid-template-columns: 1fr;
     }
     .turno__titulo {

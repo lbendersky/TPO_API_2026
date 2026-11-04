@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import CanchaPropia from '../../components/CanchaPropia/CanchaPropia';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
 
 const MisCanchas = () => {
     const { estaLogueado, usuario } = useAuth();
@@ -39,6 +40,7 @@ const MisCanchas = () => {
 
     return (
         <main className="mis-canchas">
+            <VolverAtras/>
             <div className="mis-canchas__header">
                 <h1 className="mis-canchas__titulo">Mis canchas</h1>
                 <button className="mis-canchas__nueva" onClick={() => navigate('/publicar-cancha')}>

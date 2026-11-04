@@ -1,157 +1,154 @@
 import './Filtros.css';
 
-import { useState } from 'react';
-
-import { MapPin, Trophy, DollarSign, Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { FORMATOS } from '../../utils/opcionesCancha';
+
+const PRECIO_MIN_LIMITE = 0;
+const PRECIO_MAX_LIMITE = 10000;
+const PRECIO_PASO = 500;
 
 // Recibe por props una lista de localidades disponibles
 const Filtros = ({ localidades = [], onFiltrar }) => {
-    // Setea seun fitro del usuario
-    const [texto, setTexto] = useState('');
-    const [localidad, setLocalidad] = useState('');
-    const [tipoFutbol, setTipoFutbol] = useState('');
-    const [precioMin, setPrecioMin] = useState('');
-    const [precioMax, setPrecioMax] = useState('');
+    const [localidadesSel, setLocalidadesSel] = useState([]);
+    const [tiposSel, setTiposSel] = useState([]);
+    const [precioMin, setPrecioMin] = useState(PRECIO_MIN_LIMITE);
+    const [precioMax, setPrecioMax] = useState(PRECIO_MAX_LIMITE);
 
-    const handleBuscar = () => {
-        // Convierte strings vacíos a null para que el padre sepa que no hay filtro aplicado
+    // Cada vez que cambia algún filtro, se avisa al padre automáticamente (sin botón)
+    useEffect(() => {
         onFiltrar({
-            texto: texto.trim() || null,
-            localidad: localidad || null,
-            tipoFutbol: tipoFutbol || null,
-            // parseFloat convierte el string del input a número
-            precioMin: precioMin ? parseFloat(precioMin) : null,
-            precioMax: precioMax ? parseFloat(precioMax) : null,
+            localidades: localidadesSel.length ? localidadesSel : null,
+            tiposFutbol: tiposSel.length ? tiposSel : null,
+            precioMin: precioMin > PRECIO_MIN_LIMITE ? precioMin : null,
+            precioMax: precioMax < PRECIO_MAX_LIMITE ? precioMax : null,
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [localidadesSel, tiposSel, precioMin, precioMax]);
+
+    const toggleLocalidad = (loc) => {
+        setLocalidadesSel((prev) =>
+            prev.includes(loc) ? prev.filter((l) => l !== loc) : [...prev, loc]
+        );
     };
 
-    const handleEnter = (e) => {
-        if (e.key === 'Enter') handleBuscar();
+    const toggleTipo = (valor) => {
+        setTiposSel((prev) =>
+            prev.includes(valor) ? prev.filter((t) => t !== valor) : [...prev, valor]
+        );
     };
 
-    // No deja cargar precios negativos
-    const handlePrecioMinChange = (e) => {
-        const val = e.target.value;
-        if (val === '' || Number(val) >= 0) setPrecioMin(val);
+    // Slider: arrastrar el pulgar
+    const handleMinChange = (e) => setPrecioMin(Math.min(Number(e.target.value), precioMax));
+    const handleMaxChange = (e) => setPrecioMax(Math.max(Number(e.target.value), precioMin));
+
+    // Inputs numéricos Mínimo / Máximo
+    const handleMinInput = (e) => {
+        const val = e.target.value === '' ? PRECIO_MIN_LIMITE : Number(e.target.value);
+        if (val >= PRECIO_MIN_LIMITE && val <= precioMax) setPrecioMin(val);
     };
 
-    // El maximo no puede ser menor o igual al minimo cargado
-    const handlePrecioMaxChange = (e) => {
-        const val = e.target.value;
-        const minActual = precioMin ? Number(precioMin) : 0;
-        if (val === '' || (Number(val) >= 0 && Number(val) > minActual)) setPrecioMax(val);
+    const handleMaxInput = (e) => {
+        const val = e.target.value === '' ? PRECIO_MAX_LIMITE : Number(e.target.value);
+        if (val <= PRECIO_MAX_LIMITE && val >= precioMin) setPrecioMax(val);
     };
+
+    const pctMin = ((precioMin - PRECIO_MIN_LIMITE) / (PRECIO_MAX_LIMITE - PRECIO_MIN_LIMITE)) * 100;
+    const pctMax = ((precioMax - PRECIO_MIN_LIMITE) / (PRECIO_MAX_LIMITE - PRECIO_MIN_LIMITE)) * 100;
 
     return (
-        <section className="filtros-bar">
-            <div className="filtros-bar__campo filtros-bar__campo--nombre">
-                {}
-                <Search className="filtros-bar__icono" />
-                <div className="filtros-bar__contenido">
-                    <label className="filtros-bar__label">CANCHA</label>
+        <aside className="filtros-panel">
+            <div className="filtros-panel__seccion">
+                <h3 className="filtros-panel__titulo">Barrio</h3>
+                <ul className="filtros-panel__lista">
+                    {localidades.map((loc) => (
+                        <li key={loc} className="filtros-panel__item">
+                            <label className="filtros-panel__opcion">
+                                <input
+                                    type="checkbox"
+                                    checked={localidadesSel.includes(loc)}
+                                    onChange={() => toggleLocalidad(loc)}
+                                />
+                                <span>{loc}</span>
+                            </label>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div className="filtros-panel__seccion">
+                <h3 className="filtros-panel__titulo">Tipo</h3>
+                <ul className="filtros-panel__lista">
+                    {FORMATOS.map((f) => (
+                        <li key={f.valor} className="filtros-panel__item">
+                            <label className="filtros-panel__opcion">
+                                <input
+                                    type="checkbox"
+                                    checked={tiposSel.includes(f.valor)}
+                                    onChange={() => toggleTipo(f.valor)}
+                                />
+                                <span>{f.texto}</span>
+                            </label>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div className="filtros-panel__seccion">
+                <h3 className="filtros-panel__titulo">Rango de precio</h3>
+
+                <div className="filtros-panel__precios">
                     <input
-                        type="text"
-                        className="filtros-bar__input"
-                        placeholder="Buscar por nombre..."
-                        value={texto}
-                        onChange={(e) => setTexto(e.target.value)}
-                        onKeyDown={handleEnter}
+                        type="number"
+                        className="filtros-panel__precio-input"
+                        placeholder="Mínimo"
+                        min={PRECIO_MIN_LIMITE}
+                        max={precioMax}
+                        step={PRECIO_PASO}
+                        value={precioMin}
+                        onChange={handleMinInput}
+                    />
+                    <span className="filtros-panel__precio-guion">-</span>
+                    <input
+                        type="number"
+                        className="filtros-panel__precio-input"
+                        placeholder="Máximo"
+                        min={precioMin}
+                        max={PRECIO_MAX_LIMITE}
+                        step={PRECIO_PASO}
+                        value={precioMax}
+                        onChange={handleMaxInput}
+                    />
+                </div>
+
+                <div className="filtros-slider">
+                    <div className="filtros-slider__track">
+                        <div
+                            className="filtros-slider__activo"
+                            style={{ left: `${pctMin}%`, right: `${100 - pctMax}%` }}
+                        ></div>
+                    </div>
+                    <input
+                        type="range"
+                        className="filtros-slider__input filtros-slider__input--min"
+                        min={PRECIO_MIN_LIMITE}
+                        max={PRECIO_MAX_LIMITE}
+                        step={PRECIO_PASO}
+                        value={precioMin}
+                        onChange={handleMinChange}
+                    />
+                    <input
+                        type="range"
+                        className="filtros-slider__input filtros-slider__input--max"
+                        min={PRECIO_MIN_LIMITE}
+                        max={PRECIO_MAX_LIMITE}
+                        step={PRECIO_PASO}
+                        value={precioMax}
+                        onChange={handleMaxChange}
                     />
                 </div>
             </div>
-
-            {}
-            <div className="filtros-bar__separador"></div>
-
-            <div className="filtros-bar__campo filtros-bar__campo--zona">
-                {}
-                <MapPin className="filtros-bar__icono" />
-                <div className="filtros-bar__contenido">
-                    <label className="filtros-bar__label">BARRIO</label>
-                    <select
-                        className="filtros-bar__input"
-                        value={localidad}
-                        // Cada vez que cambia la selección, actualiza el estado local
-                        onChange={(e) => setLocalidad(e.target.value)}
-                    >
-                        <option value="">Todas</option>
-                        {}
-                        {localidades.map((loc) => (
-                            <option key={loc} value={loc}>{loc}</option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-
-            {}
-            <div className="filtros-bar__separador"></div>
-
-            {}
-            <div className="filtros-bar__campo filtros-bar__campo--formato">
-                {}
-                <Trophy className="filtros-bar__icono" />
-                <div className="filtros-bar__contenido">
-                    <label className="filtros-bar__label">TIPO</label>
-                    {}
-                    <select
-                        className="filtros-bar__input"
-                        value={tipoFutbol}
-                        onChange={(e) => setTipoFutbol(e.target.value)}
-                    >
-                        {}
-                        <option value="">Todos</option>
-                        {FORMATOS.map((f) => (
-                            <option key={f.valor} value={f.valor}>{f.texto}</option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-
-            {}
-            <div className="filtros-bar__separador"></div>
-
-            {}
-            <div className="filtros-bar__campo filtros-bar__campo--precio">
-                {}
-                <DollarSign className="filtros-bar__icono" />
-                <div className="filtros-bar__contenido">
-                    <label className="filtros-bar__label">RANGO DE PRECIO</label>
-                    {}
-                    <div className="filtros-bar__rango">
-                        {}
-                        <input
-                            type="number"
-                            className="filtros-bar__input filtros-bar__input--rango"
-                            placeholder="Mín"
-                            min="0"
-                            step="1000"
-                            value={precioMin}
-                            onChange={handlePrecioMinChange}
-                        />
-                        {}
-                        <span className="filtros-bar__guion">-</span>
-                        {}
-                        <input
-                            type="number"
-                            className="filtros-bar__input filtros-bar__input--rango"
-                            placeholder="Máx"
-                            min={precioMin ? Number(precioMin) + 1000 : 0}
-                            step="1000"
-                            value={precioMax}
-                            onChange={handlePrecioMaxChange}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            {}
-            <button className="filtros-bar__boton" onClick={handleBuscar}>
-                Buscar
-            </button>
-        </section>
+        </aside>
     );
 };
-
 
 export default Filtros;

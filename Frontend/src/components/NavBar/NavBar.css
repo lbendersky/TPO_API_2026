@@ -1,6 +1,8 @@
 .navbar {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
     display: flex;
     align-items: center;
@@ -29,6 +31,10 @@
 .navbar > ul:nth-of-type(1) {
     margin-left: auto;
 }
+
+    .navbar__buscador {
+        max-width: 10em;
+    }
 
 .navbar .logo{
     height: 2.5em;
@@ -152,6 +158,10 @@
 @media (max-width: 48rem) {
     .navbar {
         padding: 0.75rem 1.5rem;
+    }
+
+    .navbar__buscador {
+        max-width: 10em;
     }
 }
 
