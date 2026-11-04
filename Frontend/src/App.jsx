@@ -1,5 +1,6 @@
 import './App.css';
 import NavBar from './components/NavBar/NavBar';
+import Footer from './components/Footer/Footer';
 import Inicio from './views/Inicio/Inicio'
 import Carrito from './views/Carrito/Carrito';
 import Turno from './views/Turno/Turno';
@@ -10,13 +11,18 @@ import MisCanchas from './views/MisCanchas/MisCanchas';
 import Moderar from './views/Moderar/Moderar';
 import Checkout from './views/Checkout/Checkout'
 import MisInscripciones from './views/MisInscripciones/MisInscripciones';
+import QuienesSomos from './views/QuienesSomos/QuienesSomos';
+import Contacto from './views/Contacto/Contacto';
+import TerminosYCondiciones from './views/TerminosYCondiciones/TerminosYCondiciones';
 import { Routes, Route } from 'react-router-dom';
-// Importa el Provider del contexto de búsqueda para compartir el texto entre NavBar y TurnoList
 import { AuthProvider } from './context/AuthContext';
+// Comparte el texto de búsqueda entre el NavBar (donde se escribe) y TurnoList (donde se usa)
+import { BusquedaProvider } from './context/BusquedaContext';
 
 function App() {
     return (
         <AuthProvider>
+            <BusquedaProvider>
                 <NavBar/>
                 <Routes>
                     <Route path="/" element={<Inicio />} />
@@ -30,7 +36,12 @@ function App() {
                     <Route path="/moderar" element={<Moderar />} />
                     <Route path="/carrito/checkout" element={<Checkout/>} />
                     <Route path="/mis-inscripciones" element={<MisInscripciones/>} />
+                    <Route path="/quienes-somos" element={<QuienesSomos/>} />
+                    <Route path="/contacto" element={<Contacto/>} />
+                    <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones/>} />
                 </Routes>
+                <Footer/>
+            </BusquedaProvider>
         </AuthProvider>
     );
 }

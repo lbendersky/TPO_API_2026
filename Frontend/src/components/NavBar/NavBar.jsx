@@ -13,7 +13,6 @@ const NavBar = () =>{
         navigate('/carrito');
     };
 
-
     return (
         <>
             <header>

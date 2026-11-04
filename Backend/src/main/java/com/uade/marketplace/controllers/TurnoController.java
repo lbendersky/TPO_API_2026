@@ -91,10 +91,10 @@ public class TurnoController {
 
     @GetMapping("/filtrar")
     public List<TurnoResponse> filtrar(
-            @org.springframework.web.bind.annotation.RequestParam(required = false) com.uade.marketplace.entity.enums.TipoFutbol tipoFutbol,
+            @org.springframework.web.bind.annotation.RequestParam(required = false) java.util.List<com.uade.marketplace.entity.enums.TipoFutbol> tipoFutbol,
             @org.springframework.web.bind.annotation.RequestParam(required = false) Float precioMin,
             @org.springframework.web.bind.annotation.RequestParam(required = false) Float precioMax,
-            @org.springframework.web.bind.annotation.RequestParam(required = false) String localidad,
+            @org.springframework.web.bind.annotation.RequestParam(required = false) java.util.List<String> localidad,
             @org.springframework.web.bind.annotation.RequestParam(required = false) String texto) {
         return turnoService.filtrar(tipoFutbol, precioMin, precioMax, localidad, texto);
     }
