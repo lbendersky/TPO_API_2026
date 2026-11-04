@@ -1,53 +1,35 @@
 import './TurnoList.css';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
-import { API_URL } from '../../config';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchLocalidades } from '../../redux/localidadesSlice';
+import { fetchTurnosFiltrados, setFiltros } from '../../redux/turnosSlice';
 
 const TurnoList = () => {
-    const [turnos, setTurnos] = useState([]);
-    // Filtro en null por defecto
-    const [filtros, setFiltros] = useState({
-        texto: null,
-        localidad: null,
-        tipoFutbol: null,
-        precioMin: null,
-        precioMax: null,
-    });
-
     const dispatch = useDispatch();
+    const { items: turnos, filtros, loading, error } = useSelector((state) => state.turnos);
     const localidades = useSelector((state) => state.localidades.data);
 
     useEffect(() => {
-    if (localidades.length === 0) dispatch(fetchLocalidades());
+        if (localidades.length === 0) dispatch(fetchLocalidades());
     }, [dispatch, localidades.length]);
-    
 
     useEffect(() => {
-        let url = `${API_URL}/turnos/filtrar?`;
-        if (filtros.localidad) url = url + `localidad=${filtros.localidad}&`;
-        if (filtros.tipoFutbol) url = url + `tipoFutbol=${filtros.tipoFutbol}&`;
-        if (filtros.precioMin != null) url = url + `precioMin=${filtros.precioMin}&`;
-        if (filtros.precioMax != null) url = url + `precioMax=${filtros.precioMax}&`;
-        if (filtros.texto) url = url + `texto=${encodeURIComponent(filtros.texto)}&`;
-
-        fetch(url)
-            .then((response) => response.json())
-            .then((data) => setTurnos(data))
-            .catch((error) => console.error('Error al cargar turnos', error));
-    }, [filtros]);
+        dispatch(fetchTurnosFiltrados(filtros));
+    }, [dispatch, filtros]);
 
     return (
         <>
-            {}
-            <Filtros localidades={localidades.map((l) => l.nombre)} onFiltrar={setFiltros} />
+            <Filtros
+                localidades={localidades.map((l) => l.nombre)}
+                onFiltrar={(f) => dispatch(setFiltros(f))}
+            />
 
-            {}
             <section className="turno-list">
-                {/* Recorre el array filtrado y renderiza una TurnoCard por cada turno */}
+                {loading && <p className="turno-list__vacio">Cargando turnos...</p>}
+                {error && <p className="turno-list__vacio">No se pudieron cargar los turnos: {error}</p>}
                 {turnos.map((value) => (
                     <TurnoCard
                         key={value.idTurno}
@@ -65,8 +47,7 @@ const TurnoList = () => {
                         tieneOfertaActiva={value.tieneOfertaActiva}
                     />
                 ))}
-                {}
-                {turnos.length === 0 && (
+                {!loading && !error && turnos.length === 0 && (
                     <p className="turno-list__vacio">No hay turnos que coincidan con los filtros.</p>
                 )}
             </section>
