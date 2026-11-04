@@ -16,30 +16,33 @@ import Contacto from './views/Contacto/Contacto';
 import TerminosYCondiciones from './views/TerminosYCondiciones/TerminosYCondiciones';
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-// Comparte el texto de búsqueda entre el NavBar (donde se escribe) y TurnoList (donde se usa)
 import { BusquedaProvider } from './context/BusquedaContext';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 function App() {
     return (
         <AuthProvider>
             <BusquedaProvider>
+                <ScrollToTop/>
                 <NavBar/>
-                <Routes>
-                    <Route path="/" element={<Inicio />} />
-                    <Route path="/inicio" element={<Inicio />} />
-                    <Route path="/carrito" element={<Carrito />} />
-                    <Route path="/turno/:id" element={<Turno />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/perfil" element={<Perfil />} />
-                    <Route path="/publicar-cancha" element={<PublicarCancha />} />
-                    <Route path="/mis-canchas" element={<MisCanchas />} />
-                    <Route path="/moderar" element={<Moderar />} />
-                    <Route path="/carrito/checkout" element={<Checkout/>} />
-                    <Route path="/mis-inscripciones" element={<MisInscripciones/>} />
-                    <Route path="/quienes-somos" element={<QuienesSomos/>} />
-                    <Route path="/contacto" element={<Contacto/>} />
-                    <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones/>} />
-                </Routes>
+                <main className="app-main">
+                    <Routes>
+                        <Route path="/" element={<Inicio />} />
+                        <Route path="/inicio" element={<Inicio />} />
+                        <Route path="/carrito" element={<Carrito />} />
+                        <Route path="/turno/:id" element={<Turno />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/perfil" element={<Perfil />} />
+                        <Route path="/publicar-cancha" element={<PublicarCancha />} />
+                        <Route path="/mis-canchas" element={<MisCanchas />} />
+                        <Route path="/moderar" element={<Moderar />} />
+                        <Route path="/carrito/checkout" element={<Checkout/>} />
+                        <Route path="/mis-inscripciones" element={<MisInscripciones/>} />
+                        <Route path="/quienes-somos" element={<QuienesSomos/>} />
+                        <Route path="/contacto" element={<Contacto/>} />
+                        <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones/>} />
+                    </Routes>
+                </main>
                 <Footer/>
             </BusquedaProvider>
         </AuthProvider>

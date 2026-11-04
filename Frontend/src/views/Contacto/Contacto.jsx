@@ -1,10 +1,13 @@
 import { Mail, MapPin } from 'lucide-react';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
+
 import './Contacto.css';
 
 const Contacto = () => {
     return (
         <section className="contacto">
             <h1>Contacto</h1>
+            <VolverAtras/>
             <p>
                 ¿Tenés una duda, una sugerencia o encontraste algo que no funciona? Escribinos,
                 te respondemos a la brevedad.

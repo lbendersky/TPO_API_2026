@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { API_URL } from '../../config'
 import { useAuth } from '../../context/useAuth'
+import VolverAtras from '../../components/VolverAtras/VolverAtras'
 import { BotonCheckout } from '../../components/Checkout/BotonCheckout'
 import { HeaderCarrito } from '../../components/Carrito/Header/HeaderCarrito'
 import { formatearFechaHora } from '../../utils/fecha'
@@ -86,6 +87,7 @@ const Checkout = () => {
 
     return (
       <main className="carrito-page">
+        <VolverAtras/>
         <HeaderCarrito etapaActual={2} />
 
         <section className="checkout-contenido">

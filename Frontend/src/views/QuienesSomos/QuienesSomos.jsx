@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './QuienesSomos.css';
 
 const QuienesSomos = () => {
     return (
         <section className="quienes-somos">
             <h1>Quiénes somos</h1>
+            <VolverAtras/>
             <p>
                 MeSumo es una plataforma pensada para que armar un partido de fútbol sea tan fácil
                 como pedir una comida: buscás una cancha disponible cerca tuyo, te sumás a un turno

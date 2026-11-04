@@ -6,6 +6,8 @@ import BuscadorModeracion from '../../components/BuscadorModeracion/BuscadorMode
 import SelectorModeracion from '../../components/SelectorModeracion/SelectorModeracion';
 import FormularioOferta from '../../components/FormularioOferta/FormularioOferta';
 import { formatearFechaHora } from '../../utils/fecha';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
+
 import './Moderar.css';
 
 const Moderar = () => {
@@ -52,6 +54,7 @@ const Moderar = () => {
 
     return (
         <main className="moderar">
+            <VolverAtras/>
             <h1 className="moderar__titulo">Panel de moderación</h1>
             <BuscadorModeracion
                 titulo="Usuarios"

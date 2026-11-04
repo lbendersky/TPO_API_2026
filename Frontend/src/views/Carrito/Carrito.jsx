@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../config";
 import { useAuth } from "../../context/useAuth";
+import VolverAtras from "../../components/VolverAtras/VolverAtras";
+
 
 import { HeaderCarrito } from "../../components/Carrito/Header/HeaderCarrito";
 import AvisoPrioridadBloqueada from "../../components/Carrito/Header/AvisoPrioridadBloqueada";
@@ -142,6 +144,7 @@ const Carrito = () => {
     return (
         <main className="carrito-page">
             <HeaderCarrito />
+            <VolverAtras/>
             <AvisoPrioridadBloqueada />
 
             <div className="carrito-layout">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import { Alerta } from '../../utils/alerta';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './Login.css';
 
 const Login = () => {
@@ -78,6 +79,7 @@ const Login = () => {
 
     return (
         <main className="login">
+            <VolverAtras/>
             <div className="login__tabs">
                 <button
                     className={modo === 'login' ? 'login__tab login__tab--activa' : 'login__tab'}

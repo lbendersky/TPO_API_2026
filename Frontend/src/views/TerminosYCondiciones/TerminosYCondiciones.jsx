@@ -1,8 +1,11 @@
 import './TerminosYCondiciones.css';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
+
 
 const TerminosYCondiciones = () => {
     return (
         <section className="terminos">
+            <VolverAtras/>
             <h1>Términos y condiciones</h1>
             <p className="terminos__actualizacion">Última actualización: noviembre de 2026</p>
 
