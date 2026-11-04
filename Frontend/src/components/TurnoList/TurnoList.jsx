@@ -12,6 +12,7 @@ import { useBusqueda } from '../../context/useBusqueda';
 const TurnoList = () => {
     const dispatch = useDispatch();
     const { items: turnos, filtros, loading, error } = useSelector((state) => state.turnos);
+    const turnosFuturos = turnos.filter((value) => new Date(value.fechaHora) > new Date());
     const localidades = useSelector((state) => state.localidades.data);
     const { texto, setTexto } = useBusqueda();
 
@@ -46,7 +47,7 @@ const TurnoList = () => {
                     <div className="turno-list">
                         {loading && <p className="turno-list__vacio">Cargando turnos...</p>}
                         {error && <p className="turno-list__vacio">No se pudieron cargar los turnos: {error}</p>}
-                        {turnos.map((value) => (
+                        {turnosFuturos.map((value) => (
                             <TurnoCard
                                 key={value.idTurno}
                                 idTurno={value.idTurno}
@@ -64,7 +65,7 @@ const TurnoList = () => {
                             />
                         ))}
                     </div>
-                    {!loading && !error && turnos.length === 0 && (
+                    {!loading && !error && turnosFuturos.length === 0 && (
                         <p className="turno-list__vacio">No hay turnos que coincidan con los filtros.</p>
                     )}
                 </section>

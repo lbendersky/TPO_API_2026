@@ -1,7 +1,6 @@
 import './FormularioCancha.css';
 
 import { useState, useEffect } from 'react';
-import { API_URL } from '../../config';
 import { SUPERFICIES, FORMATOS } from '../../utils/opcionesCancha';
 import SelectorFotos from '../SelectorFotos/SelectorFotos';
 import { useDispatch, useSelector } from 'react-redux';
