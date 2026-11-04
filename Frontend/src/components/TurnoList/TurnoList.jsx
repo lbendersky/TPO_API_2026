@@ -1,46 +1,27 @@
 import './TurnoList.css';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Search } from 'lucide-react';
 import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
-import { API_URL } from '../../config';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchLocalidades } from '../../redux/localidadesSlice';
+import { fetchTurnosFiltrados, setFiltros } from '../../redux/turnosSlice';
 import { useBusqueda } from '../../context/useBusqueda';
 
 const TurnoList = () => {
-    const [turnos, setTurnos] = useState([]);
-    // Filtro en null por defecto (Barrio, Tipo y Precio vienen del panel lateral)
-    const [filtros, setFiltros] = useState({
-        localidades: null,
-        tiposFutbol: null,
-        precioMin: null,
-        precioMax: null,
-    });
-
-    const { texto, setTexto } = useBusqueda();
-
     const dispatch = useDispatch();
+    const { items: turnos, filtros, loading, error } = useSelector((state) => state.turnos);
     const localidades = useSelector((state) => state.localidades.data);
+    const { texto, setTexto } = useBusqueda();
 
     useEffect(() => {
         if (localidades.length === 0) dispatch(fetchLocalidades());
     }, [dispatch, localidades.length]);
 
     useEffect(() => {
-        const params = new URLSearchParams();
-        if (texto && texto.trim()) params.append('texto', texto.trim());
-        if (filtros.localidades) filtros.localidades.forEach((l) => params.append('localidad', l));
-        if (filtros.tiposFutbol) filtros.tiposFutbol.forEach((t) => params.append('tipoFutbol', t));
-        if (filtros.precioMin != null) params.append('precioMin', filtros.precioMin);
-        if (filtros.precioMax != null) params.append('precioMax', filtros.precioMax);
-
-        fetch(`${API_URL}/turnos/filtrar?${params.toString()}`)
-            .then((response) => response.json())
-            .then((data) => setTurnos(data))
-            .catch((error) => console.error('Error al cargar turnos', error));
-    }, [texto, filtros]);
+        dispatch(fetchTurnosFiltrados({ ...filtros, texto: texto?.trim() || null }));
+    }, [dispatch, filtros, texto]);
 
     return (
         <>
@@ -56,10 +37,15 @@ const TurnoList = () => {
             </label>
 
             <div className="turno-list-layout">
-                <Filtros localidades={localidades.map((l) => l.nombre)} onFiltrar={setFiltros} />
+                <Filtros
+                    localidades={localidades.map((l) => l.nombre)}
+                    onFiltrar={(f) => dispatch(setFiltros(f))}
+                />
 
                 <section className="turno-list-contenido">
                     <div className="turno-list">
+                        {loading && <p className="turno-list__vacio">Cargando turnos...</p>}
+                        {error && <p className="turno-list__vacio">No se pudieron cargar los turnos: {error}</p>}
                         {turnos.map((value) => (
                             <TurnoCard
                                 key={value.idTurno}
@@ -78,7 +64,7 @@ const TurnoList = () => {
                             />
                         ))}
                     </div>
-                    {turnos.length === 0 && (
+                    {!loading && !error && turnos.length === 0 && (
                         <p className="turno-list__vacio">No hay turnos que coincidan con los filtros.</p>
                     )}
                 </section>
