@@ -8,7 +8,7 @@
     letter-spacing: 0.04em;
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
     border: 1px solid var(--brilloBlanco);
-    border-radius: 1.2rem;
+    border-radius: var(--radio-tarjeta);
     box-shadow: 0 1rem 2.5rem var(--sombraNegra);
     backdrop-filter: blur(0.4rem);
     position: relative;
@@ -76,9 +76,9 @@
     border: 0.125rem solid var(--verdeOscuro);
     background: var(--blanco);
     color: var(--negro);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-size: 1.05rem;
-    font-family: inherit;
+    font-family: var(--fuenteTexto);
     letter-spacing: 0.02em;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
@@ -97,7 +97,7 @@
 .perfil__guardar {
     padding: 0.9rem;
     border: none;
-    border-radius: 0.7rem;
+    border-radius: var(--radio-mediano);
     background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     color: var(--blanco);
     cursor: pointer;
@@ -140,7 +140,7 @@
     text-align: center;
     margin: 0;
     padding: 0.7rem 1rem;
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-weight: 700;
     letter-spacing: 0.05em;
     box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
@@ -153,7 +153,7 @@
     text-align: center;
     margin: 0;
     padding: 0.7rem 1rem;
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-weight: 700;
     letter-spacing: 0.05em;
     animation: perfil-shake 0.4s ease-out;
@@ -163,7 +163,7 @@
     width: 100%;
     padding: 0.9rem;
     border: 1px solid var(--brilloBlanco);
-    border-radius: 0.7rem;
+    border-radius: var(--radio-mediano);
     background: linear-gradient(135deg, var(--verdeMuyOscuro), var(--verdeOscuro));
     color: var(--amarilloLima);
     cursor: pointer;
@@ -193,7 +193,7 @@
     flex: 1;
     padding: 0.85rem;
     border: 0.125rem solid var(--gris);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     cursor: pointer;
     background: var(--blanco);
     color: var(--gris);
@@ -267,7 +267,7 @@
     color: var(--verdeOscuro);
     background: var(--blanco);
     border: 0.125rem solid var(--verdeOscuro);
-    border-radius: 2em;
+    border-radius: var(--radio-grande);
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, background 0.25s ease, color 0.25s ease;
     box-shadow: 0 0.3rem 0.7rem var(--sombraNegra);

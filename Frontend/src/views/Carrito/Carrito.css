@@ -1,22 +1,4 @@
 .carrito-page {
-  --c-fondo: var(--verdeOscuro);
-  --c-verde-oscuro: var(--verdeOscuro);
-  --c-verde-boton: var(--verdeClaro);
-  --c-verde-boton-hover: var(--verdeMuyOscuro);
-  --c-verde-fondo: #e3f2e3;
-  --c-verde-texto: var(--verdeOscuro);
-  --c-tarjeta: var(--blanco);
-  --c-texto: var(--negro);
-  --c-texto-suave: var(--gris);
-  --c-borde: #e1e1e1;
-  --c-gris-chip: #f3f3f3;
-  --c-gris-boton: #f3f3f3;
-  --c-sobre-fondo: var(--blanco);
-  --radio-tarjeta: 1.125em;
-  --radio-chip: 0.5em;
-  --sombra: 0 0.5em 1.5em var(--sombraNegra);
-  --sombra-hover: 0 0.9em 2em var(--sombraNegra), 0 0 1.2em var(--sombraVerde);
-
   color: var(--c-texto);
   background: var(--gradienteFondo);
   min-height: 100vh;
@@ -100,7 +82,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  background: linear-gradient(160deg, var(--c-tarjeta) 0%, #f4fff0 100%);
+  background: linear-gradient(160deg, var(--c-tarjeta) 0%, var(--verdeMuyClaro) 100%);
   border-radius: var(--radio-tarjeta);
   box-shadow: var(--sombra);
   padding: 1.25em;
@@ -120,7 +102,7 @@
 }
 
 .carrito-mensaje {
-  background: linear-gradient(160deg, var(--c-tarjeta) 0%, #f4fff0 100%);
+  background: linear-gradient(160deg, var(--c-tarjeta) 0%, var(--verdeMuyClaro) 100%);
   border-radius: var(--radio-tarjeta);
   box-shadow: var(--sombra);
   padding: 1.75em;

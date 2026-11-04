@@ -5,7 +5,7 @@
 .formulario-oferta__toggle {
     padding: 0.65rem 1.3rem;
     border: none;
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     color: var(--blanco);
     cursor: pointer;
@@ -50,7 +50,7 @@
     gap: 0.85rem;
     padding: 1rem;
     border: 1px solid var(--brilloBlanco);
-    border-radius: 0.8rem;
+    border-radius: var(--radio-mediano);
     background: linear-gradient(135deg, var(--verdeMuyOscuro), var(--verdeOscuro));
     color: var(--blanco);
     box-shadow: 0 0.6rem 1.2rem var(--sombraNegra);
@@ -86,8 +86,8 @@
     border: 0.125rem solid var(--verdeOscuro);
     background-color: var(--blanco);
     color: var(--negro);
-    border-radius: 0.5rem;
-    font-family: inherit;
+    border-radius: var(--radio-chico);
+    font-family: var(--fuenteTexto);
     font-size: 1.05rem;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
@@ -107,7 +107,7 @@
     align-self: center;
     padding: 0.7rem 1.4rem;
     border: 0.125rem solid var(--amarilloLima);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     background: var(--gradienteAcento);
     color: var(--verdeMuyOscuro);
     cursor: pointer;
@@ -137,7 +137,7 @@
     padding: 0.6rem 1rem;
     color: var(--rojo);
     background: var(--rojoClaro);
-    border-radius: 0.5rem;
+    border-radius: var(--radio-chico);
     font-weight: 700;
     letter-spacing: 0.05em;
     text-align: center;
@@ -150,7 +150,7 @@
     padding: 0.6rem 1rem;
     color: var(--verdeMuyOscuro);
     background: var(--gradienteAcento);
-    border-radius: 0.5rem;
+    border-radius: var(--radio-chico);
     font-weight: 700;
     letter-spacing: 0.05em;
     text-align: center;

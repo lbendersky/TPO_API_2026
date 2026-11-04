@@ -6,9 +6,9 @@
     width: 100%;
     padding: 1.75rem;
     color: var(--negro);
-    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    background: linear-gradient(160deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     border: 1px solid var(--brilloBlanco);
-    border-radius: 1rem;
+    border-radius: var(--radio-tarjeta);
     box-shadow: 0 1rem 2rem var(--sombraNegra);
     position: relative;
     overflow: hidden;
@@ -76,7 +76,7 @@
     text-transform: uppercase;
     color: var(--rojo);
     background-color: var(--rojoClaro);
-    border-radius: 1rem;
+    border-radius: var(--radio-tarjeta);
     vertical-align: middle;
 }
 
@@ -91,7 +91,7 @@
     color: var(--blanco);
     background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     border: none;
-    border-radius: 2rem;
+    border-radius: var(--radio-grande);
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -124,7 +124,7 @@
 .cancha-propia__error {
     margin-top: 1rem;
     padding: 0.7rem 1rem;
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-weight: 700;
     letter-spacing: 0.05em;
 }
@@ -145,7 +145,7 @@
     position: relative;
     width: 100%;
     max-width: 24rem;
-    border-radius: 0.9rem;
+    border-radius: var(--radio-mediano);
     overflow: hidden;
     box-shadow: 0 0.5rem 1.2rem var(--sombraNegra);
 }

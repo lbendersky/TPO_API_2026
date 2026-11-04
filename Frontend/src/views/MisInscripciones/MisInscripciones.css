@@ -43,7 +43,7 @@
     padding: 1.2rem;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid var(--brilloBlanco);
-    border-radius: 0.8rem;
+    border-radius: var(--radio-mediano);
     letter-spacing: 0.03em;
 }
 
@@ -66,9 +66,9 @@
     justify-content: space-between;
     gap: 1rem;
     padding: 1.3rem 1.6rem;
-    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    background: linear-gradient(160deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     border: 1px solid var(--brilloBlanco);
-    border-radius: 1rem;
+    border-radius: var(--radio-tarjeta);
     box-shadow: 0 0.8rem 1.8rem var(--sombraNegra);
     position: relative;
     overflow: hidden;
@@ -123,7 +123,7 @@
 
 .tarjeta-inscripcion__estado {
     padding: 0.35rem 0.9rem;
-    border-radius: 2rem;
+    border-radius: var(--radio-grande);
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -138,12 +138,12 @@
 }
 
 .tarjeta-inscripcion__estado--pendiente {
-    background: linear-gradient(135deg, #b8841a, #e0b43b);
+    background: linear-gradient(135deg, var(--doradoOscuro), var(--doradoClaro));
     color: var(--blanco);
 }
 
 .tarjeta-inscripcion__estado--efectivo {
-    background: linear-gradient(135deg, #22577a, #38a3a5);
+    background: linear-gradient(135deg, var(--azulOscuro), var(--azulClaro));
 }
 
 .tarjeta-inscripcion__estado--cancelado,
@@ -160,7 +160,7 @@
 
 .tarjeta-inscripcion__tipo {
     padding: 0.25rem 0.75rem;
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     background: var(--gradienteAcento);
     color: var(--verdeMuyOscuro);
     font-size: 0.8rem;

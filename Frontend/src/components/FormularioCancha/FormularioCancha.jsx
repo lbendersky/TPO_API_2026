@@ -14,7 +14,7 @@ const FormularioCancha = ({ onPublicar, inicial}) => {
     const [fotosElegidas, setFotosElegidas] = useState([]);
 
     const dispatch = useDispatch();
-    const localidades = useSelector((state) => state.localidades.items);
+    const localidades = useSelector((state) => state.localidades.data);
 
     useEffect(() => {
         if (localidades.length === 0) dispatch(fetchLocalidades());

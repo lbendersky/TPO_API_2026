@@ -5,12 +5,12 @@
     padding: 1.5rem;
     background-image:
         var(--gradienteAcento),
-        linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+        linear-gradient(160deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     background-position: top left, 0 0;
     background-size: 100% 0.3rem, 100% 100%;
     background-repeat: no-repeat, no-repeat;
     border: 1px solid var(--brilloBlanco);
-    border-radius: 1rem;
+    border-radius: var(--radio-tarjeta);
     box-shadow: 0 1rem 2rem var(--sombraNegra);
     position: relative;
     animation: selector-mod-fade-in 0.6s ease-out both;
@@ -40,7 +40,7 @@
     gap: 0.5rem;
     padding: 0.75rem 0.9rem;
     border: 0.125rem solid var(--verdeOscuro);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     background: var(--blanco);
     color: var(--verdeMuyOscuro);
     font-family: inherit;
@@ -80,9 +80,9 @@
     left: 0;
     right: 0;
     z-index: 20;
-    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    background: linear-gradient(160deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     border: 1px solid rgba(66, 164, 66, 0.3);
-    border-radius: 0.7rem;
+    border-radius: var(--radio-mediano);
     box-shadow: 0 0.8rem 1.8rem var(--sombraNegra);
     max-height: 18rem;
     display: flex;
@@ -131,7 +131,7 @@
     padding: 1.1rem;
     background: var(--blanco);
     border: 1px solid rgba(66, 164, 66, 0.2);
-    border-radius: 0.75rem;
+    border-radius: var(--radio-mediano);
     color: var(--verdeMuyOscuro);
 }
 
@@ -166,7 +166,7 @@
 .selector-moderacion__eliminar {
     padding: 0.7rem 1.3rem;
     border: none;
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     cursor: pointer;
     font-family: inherit;
     font-size: 1rem;
@@ -212,7 +212,7 @@
     padding: 0.7rem 1rem;
     color: var(--rojo);
     background: var(--rojoClaro);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-weight: 700;
     letter-spacing: 0.05em;
     text-align: center;
@@ -224,7 +224,7 @@
     padding: 0.7rem 1rem;
     color: var(--verdeMuyOscuro);
     background: var(--gradienteAcento);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-weight: 700;
     letter-spacing: 0.05em;
     text-align: center;

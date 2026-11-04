@@ -1,8 +1,8 @@
 .filtros-bar {
     display: flex;
     align-items: stretch;
-    background: linear-gradient(180deg, var(--blanco) 0%, #f4fff0 100%);
-    border-radius: 3.2em;
+    background: linear-gradient(180deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
+    border-radius: var(--radio-pill);
     box-shadow:
         0 0.6em 1.5em var(--sombraNegra),
         0 0 0 1px rgba(255, 255, 255, 0.8) inset;
@@ -110,8 +110,8 @@
     font-size: 1.3em;
     color: var(--negro);
     padding: 0.35em 0.6em;
-    border-radius: 0.5em;
-    font-family: inherit;
+    border-radius: var(--radio-chico);
+    font-family: var(--fuenteTexto);
     width: 100%;
     min-width: 0;
     cursor: text;
@@ -234,7 +234,7 @@ select.filtros-bar__input {
 @media (max-width: 64rem) {
     .filtros-bar {
         flex-wrap: wrap;
-        border-radius: 1.6em;
+        border-radius: var(--radio-pill);
         padding: 1.2em 1.4em 1.4em;
     }
 
@@ -251,7 +251,7 @@ select.filtros-bar__input {
 
     .filtros-bar__boton {
         flex: 1 1 100%;
-        border-radius: 3em;
+        border-radius: var(--radio-pill);
         padding: 0.8em;
         margin-top: 0.6em;
     }

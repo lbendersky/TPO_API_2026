@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     padding: 0.75rem 5rem;
-    background: linear-gradient(180deg, var(--blanco) 0%, #f4fff0 100%);
+    background: linear-gradient(180deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     letter-spacing: 0.0em;
     line-height: 1.4;
     font-size: 1.5rem;
@@ -60,7 +60,7 @@
     color: var(--verdeOscuro);
     text-decoration: none;
     padding: 0.25em 0.75em;
-    border-radius: 0.6em;
+    border-radius: var(--radio-mediano);
     transition: background-color 0.25s ease, transform 0.25s ease;
     position: relative;
 }
@@ -76,7 +76,7 @@
     color: var(--verdeOscuro);
     cursor: pointer;
     transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
-    border-radius: 0.5em;
+    border-radius: var(--radio-chico);
     padding: 0.35em;
     box-sizing: content-box;
 }
@@ -100,7 +100,7 @@
     color: var(--blanco);
     background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     border: 0.12em solid transparent;
-    border-radius: 2em;
+    border-radius: var(--radio-grande);
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
     position: relative;

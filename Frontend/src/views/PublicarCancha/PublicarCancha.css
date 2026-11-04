@@ -52,7 +52,7 @@
     padding: 0.8rem 1rem;
     color: var(--rojo);
     background-color: var(--rojoClaro);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     text-align: center;
     font-weight: 700;
     letter-spacing: 0.03em;
@@ -65,8 +65,8 @@
     padding: 2.5rem 2rem;
     text-align: center;
     color: var(--verdeMuyOscuro);
-    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
-    border-radius: 1.2rem;
+    background: linear-gradient(160deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
+    border-radius: var(--radio-tarjeta);
     box-shadow:
         0 1rem 2rem var(--sombraNegra),
         0 0 0 1px rgba(255, 255, 255, 0.6) inset;
@@ -131,7 +131,7 @@
     color: var(--blanco);
     background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     border: none;
-    border-radius: 2em;
+    border-radius: var(--radio-grande);
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
     box-shadow: 0 0.3rem 0.8rem var(--sombraNegra);

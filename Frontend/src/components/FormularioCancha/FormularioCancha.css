@@ -5,9 +5,9 @@
     max-width: 50rem;
     margin: 0 auto;
     padding: 2.2rem;
-    background: linear-gradient(160deg, var(--blanco) 0%, #f4fff0 100%);
+    background: linear-gradient(160deg, var(--blanco) 0%, var(--verdeMuyClaro) 100%);
     border: 1px solid var(--brilloBlanco);
-    border-radius: 1.1rem;
+    border-radius: var(--radio-tarjeta);
     box-shadow: 0 1rem 2rem var(--sombraNegra);
     position: relative;
     overflow: hidden;
@@ -59,12 +59,12 @@
 .form-cancha select,
 .form-cancha textarea {
     padding: 0.75rem 0.9rem;
-    font-family: inherit;
+    font-family: var(--fuenteTexto);
     font-size: 1.05rem;
     color: var(--negro);
     background: var(--blanco);
     border: 0.125rem solid var(--verdeOscuro);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     outline: none;
     letter-spacing: 0.02em;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
@@ -103,7 +103,7 @@
     color: var(--blanco);
     background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     border: none;
-    border-radius: 2rem;
+    border-radius: var(--radio-grande);
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -144,7 +144,7 @@
     object-fit: contain;
     padding: 0.75rem;
     border: 0.1875rem solid rgba(66, 164, 66, 0.25);
-    border-radius: 0.8rem;
+    border-radius: var(--radio-mediano);
     cursor: pointer;
     background: var(--blanco);
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;

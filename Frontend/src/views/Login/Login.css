@@ -8,7 +8,7 @@
     letter-spacing: 0.04em;
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
     border: 1px solid var(--brilloBlanco);
-    border-radius: 1.2rem;
+    border-radius: var(--radio-tarjeta);
     box-shadow: 0 1rem 2.5rem var(--sombraNegra);
     backdrop-filter: blur(0.4rem);
     position: relative;
@@ -50,7 +50,7 @@
     gap: 0.5rem;
     background: rgba(0, 0, 0, 0.2);
     padding: 0.35rem;
-    border-radius: 0.8rem;
+    border-radius: var(--radio-mediano);
     border: 1px solid var(--brilloBlanco);
 }
 
@@ -61,7 +61,7 @@
     background: transparent;
     color: rgba(255, 255, 255, 0.75);
     cursor: pointer;
-    border-radius: 0.55rem;
+    border-radius: var(--radio-chico);
     font-size: 1.1rem;
     font-weight: 700;
     font-family: inherit;
@@ -97,9 +97,9 @@
     border: 0.125rem solid var(--verdeOscuro);
     background: var(--blanco);
     color: var(--negro);
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-size: 1.05rem;
-    font-family: inherit;
+    font-family: var(--fuenteTexto);
     letter-spacing: 0.02em;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
@@ -123,7 +123,7 @@
 .login__submit {
     padding: 1rem;
     border: none;
-    border-radius: 0.7rem;
+    border-radius: var(--radio-mediano);
     background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
     color: var(--blanco);
     cursor: pointer;
@@ -170,7 +170,7 @@
     text-align: center;
     margin: 0;
     padding: 0.7rem 1rem;
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-weight: 700;
     letter-spacing: 0.05em;
     animation: login-shake 0.4s ease-out;
@@ -182,7 +182,7 @@
     text-align: center;
     margin: 0;
     padding: 0.7rem 1rem;
-    border-radius: 0.6rem;
+    border-radius: var(--radio-mediano);
     font-weight: 700;
     letter-spacing: 0.05em;
     box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
@@ -197,7 +197,7 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     padding: 0.3rem 0.6rem;
-    border-radius: 0.4rem;
+    border-radius: var(--radio-chico);
     transition: color 0.25s ease, text-shadow 0.25s ease;
     position: relative;
 }
