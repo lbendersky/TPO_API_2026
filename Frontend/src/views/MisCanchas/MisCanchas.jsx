@@ -6,10 +6,13 @@ import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import CanchaPropia from '../../components/CanchaPropia/CanchaPropia';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
+import {useDispatch} from "react-redux";
+import {fetchMisTurnos} from "../../redux/turnosSlice";
 
 const MisCanchas = () => {
     const { estaLogueado, usuario } = useAuth();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [canchas, setCanchas] = useState([]);
     const [cargando, setCargando] = useState(true);
 
@@ -21,7 +24,8 @@ const MisCanchas = () => {
 
     useEffect(() => {
         if (!usuario) return;
-        fetch(`${API_URL}/canchas/usuario/${usuario.idUsuario}`)
+        dispatch(fetchMisTurnos(usuario.idUsuario)); //Pide los turnos de las canchas del usuario
+        fetch(`${API_URL}/canchas/usuario/${usuario.idUsuario}`) //Fatla usar redux para esto 
             .then((response) => {
                 if (!response.ok) throw new Error('No se pudieron cargar tus canchas');
                 return response.json();
@@ -34,7 +38,7 @@ const MisCanchas = () => {
                 console.error('Error al cargar las canchas', error);
                 setCargando(false);
             });
-    }, [usuario]);
+    }, [usuario, dispatch]);
 
     const actualizarCancha = (cambiada) => setCanchas(canchas.map((c) => (c.idCancha === cambiada.idCancha ? cambiada : c)));
 

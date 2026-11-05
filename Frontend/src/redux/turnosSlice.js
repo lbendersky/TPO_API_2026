@@ -22,6 +22,16 @@ export const fetchMisTurnos = createAsyncThunk('turnos/fetchMisTurnos', async (i
     return data;
 });
 
+export const fetchTurnoPorId = createAsyncThunk('turnos/fetchTurnoPorId', async (idTurno) => {
+    const { data } = await axios.get(`${API_URL}/turnos/${idTurno}`);
+    return data;
+});
+
+export const fetchParticipantes = createAsyncThunk('turnos/fetchParticipantes', async (idTurno) => {
+    const { data } = await axios.get(`${API_URL}/turnos/${idTurno}/participantes`);
+    return data;
+});
+
 export const crearTurno = createAsyncThunk('turnos/crearTurno', async ({ datos, token }, { rejectWithValue }) => {
     try {
         const { data } = await axios.post(`${API_URL}/turnos`, datos, conToken(token));
@@ -55,6 +65,8 @@ const turnosSlice = createSlice({
     items: [], // la lista del catálogo
     filtros: { texto: null, localidades: null, tiposFutbol: null, precioMin: null, precioMax: null }, // por defecto, no hay filtros aplicados
     localidades: [], // lista de localidades
+    seleccionado: null,
+    participantes: [],
     deMisCanchas: [],
     loading: false,
     error: null,
@@ -148,6 +160,32 @@ const turnosSlice = createSlice({
       .addCase(borrarTurno.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      //Detalle tunro
+      .addCase(fetchTurnoPorId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.seleccionado = null;
+      })
+      .addCase(fetchTurnoPorId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.seleccionado = action.payload;
+      })
+      .addCase(fetchTurnoPorId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      // Anotados
+      .addCase(fetchParticipantes.pending, (state) => {
+        state.participantes = [];
+      })
+      .addCase(fetchParticipantes.fulfilled, (state, action) => {
+        state.participantes = action.payload;
+      })
+      .addCase(fetchParticipantes.rejected, (state, action) => {
+        state.participantes = [];
+        state.error = action.error.message;
       });
   },
 });
