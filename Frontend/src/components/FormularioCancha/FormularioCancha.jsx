@@ -5,6 +5,7 @@ import { SUPERFICIES, FORMATOS } from '../../utils/opcionesCancha';
 import SelectorFotos from '../SelectorFotos/SelectorFotos';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLocalidades } from '../../redux/turnosSlice';
+import { Boton } from '../Boton/Boton';
 
 const FORM_VACIO = { nombre: '', direccion: '', idLocalidad: '', tipoSuperficie: '', tipoFutbol: '', precioUnitario: '', descripcion: '',};
 
@@ -59,7 +60,7 @@ const FormularioCancha = ({ onPublicar, inicial}) => {
                 <textarea name="descripcion" rows="3" value={form.descripcion} onChange={handleChange} />
             </label>
             {!inicial && <SelectorFotos elegidas={fotosElegidas} onCambiar={setFotosElegidas} />}
-            <button type="submit" className="form-cancha__boton">{inicial ? 'Guardar cambios' : 'Publicar cancha'}</button>        
+            <Boton type="submit" variante="primario" tamaño="grande" className="form-cancha__boton">{inicial ? 'Guardar cambios' : 'Publicar cancha'}</Boton>
         </form>
     );
 };

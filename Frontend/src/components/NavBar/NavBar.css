@@ -94,51 +94,6 @@
     box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
 }
 
-.boton-publicar {
-    display: flex;
-    align-items: center;
-    gap: 0.4em;
-    padding: 0.5em 1.2em;
-    font-family: inherit;
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    color: var(--blanco);
-    background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
-    border: 0.12em solid transparent;
-    border-radius: var(--radio-grande);
-    cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0.3rem 0.7rem var(--sombraNegra);
-}
-
-.boton-publicar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-    transition: left 0.6s ease;
-}
-
-.boton-publicar:hover {
-    transform: translateY(-0.15rem);
-    filter: brightness(1.1);
-    box-shadow: 0 0.5rem 1.1rem var(--sombraNegra), 0 0 1rem var(--sombraVerde);
-}
-
-.boton-publicar:hover::before {
-    left: 100%;
-}
-
-.boton-publicar:active {
-    transform: translateY(0);
-}
-
 .boton-publicar__icono {
     width: 1.3em;
     height: 1.3em;

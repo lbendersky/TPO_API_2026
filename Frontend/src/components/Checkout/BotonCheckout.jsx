@@ -1,11 +1,14 @@
+import { Boton } from '../Boton/Boton';
+
 export const BotonCheckout = ({ confirmarPago }) => {
   return (
-    <button
+    <Boton
       type="button"
-      className="boton-confirmar-reserva"
+      variante="primario"
+      ancho="completo"
       onClick={confirmarPago}
     >
         Confirmar pago
-    </button>
+    </Boton>
   )
 }

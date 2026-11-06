@@ -2,45 +2,6 @@
     display: contents;
 }
 
-.formulario-oferta__toggle {
-    padding: 0.65rem 1.3rem;
-    border: none;
-    border-radius: var(--radio-mediano);
-    background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
-    color: var(--blanco);
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0.3rem 0.8rem var(--sombraNegra);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
-}
-
-.formulario-oferta__toggle::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.6s ease;
-}
-
-.formulario-oferta__toggle:hover {
-    transform: translateY(-0.2rem);
-    filter: brightness(1.1);
-    box-shadow: 0 0.5rem 1.1rem var(--sombraNegra), 0 0 0.8rem var(--sombraVerde);
-}
-
-.formulario-oferta__toggle:hover::before {
-    left: 100%;
-}
-
 .formulario-oferta__form {
     flex-basis: 100%;
     display: flex;
@@ -90,45 +51,6 @@
     font-family: var(--fuenteTexto);
     font-size: 1.05rem;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
-}
-
-.formulario-oferta__label input:hover {
-    border-color: var(--verdeClaro);
-}
-
-.formulario-oferta__label input:focus {
-    outline: none;
-    border-color: var(--amarilloLima);
-    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
-    transform: translateY(-0.1rem);
-}
-
-.formulario-oferta__enviar {
-    align-self: center;
-    padding: 0.7rem 1.4rem;
-    border: 0.125rem solid var(--amarilloLima);
-    border-radius: var(--radio-mediano);
-    background: var(--gradienteAcento);
-    color: var(--verdeMuyOscuro);
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
-}
-
-.formulario-oferta__enviar:hover:not(:disabled) {
-    transform: translateY(-0.2rem);
-    filter: brightness(1.1);
-    box-shadow: 0 0.5rem 1.1rem var(--sombraNegra), 0 0 0.8rem var(--sombraVerde);
-}
-
-.formulario-oferta__enviar:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 .formulario-oferta__error {

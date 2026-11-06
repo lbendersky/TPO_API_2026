@@ -36,45 +36,6 @@
     letter-spacing: 0.04em;
 }
 
-.mis-canchas__nueva {
-    padding: 0.7rem 1.5rem;
-    font-family: inherit;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--verdeMuyOscuro);
-    background: var(--gradienteAcento);
-    border: 0.125rem solid var(--verdeOscuro);
-    border-radius: var(--radio-grande);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0.4rem 1rem var(--sombraVerde);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
-}
-
-.mis-canchas__nueva::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transition: left 0.6s ease;
-}
-
-.mis-canchas__nueva:hover {
-    transform: translateY(-0.2rem);
-    filter: brightness(1.08);
-    box-shadow: 0 0.6rem 1.3rem var(--sombraNegra), 0 0 1rem var(--sombraVerde);
-}
-
-.mis-canchas__nueva:hover::before {
-    left: 100%;
-}
-
 .mis-canchas__aviso {
     font-size: 1.2rem;
     text-align: center;

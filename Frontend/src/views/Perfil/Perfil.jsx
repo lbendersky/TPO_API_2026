@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alerta } from '../../utils/alerta';
+import { confirmarEliminar } from '../../utils/alerta';
 import { useAuth } from '../../context/useAuth';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './Perfil.css';
+import { Boton } from '../../components/Boton/Boton';
 
 const Perfil = () => {
     const { usuario, estaLogueado, actualizar, logout, eliminarCuenta } = useAuth();
@@ -56,15 +57,7 @@ const Perfil = () => {
     };
 
     const handleEliminar = async () => {
-        const resultado = await Alerta.fire({
-            title: '¿Eliminar cuenta?',
-            text: 'Esta acción no se puede deshacer.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#c0392b',
-        });
+        const resultado = await confirmarEliminar('cuenta');
         if (!resultado.isConfirmed) return;
         try {
             await eliminarCuenta();
@@ -91,10 +84,10 @@ const Perfil = () => {
             <div className="perfil__encabezado">
                 <h1 className="perfil__titulo">Mi perfil</h1>
                 <div className="perfil__encabezado-botones">
-                    <button type="button" className="perfil__mis-canchas" onClick={() => navigate('/mis-canchas')}> Mis canchas
-                    </button>
-                    <button type="button" className="perfil__mis-canchas" onClick={() => navigate('/mis-inscripciones')}> Mis inscripciones
-                    </button>
+                    <Boton type="button" variante="secundario" onClick={() => navigate('/mis-canchas')}> Mis canchas
+                    </Boton>
+                    <Boton type="button" variante="secundario" onClick={() => navigate('/mis-inscripciones')}> Mis inscripciones
+                    </Boton>
                 </div>
             </div>
 
@@ -128,19 +121,19 @@ const Perfil = () => {
                     <input type="password" value={datos.contrasena} onChange={handleCambio('contrasena')} />
                 </label>
 
-                <button type="submit" className="perfil__guardar">Guardar cambios</button>
+                <Boton type="submit" variante="primario" tamaño="grande">Guardar cambios</Boton>
             </form>
 
             {mensaje && <p className="perfil__mensaje">{mensaje}</p>}
             {error && <p className="perfil__error">{error}</p>}
 
             <div className="perfil__acciones">
-                <button type="button" className="perfil__logout" onClick={handleLogout}>
+                <Boton type="button" variante="secundario" onClick={handleLogout}>
                     Cerrar sesión
-                </button>
-                <button type="button" className="perfil__eliminar" onClick={handleEliminar}>
+                </Boton>
+                <Boton type="button" variante="peligro" onClick={handleEliminar}>
                     Eliminar cuenta
-                </button>
+                </Boton>
             </div>
         </main>
     );

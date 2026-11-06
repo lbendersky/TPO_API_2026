@@ -74,3 +74,32 @@ h1, h2, h3, h4 {
 p {
     margin: 0;
 }
+
+.form-cancha input:hover,
+.form-cancha select:hover,
+.form-cancha textarea:hover,
+.form-turno input:hover,
+.login__form input:hover,
+.perfil__campo input:hover,
+.buscador-moderacion__input:hover,
+.selector-moderacion__trigger:hover:not(:disabled),
+.formulario-oferta__label input:hover,
+.filtros-panel__precio-input:hover {
+    border-color: var(--verdeClaro);
+}
+
+.form-cancha input:focus,
+.form-cancha select:focus,
+.form-cancha textarea:focus,
+.form-turno input:focus,
+.login__form input:focus,
+.perfil__campo input:focus,
+.buscador-moderacion__input:focus,
+.selector-moderacion__trigger:focus,
+.formulario-oferta__label input:focus,
+.filtros-panel__precio-input:focus {
+    outline: none;
+    border-color: var(--amarilloLima);
+    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
+    transform: translateY(-0.1rem);
+}

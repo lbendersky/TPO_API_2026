@@ -8,4 +8,14 @@ export const Alerta = Swal.mixin({
     iconColor: '#214d21',
 });
 
+export const confirmarEliminar = (nombre) => Alerta.fire({
+    title: `¿Eliminar ${nombre}?`,
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#c0392b',
+});
+
 export default Alerta;

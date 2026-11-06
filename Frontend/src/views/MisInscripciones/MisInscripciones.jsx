@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
+import { formatearMoneda } from '../../utils/moneda';
 import { obtenerEstadosPago } from '../../utils/pagosLocales';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 
@@ -15,9 +16,6 @@ const ESTADO_LABEL = {
     CANCELADO: 'Cancelado',
     REEMBOLSADO: 'Reembolsado',
 };
-
-const formatearMonto = (n) =>
-    new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n ?? 0);
 
 const MisInscripciones = () => {
     const { estaLogueado, usuario, token } = useAuth();
@@ -82,7 +80,7 @@ const MisInscripciones = () => {
                                     <span className={`tarjeta-inscripcion__estado tarjeta-inscripcion__estado--${estadoEfectivo?.toLowerCase()}`}>
                                         {ESTADO_LABEL[estadoEfectivo] ?? estadoEfectivo}
                                     </span>
-                                    <span className="tarjeta-inscripcion__monto">{formatearMonto(i.montoPagado)}</span>
+                                    <span className="tarjeta-inscripcion__monto">{formatearMoneda(i.montoPagado)}</span>
                                 </div>
                             </article>
                         );

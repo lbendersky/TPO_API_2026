@@ -1,11 +1,9 @@
 import './TarjetaCarrito.css';
 import { useState } from 'react';
 import { SUPERFICIES, FORMATOS } from '../../utils/opcionesCancha';
+import { formatearMoneda } from '../../utils/moneda';
 
 const capitalizar = (t) => t.charAt(0).toUpperCase() + t.slice(1);
-
-const formatearPrecio = (n) =>
-    new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n);
 
 export const TarjetaCarrito = ({ item, onQuitar, onCambiarCantidad }) => {
     const [cantidadSeleccionada, setCantidadSeleccionada] = useState(item.cantidad ?? 1);
@@ -84,7 +82,7 @@ export const TarjetaCarrito = ({ item, onQuitar, onCambiarCantidad }) => {
                     </div>
 
                     <div className="precio-turno">
-                        <span className="precio-turno__final">{formatearPrecio(item.subtotal)}</span>
+                        <span className="precio-turno__final">{formatearMoneda(item.subtotal)}</span>
                     </div>
                 </div>
             </div>

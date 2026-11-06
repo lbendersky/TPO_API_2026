@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useAuth } from '../../context/useAuth';
 import { editarTurno, borrarTurno } from '../../redux/turnosSlice';
 import { formatearFechaHora } from '../../utils/fecha';
+import { Boton } from '../Boton/Boton';
 import FormularioTurno from '../FormularioTurno/FormularioTurno';
 
 const TurnoPropio = ({ turno }) => {
@@ -42,8 +43,8 @@ const TurnoPropio = ({ turno }) => {
                 <span>{turno.lugaresDisponibles} lugares - {turno.estado}</span>
                 <span>${turno.precioPorJugador} por jugador</span>
                 <div className="turno-propio__acciones">
-                    <button onClick={() => setEditando(!editando)}>{editando ? 'Cerrar' : 'Editar'}</button>
-                    <button className="turno-propio__borrar" onClick={borrar}>Borrar</button>
+                    <Boton variante="secundario" tamaño="chico" onClick={() => setEditando(!editando)}>{editando ? 'Cerrar' : 'Editar'}</Boton>
+                    <Boton variante="peligro" tamaño="chico" onClick={borrar}>Borrar</Boton>
                 </div>
             </div>
             {error && <p className="cancha-propia__error">{error}</p>}

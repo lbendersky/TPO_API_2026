@@ -6,6 +6,7 @@ import { useAuth } from '../../context/useAuth';
 import { crearTurno } from '../../redux/turnosSlice';
 import FormularioTurno from '../FormularioTurno/FormularioTurno';
 import TurnoPropio from '../TurnoPropio/TurnoPropio';
+import { Boton } from '../Boton/Boton';
 
 const TurnosDeCancha = ({ cancha }) => {
     const { token } = useAuth();
@@ -34,7 +35,7 @@ const TurnosDeCancha = ({ cancha }) => {
                 <TurnoPropio key={turno.idTurno} turno={turno} />
             ))}
             {cancha.activa && !abierto && (
-                <button className="cancha-propia__boton" onClick={() => setAbierto(true)}>+ Agregar turno</button>
+                <Boton variante="primario" onClick={() => setAbierto(true)}>+ Agregar turno</Boton>
             )}
             {error && <p className="cancha-propia__error">{error}</p>}
             {abierto && (
