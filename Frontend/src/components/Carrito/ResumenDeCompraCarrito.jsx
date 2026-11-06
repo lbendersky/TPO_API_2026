@@ -1,8 +1,6 @@
 import './ResumenDeCompraCarrito.css';
 import { Boton } from '../Boton/Boton';
-
-const formatear = (n) =>
-    new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n);
+import { formatearMoneda } from '../../utils/moneda';
 
 export const ResumenDeCompraCarrito = ({ total, items = [], onConfirmarReserva, disabled = false }) => {
     return (
@@ -16,7 +14,7 @@ export const ResumenDeCompraCarrito = ({ total, items = [], onConfirmarReserva, 
                 {items.map((item) => (
                     <div key={item.idItem} className="resumen-linea">
                         <span>{item.nombreCancha} x{item.cantidad}</span>
-                        <span className="resumen-linea__monto">{formatear(item.subtotal)}</span>
+                        <span className="resumen-linea__monto">{formatearMoneda(item.subtotal)}</span>
                     </div>
                 ))}
             </div>
@@ -25,7 +23,7 @@ export const ResumenDeCompraCarrito = ({ total, items = [], onConfirmarReserva, 
                 <div className="sidebar-precio__fila">
                     <span className="sidebar-precio__etiqueta">Total a pagar</span>
                     <div>
-                        <p className="sidebar-precio__monto">{formatear(total)}</p>
+                        <p className="sidebar-precio__monto">{formatearMoneda(total)}</p>
                         <span className="sidebar-precio__moneda">Moneda nacional ARS</span>
                     </div>
                 </div>

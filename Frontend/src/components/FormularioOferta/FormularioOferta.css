@@ -53,17 +53,6 @@
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.formulario-oferta__label input:hover {
-    border-color: var(--verdeClaro);
-}
-
-.formulario-oferta__label input:focus {
-    outline: none;
-    border-color: var(--amarilloLima);
-    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
-    transform: translateY(-0.1rem);
-}
-
 .formulario-oferta__error {
     width: 100%;
     margin: 0;

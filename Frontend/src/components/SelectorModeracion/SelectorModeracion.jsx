@@ -2,7 +2,7 @@ import './SelectorModeracion.css';
 
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { Alerta } from '../../utils/alerta';
+import { confirmarEliminar  } from '../../utils/alerta';
 import { Boton } from '../Boton/Boton';
 
 const SelectorModeracion = ({
@@ -66,15 +66,7 @@ const SelectorModeracion = ({
     const eliminar = async () => {
         if (!seleccionado) return;
         const nombre = tituloSingular ?? `este ${titulo.toLowerCase().slice(0, -1)}`;
-        const confirm = await Alerta.fire({
-            title: `¿Eliminar ${nombre}?`,
-            text: 'Esta acción no se puede deshacer.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#c0392b',
-        });
+        const confirm = await confirmarEliminar(nombre);
         if (!confirm.isConfirmed) return;
         try {
             await onEliminar(seleccionado);

@@ -52,17 +52,6 @@
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.selector-moderacion__trigger:hover:not(:disabled) {
-    border-color: var(--verdeClaro);
-}
-
-.selector-moderacion__trigger:focus {
-    outline: none;
-    border-color: var(--amarilloLima);
-    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
-    transform: translateY(-0.1rem);
-}
-
 .selector-moderacion__trigger:disabled {
     opacity: 0.6;
     cursor: not-allowed;

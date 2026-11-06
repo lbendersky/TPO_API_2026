@@ -32,16 +32,6 @@
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.form-turno input:hover {
-    border-color: var(--verdeClaro);
-}
-
-.form-turno input:focus {
-    border-color: var(--amarilloLima);
-    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
-    transform: translateY(-0.1rem);
-}
-
 .form-turno__completo,
 .form-turno__botones {
     grid-column: 1 / -1;

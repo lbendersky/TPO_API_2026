@@ -70,20 +70,6 @@
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.form-cancha input:hover,
-.form-cancha select:hover,
-.form-cancha textarea:hover {
-    border-color: var(--verdeClaro);
-}
-
-.form-cancha input:focus,
-.form-cancha select:focus,
-.form-cancha textarea:focus {
-    border-color: var(--amarilloLima);
-    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
-    transform: translateY(-0.1rem);
-}
-
 .form-cancha textarea {
     resize: vertical;
 }

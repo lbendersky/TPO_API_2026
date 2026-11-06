@@ -1,7 +1,7 @@
 import './BuscadorModeracion.css';
 
 import { useState } from 'react';
-import { Alerta } from '../../utils/alerta';
+import { confirmarEliminar  } from '../../utils/alerta';
 import { Boton } from '../Boton/Boton';
 
 const BuscadorModeracion = ({ titulo, tituloSingular, placeholder, onBuscar, onEliminar, renderResultado, puedeEliminar, renderExtra }) => {
@@ -34,15 +34,7 @@ const BuscadorModeracion = ({ titulo, tituloSingular, placeholder, onBuscar, onE
     const eliminar = async () => {
         if (!resultado) return;
         const nombre = tituloSingular ?? `este ${titulo.toLowerCase().slice(0, -1)}`;
-        const resultadoConfirm = await Alerta.fire({
-            title: `¿Eliminar ${nombre}?`,
-            text: 'Esta acción no se puede deshacer.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#c0392b',
-        });
+        const resultadoConfirm = await confirmarEliminar(nombre);
         if (!resultadoConfirm.isConfirmed) return;
         setError('');
         try {

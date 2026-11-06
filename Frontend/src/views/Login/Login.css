@@ -109,18 +109,6 @@
     opacity: 0.75;
 }
 
-.login__form input:hover {
-    border-color: var(--verdeClaro);
-}
-
-.login__form input:focus {
-    outline: none;
-    border-color: var(--amarilloLima);
-    box-shadow: 0 0 0 0.2rem var(--sombraVerde);
-    transform: translateY(-0.1rem);
-}
-
-
 .login__error {
     color: var(--rojo);
     background: var(--rojoClaro);

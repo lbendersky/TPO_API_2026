@@ -6,14 +6,12 @@ import VolverAtras from '../../components/VolverAtras/VolverAtras'
 import { BotonCheckout } from '../../components/Checkout/BotonCheckout'
 import { HeaderCarrito } from '../../components/Carrito/HeaderCarrito'
 import { formatearFechaHora } from '../../utils/fecha'
+import { formatearMoneda } from '../../utils/moneda'
 import { guardarEstadosPago } from '../../utils/pagosLocales'
 import { Boton } from '../../components/Boton/Boton'
 
 import '../Carrito/Carrito.css'
 import './Checkout.css'
-
-const formatearMonto = (n) =>
-  new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n ?? 0)
 
 const soloDigitos = (v) => v.replace(/\D/g, '')
 
@@ -104,14 +102,14 @@ const Checkout = () => {
               <li key={i.idInscripcion} className="checkout-confirmacion__item">
                 <span className="checkout-confirmacion__turno">Turno #{i.idTurno}</span>
                 <span className="checkout-confirmacion__fecha">{formatearFechaHora(i.fechaCompra)}</span>
-                <span className="checkout-confirmacion__monto">{formatearMonto(i.montoPagado)}</span>
+                <span className="checkout-confirmacion__monto">{formatearMoneda(i.montoPagado)}</span>
               </li>
             ))}
           </ul>
 
           <div className="checkout-confirmacion__total">
             <span>Total pagado</span>
-            <strong>{formatearMonto(totalPagado)}</strong>
+            <strong>{formatearMoneda(totalPagado)}</strong>
           </div>
 
           <Boton
