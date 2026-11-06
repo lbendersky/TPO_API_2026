@@ -8,6 +8,7 @@ import CanchaPropia from '../../components/CanchaPropia/CanchaPropia';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import {useDispatch} from "react-redux";
 import {fetchMisTurnos} from "../../redux/turnosSlice";
+import { Boton } from '../../components/Boton/Boton';
 
 const MisCanchas = () => {
     const { estaLogueado, usuario } = useAuth();
@@ -47,9 +48,9 @@ const MisCanchas = () => {
             <VolverAtras/>
             <div className="mis-canchas__header">
                 <h1 className="mis-canchas__titulo">Mis canchas</h1>
-                <button className="mis-canchas__nueva" onClick={() => navigate('/publicar-cancha')}>
+                <Boton variante="acento" tamaño="grande" onClick={() => navigate('/publicar-cancha')}>
                     + Publicar nueva cancha
-                </button>
+                </Boton>
             </div>
 
             {cargando && <p className="mis-canchas__aviso">Cargando tus canchas...</p>}

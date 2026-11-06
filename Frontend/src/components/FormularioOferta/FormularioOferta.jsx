@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './FormularioOferta.css';
+import { Boton } from '../Boton/Boton';
 
 const estadoInicial = { porcentajeDescuento: '', fechaInicio: '', fechaFin: '' };
 
@@ -56,9 +57,9 @@ const FormularioOferta = ({ turno, onCrear }) => {
 
     return (
         <div className="formulario-oferta">
-            <button type="button" className="formulario-oferta__toggle" onClick={toggle}>
+            <Boton type="button" variante="primario" tamaño="chico" onClick={toggle}>
                 {abierto ? 'Cancelar' : 'Crear oferta'}
-            </button>
+            </Boton>
             {ok && <p className="formulario-oferta__ok">{ok}</p>}
             {abierto && (
                 <form className="formulario-oferta__form" onSubmit={enviar}>
@@ -93,9 +94,9 @@ const FormularioOferta = ({ turno, onCrear }) => {
                         />
                     </label>
                     {error && <p className="formulario-oferta__error">{error}</p>}
-                    <button type="submit" className="formulario-oferta__enviar" disabled={enviando}>
+                    <Boton type="submit" variante="acento" tamaño="chico" disabled={enviando}>
                         {enviando ? 'Creando...' : 'Confirmar oferta'}
-                    </button>
+                    </Boton>
                 </form>
             )}
         </div>

@@ -3,6 +3,7 @@ import './SelectorModeracion.css';
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Alerta } from '../../utils/alerta';
+import { Boton } from '../Boton/Boton';
 
 const SelectorModeracion = ({
     titulo,
@@ -134,14 +135,14 @@ const SelectorModeracion = ({
                 <div className="selector-moderacion__resultado">
                     {renderResultado(seleccionado)}
                     <div className="selector-moderacion__acciones">
-                        <button
-                            className="selector-moderacion__eliminar"
+                        <Boton
+                            variante="peligro"
                             onClick={eliminar}
                             disabled={bloqueado}
                             title={bloqueado ? 'No podés eliminar este registro' : ''}
                         >
                             Eliminar
-                        </button>
+                        </Boton>
                         {renderExtra && renderExtra(seleccionado)}
                     </div>
                 </div>

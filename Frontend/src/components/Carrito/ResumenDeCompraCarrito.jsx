@@ -1,4 +1,5 @@
 import './ResumenDeCompraCarrito.css';
+import { Boton } from '../Boton/Boton';
 
 const formatear = (n) =>
     new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n);
@@ -30,14 +31,9 @@ export const ResumenDeCompraCarrito = ({ total, items = [], onConfirmarReserva, 
                 </div>
             </div>
 
-            <button
-                type="button"
-                className="boton-confirmar-reserva"
-                onClick={onConfirmarReserva}
-                disabled={disabled}
-            >
+            <Boton type="button" variante="primario" ancho="completo" onClick={onConfirmarReserva} disabled={disabled}>
                 Confirmar Reserva
-            </button>
+            </Boton>
         </>
     );
 };

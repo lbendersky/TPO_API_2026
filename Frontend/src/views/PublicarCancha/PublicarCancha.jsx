@@ -6,6 +6,7 @@ import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import FormularioCancha from '../../components/FormularioCancha/FormularioCancha';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
+import { Boton } from '../../components/Boton/Boton';
 
 const PublicarCancha = () => {
     const { estaLogueado, token } = useAuth();
@@ -76,9 +77,9 @@ const PublicarCancha = () => {
                 <section className="publicar-cancha__exito">
                     <h2>¡Listo! "{publicada.nombre}" ya está publicada ⚽</h2>
                     <p>{publicada.localidad} - {publicada.tipoFutbol} - {publicada.cantidadJugadores} jugadores</p>
-                    <button onClick={() => setPublicada(null)}>Publicar otra cancha</button>
-                    <button onClick={() => navigate('/mis-canchas')}>Ver mis canchas</button>
-                    <button onClick={() => navigate('/inicio')}>Volver al inicio</button>
+                    <Boton variante="primario" onClick={() => setPublicada(null)}>Publicar otra cancha</Boton>
+                    <Boton variante="primario" onClick={() => navigate('/mis-canchas')}>Ver mis canchas</Boton>
+                    <Boton variante="primario" onClick={() => navigate('/inicio')}>Volver al inicio</Boton>
                 </section>
             ) : (
                 <>

@@ -5,6 +5,7 @@ import { API_URL } from '../../config';
 import { Alerta } from '../../utils/alerta';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './Login.css';
+import { Boton } from '../../components/Boton/Boton';
 
 const Login = () => {
     const { login, register } = useAuth();
@@ -111,7 +112,7 @@ const Login = () => {
                         onChange={(e) => setLoginData({ ...loginData, contrasena: e.target.value })}
                         required
                     />
-                    <button type="submit" className="login__submit">Entrar</button>
+                    <Boton type="submit" variante="primario" tamaño="grande">Entrar</Boton>
                     <span className="login__olvide" onClick={handleOlvideContrasena}>¿Olvidaste tu contraseña?</span>
                 </form>
             ) : (
@@ -165,7 +166,7 @@ const Login = () => {
                         onChange={(e) => setRegisterData({ ...registerData, contrasena: e.target.value })}
                         required
                     />
-                    <button type="submit" className="login__submit">Crear cuenta</button>
+                    <Boton type="submit" variante="primario" tamaño="grande">Crear cuenta</Boton>
                 </form>
             )}
 

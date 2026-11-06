@@ -93,45 +93,6 @@
     grid-column: 1 / -1;
 }
 
-.form-cancha__boton {
-    padding: 0.9rem;
-    font-family: inherit;
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--blanco);
-    background: linear-gradient(135deg, var(--verdeOscuro), var(--verdeClaro));
-    border: none;
-    border-radius: var(--radio-grande);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0.4rem 1rem var(--sombraNegra);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
-}
-
-.form-cancha__boton::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.6s ease;
-}
-
-.form-cancha__boton:hover {
-    transform: translateY(-0.2rem);
-    filter: brightness(1.1);
-    box-shadow: 0 0.6rem 1.3rem var(--sombraNegra), 0 0 1rem var(--sombraVerde);
-}
-
-.form-cancha__boton:hover::before {
-    left: 100%;
-}
-
 .form-cancha__fotos {
     display: flex;
     gap: 0.85rem;

@@ -1,4 +1,5 @@
 import './FormularioTurno.css';
+import { Boton } from '../Boton/Boton';
 
 import { useState } from 'react';
 
@@ -29,8 +30,8 @@ const FormularioTurno = ({ precioSugerido, inicial, onCrear, onCancelar }) => {
                     value={form.descripcion} onChange={handleChange} />
             </label>
             <div className="form-turno__botones">
-                <button type="button" className="form-turno__cancelar" onClick={onCancelar}>Cancelar</button>
-                <button type="submit" className="form-turno__publicar">{inicial ? 'Guardar cambios' : 'Publicar turno'}</button>            
+                <Boton type="button" variante="secundario" tamaño="chico" onClick={onCancelar}>Cancelar</Boton>
+                <Boton type="submit" variante="primario" tamaño="chico">{inicial ? 'Guardar cambios' : 'Publicar turno'}</Boton>
             </div>
         </form>
     );

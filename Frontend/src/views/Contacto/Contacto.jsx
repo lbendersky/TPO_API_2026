@@ -20,7 +20,7 @@ const Contacto = () => {
                 </a>
                 <div className="contacto__dato">
                     <MapPin />
-                    <span>Buenos Aires, Argentina</span>
+                    <span>Estadio Pedro Bidegain, Buenos Aires, Argentina</span>
                 </div>
             </div>
         </section>

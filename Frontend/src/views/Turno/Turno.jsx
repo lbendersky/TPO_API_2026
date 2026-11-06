@@ -16,6 +16,7 @@ import { formatearFechaHora } from '../../utils/fecha';
 import { useAuth } from '../../context/useAuth';
 import ParticipantesTurno from '../../components/ParticipantesTurno/ParticipantesTurno';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
+import { Boton } from '../../components/Boton/Boton';
 
 const TIPO_FUTBOL_LABEL = {
     F5: 'Fútbol 5',
@@ -171,14 +172,16 @@ const Turno = () => {
                         )}
                     </div>
 
-                    <button
-                        className="turno__cta"
+                    <Boton
+                        variante="primario"
+                        tamaño="grande"
+                        ancho="completo"
                         type="button"
                         onClick={agregarAlCarrito}
                         disabled={sinCupos}
                     >
                         {sinCupos ? 'Sin cupos disponibles' : 'Sumarme'}
-                    </button>
+                    </Boton>
                 </div>
             </section>
 

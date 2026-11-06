@@ -7,6 +7,7 @@ import { BotonCheckout } from '../../components/Checkout/BotonCheckout'
 import { HeaderCarrito } from '../../components/Carrito/HeaderCarrito'
 import { formatearFechaHora } from '../../utils/fecha'
 import { guardarEstadosPago } from '../../utils/pagosLocales'
+import { Boton } from '../../components/Boton/Boton'
 
 import '../Carrito/Carrito.css'
 import './Checkout.css'
@@ -113,13 +114,14 @@ const Checkout = () => {
             <strong>{formatearMonto(totalPagado)}</strong>
           </div>
 
-          <button
+          <Boton
             type="button"
-            className="boton-confirmar-reserva"
+            variante="primario"
+            ancho="completo"
             onClick={() => navigate('/inicio')}
           >
             Volver al inicio
-          </button>
+          </Boton>
         </section>
       </main>
     )
@@ -127,6 +129,7 @@ const Checkout = () => {
 
   return (
     <main className="carrito-page">
+      <VolverAtras/>
       <HeaderCarrito etapaActual={2} />
 
       <section className="checkout-contenido">
