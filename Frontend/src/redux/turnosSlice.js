@@ -66,7 +66,7 @@ const turnosSlice = createSlice({
     filtros: { texto: null, localidades: null, tiposFutbol: null, precioMin: null, precioMax: null }, // por defecto, no hay filtros aplicados
     localidades: [], // lista de localidades
     seleccionado: null,
-    participantes: [],
+    participantesPorId: {},
     deMisCanchas: [],
     loading: false,
     error: null,
@@ -177,14 +177,14 @@ const turnosSlice = createSlice({
       })
 
       // Anotados
-      .addCase(fetchParticipantes.pending, (state) => {
-        state.participantes = [];
+      .addCase(fetchParticipantes.pending, (state, action) => {
+        state.participantesPorId[action.meta.arg] = [];
       })
       .addCase(fetchParticipantes.fulfilled, (state, action) => {
-        state.participantes = action.payload;
+        state.participantesPorId[action.meta.arg] = action.payload;
       })
       .addCase(fetchParticipantes.rejected, (state, action) => {
-        state.participantes = [];
+        state.participantesPorId[action.meta.arg] = [];
         state.error = action.error.message;
       });
   },

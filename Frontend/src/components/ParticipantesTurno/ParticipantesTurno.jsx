@@ -6,7 +6,7 @@ import { fetchParticipantes } from '../../redux/turnosSlice';
 
 const ParticipantesTurno = ({ idTurno }) => {
     const dispatch = useDispatch();
-    const participantes = useSelector((state) => state.turnos.participantes);
+    const participantes = useSelector((state) => state.turnos.participantesPorId[idTurno] ?? []);
 
     useEffect(() => {
         if (!idTurno) return;
