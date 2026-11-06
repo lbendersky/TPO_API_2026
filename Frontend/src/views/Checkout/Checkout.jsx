@@ -4,12 +4,11 @@ import { API_URL } from '../../config'
 import { useAuth } from '../../context/useAuth'
 import VolverAtras from '../../components/VolverAtras/VolverAtras'
 import { BotonCheckout } from '../../components/Checkout/BotonCheckout'
-import { HeaderCarrito } from '../../components/Carrito/Header/HeaderCarrito'
+import { HeaderCarrito } from '../../components/Carrito/HeaderCarrito'
 import { formatearFechaHora } from '../../utils/fecha'
 import { guardarEstadosPago } from '../../utils/pagosLocales'
 
 import '../Carrito/Carrito.css'
-import '../../components/Carrito/Header/CarritoHeader.css'
 import './Checkout.css'
 
 const formatearMonto = (n) =>

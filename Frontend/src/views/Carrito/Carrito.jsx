@@ -5,17 +5,13 @@ import { useAuth } from "../../context/useAuth";
 import VolverAtras from "../../components/VolverAtras/VolverAtras";
 
 
-import { HeaderCarrito } from "../../components/Carrito/Header/HeaderCarrito";
-import AvisoPrioridadBloqueada from "../../components/Carrito/Header/AvisoPrioridadBloqueada";
-import { TarjetaCarrito } from "../../components/Carrito/Tarjetas/TarjetaCarrito";
+import { HeaderCarrito } from "../../components/Carrito/HeaderCarrito";
+import AvisoPrioridadBloqueada from "../../components/Carrito/AvisoPrioridadBloqueada";
+import { TarjetaCarrito } from "../../components/Carrito/TarjetaCarrito";
 import { CanchasSeleccionadas } from "../../components/Carrito/CanchasSeleccionadas";
-import { ResumenDeCompraCarrito } from "../../components/Carrito/SideBar/ResumenDeCompraCarrito";
-import { BotonConfirmarReserva } from "../../components/Carrito/SideBar/BotonConfirmarReserva";
+import { ResumenDeCompraCarrito } from "../../components/Carrito/ResumenDeCompraCarrito";
 
 import "./Carrito.css";
-import "../../components/Carrito/Header/CarritoHeader.css";
-import "../../components/Carrito/SideBar/SideBar.css";
-import "../../components/Carrito/Tarjetas/TarjetaCarrito.css";
 
 const formatearTiempoRestante = (ms) => {
     if (ms <= 0) return "00:00";
@@ -182,8 +178,12 @@ const Carrito = () => {
                 </section>
 
                 <aside className="carrito-sidebar">
-                    <ResumenDeCompraCarrito total={carrito.total} items={items} />
-                    <BotonConfirmarReserva onConfirmarReserva={onConfirmarReserva} disabled={items.length === 0} />
+                    <ResumenDeCompraCarrito
+                        total={carrito.total}
+                        items={items}
+                        onConfirmarReserva={onConfirmarReserva}
+                        disabled={items.length === 0}
+                    />
                 </aside>
             </div>
         </main>
