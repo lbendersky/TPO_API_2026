@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { SUPERFICIES, FORMATOS } from '../../utils/opcionesCancha';
 import SelectorFotos from '../SelectorFotos/SelectorFotos';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLocalidades } from '../../redux/localidadesSlice';
+import { fetchLocalidades } from '../../redux/turnosSlice';
 
 const FORM_VACIO = { nombre: '', direccion: '', idLocalidad: '', tipoSuperficie: '', tipoFutbol: '', precioUnitario: '', descripcion: '',};
 
@@ -13,7 +13,7 @@ const FormularioCancha = ({ onPublicar, inicial}) => {
     const [fotosElegidas, setFotosElegidas] = useState([]);
 
     const dispatch = useDispatch();
-    const localidades = useSelector((state) => state.localidades.data);
+    const localidades = useSelector((state) => state.turnos.localidades);
 
     useEffect(() => {
         if (localidades.length === 0) dispatch(fetchLocalidades());

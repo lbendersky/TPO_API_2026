@@ -1,18 +1,17 @@
 import './ParticipantesTurno.css';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { User } from 'lucide-react';
-import { API_URL } from '../../config';
+import { fetchParticipantes } from '../../redux/turnosSlice';
 
 const ParticipantesTurno = ({ idTurno }) => {
-    const [participantes, setParticipantes] = useState([]);
+    const dispatch = useDispatch();
+    const participantes = useSelector((state) => state.turnos.participantes);
 
     useEffect(() => {
         if (!idTurno) return;
-        fetch(`${API_URL}/turnos/${idTurno}/participantes`)
-            .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-            .then(setParticipantes)
-            .catch((e) => console.error('Error al cargar participantes', e));
-    }, [idTurno]);
+        dispatch(fetchParticipantes(idTurno));
+    }, [dispatch, idTurno]);
 
     const conteo = participantes.reduce((acc, nombre) => {
         acc.set(nombre, (acc.get(nombre) || 0) + 1);

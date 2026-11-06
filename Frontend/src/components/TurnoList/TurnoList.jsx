@@ -5,15 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Search } from 'lucide-react';
 import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
-import { fetchLocalidades } from '../../redux/localidadesSlice';
-import { fetchTurnosFiltrados, setFiltros } from '../../redux/turnosSlice';
+import { fetchTurnosFiltrados, setFiltros, fetchLocalidades } from '../../redux/turnosSlice';
 import { useBusqueda } from '../../context/useBusqueda';
 
 const TurnoList = () => {
     const dispatch = useDispatch();
     const { items: turnos, filtros, loading, error } = useSelector((state) => state.turnos);
     const turnosFuturos = turnos.filter((value) => new Date(value.fechaHora) > new Date());
-    const localidades = useSelector((state) => state.localidades.data);
+    const localidades = useSelector((state) => state.turnos.localidades);
     const { texto, setTexto } = useBusqueda();
 
     useEffect(() => {

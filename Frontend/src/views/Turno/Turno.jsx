@@ -5,6 +5,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 // useState: para guardar el turno traído del back.
 // useEffect: para disparar el fetch cuando se monta el componente o cambia el id.
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTurnoPorId } from '../../redux/turnosSlice';
 
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
 import { Alerta } from '../../utils/alerta';
@@ -26,7 +28,9 @@ const Turno = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { estaLogueado, token } = useAuth();
-    const [turno, setTurno] = useState(null);
+    const dispatch = useDispatch();
+    const turno = useSelector((state) => state.turnos.seleccionado);
+    const error = useSelector((state) => state.turnos.error);
     const [imagenes, setImagenes] = useState([]);
     const [indice, setIndice] = useState(0);
 
@@ -53,11 +57,8 @@ const Turno = () => {
     };
 
     useEffect(() => {
-        fetch(`${API_URL}/turnos/${id}`)
-            .then((response) => response.json())
-            .then((data) => setTurno(data))
-            .catch((error) => console.error('Error al cargar turno', error));
-    }, [id]);
+    dispatch(fetchTurnoPorId(id));
+    }, [dispatch, id]);
 
         useEffect(() => {
         if (!turno?.idCancha) return;
@@ -73,6 +74,7 @@ const Turno = () => {
     const anterior = () => setIndice((i) => Math.max(i - 1, 0));
     const siguiente = () => setIndice((i) => Math.min(i + 1, imagenes.length - 1));
 
+    if (error && !turno) return <p className="turno__cargando">No se pudo cargar el turno.</p>;
     if (!turno) return <p className="turno__cargando">Cargando...</p>;
 
     const sinCupos = turno.lugaresDisponibles <= 0;
