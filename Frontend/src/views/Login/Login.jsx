@@ -1,15 +1,51 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
+import { API_URL } from '../../config';
+import { Alerta } from '../../utils/alerta';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './Login.css';
+import { Boton } from '../../components/Boton/Boton';
 
 const Login = () => {
     const { login, register } = useAuth();
     const navigate = useNavigate();
     const [modo, setModo] = useState('login');
     const [error, setError] = useState('');
+    const [aviso, setAviso] = useState('');
 
     const [loginData, setLoginData] = useState({ email: '', contrasena: '' });
+
+    const handleOlvideContrasena = async () => {
+        setError('');
+        setAviso('');
+        if (!loginData.email) {
+            setError('Ingresá tu email para recuperar la contraseña.');
+            return;
+        }
+        const { value: nuevaContrasena } = await Alerta.fire({
+            title: 'Cambiar contraseña',
+            input: 'password',
+            inputLabel: 'Ingresá tu nueva contraseña',
+            inputPlaceholder: 'Nueva contraseña',
+            inputAttributes: { autocapitalize: 'off', autocorrect: 'off' },
+            showCancelButton: true,
+            confirmButtonText: 'Cambiar',
+            cancelButtonText: 'Cancelar',
+        });
+        if (!nuevaContrasena) return;
+        try {
+            const response = await fetch(`${API_URL}/api/v1/auth/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: loginData.email, contrasena: nuevaContrasena }),
+            });
+            if (!response.ok) throw new Error('No se pudo cambiar la contraseña.');
+            setAviso('Contraseña actualizada correctamente.');
+        } catch (err) {
+            setError(err.message);
+        }
+    };
     const [registerData, setRegisterData] = useState({
         email: '',
         nombre: '',
@@ -25,7 +61,7 @@ const Login = () => {
         setError('');
         try {
             await login(loginData.email, loginData.contrasena);
-            navigate('/');
+            navigate(-1);
         } catch (err) {
             setError(err.message);
         }
@@ -44,6 +80,7 @@ const Login = () => {
 
     return (
         <main className="login">
+            <VolverAtras/>
             <div className="login__tabs">
                 <button
                     className={modo === 'login' ? 'login__tab login__tab--activa' : 'login__tab'}
@@ -75,7 +112,8 @@ const Login = () => {
                         onChange={(e) => setLoginData({ ...loginData, contrasena: e.target.value })}
                         required
                     />
-                    <button type="submit" className="login__submit">Entrar</button>
+                    <Boton type="submit" variante="primario" tamaño="grande">Entrar</Boton>
+                    <span className="login__olvide" onClick={handleOlvideContrasena}>¿Olvidaste tu contraseña?</span>
                 </form>
             ) : (
                 <form className="login__form" onSubmit={handleRegister}>
@@ -128,11 +166,12 @@ const Login = () => {
                         onChange={(e) => setRegisterData({ ...registerData, contrasena: e.target.value })}
                         required
                     />
-                    <button type="submit" className="login__submit">Crear cuenta</button>
+                    <Boton type="submit" variante="primario" tamaño="grande">Crear cuenta</Boton>
                 </form>
             )}
 
             {error && <p className="login__error">{error}</p>}
+            {aviso && <p className="login__aviso">{aviso}</p>}
         </main>
     );
 };

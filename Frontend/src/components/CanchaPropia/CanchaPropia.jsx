@@ -1,11 +1,12 @@
 import './CanchaPropia.css';
 
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import CarruselCancha from '../CarruselCancha/CarruselCancha';
 import FormularioCancha from '../FormularioCancha/FormularioCancha';
 import TurnosDeCancha from '../TurnosDeCancha/TurnosDeCancha';
+import { Boton } from '../Boton/Boton';
 
 const CanchaPropia = ({ cancha, onCambio }) => {
     const { token } = useAuth();
@@ -55,8 +56,8 @@ const CanchaPropia = ({ cancha, onCambio }) => {
             </div>
             {cancha.activa && (
                 <div className="cancha-propia__acciones">
-                    <button className="cancha-propia__boton" onClick={() => setEditando(!editando)}>{editando ? 'Cancelar edición' : 'Editar cancha'}</button>
-                    <button className="cancha-propia__boton cancha-propia__boton--peligro" onClick={darDeBaja}>Dar de baja</button>
+                    <Boton variante="primario" onClick={() => setEditando(!editando)}>{editando ? 'Cancelar edición' : 'Editar cancha'}</Boton>
+                    <Boton variante="peligro" onClick={darDeBaja}>Dar de baja</Boton>
                 </div>
             )}
             {error && <p className="cancha-propia__error">{error}</p>}

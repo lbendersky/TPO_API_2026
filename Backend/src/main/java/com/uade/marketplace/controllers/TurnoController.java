@@ -84,12 +84,17 @@ public class TurnoController {
         return turnoService.actualizarStock(turnoId, body.get("lugaresDisponibles"), actor);
     }
 
+    @GetMapping("/{turnoId}/participantes")
+    public List<String> getParticipantes(@PathVariable Long turnoId) throws RecursoNoEncontradoException {
+        return turnoService.getParticipantes(turnoId);
+    }
+
     @GetMapping("/filtrar")
     public List<TurnoResponse> filtrar(
-            @org.springframework.web.bind.annotation.RequestParam(required = false) com.uade.marketplace.entity.enums.TipoFutbol tipoFutbol,
+            @org.springframework.web.bind.annotation.RequestParam(required = false) java.util.List<com.uade.marketplace.entity.enums.TipoFutbol> tipoFutbol,
             @org.springframework.web.bind.annotation.RequestParam(required = false) Float precioMin,
             @org.springframework.web.bind.annotation.RequestParam(required = false) Float precioMax,
-            @org.springframework.web.bind.annotation.RequestParam(required = false) String localidad,
+            @org.springframework.web.bind.annotation.RequestParam(required = false) java.util.List<String> localidad,
             @org.springframework.web.bind.annotation.RequestParam(required = false) String texto) {
         return turnoService.filtrar(tipoFutbol, precioMin, precioMax, localidad, texto);
     }

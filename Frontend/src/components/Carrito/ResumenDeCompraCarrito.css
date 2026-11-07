@@ -1,0 +1,122 @@
+.resumen-compra__encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.resumen-compra__titulo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--verdeMuyOscuro);
+  letter-spacing: 0.03em;
+}
+
+.resumen-compra__lineas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.resumen-linea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--c-texto-suave);
+  font-weight: 600;
+}
+
+.resumen-linea__monto {
+  font-weight: 700;
+  color: var(--c-texto);
+  white-space: nowrap;
+}
+
+.resumen-linea--descuento,
+.resumen-linea--descuento .resumen-linea__monto {
+  color: var(--c-verde-texto);
+}
+
+.resumen-linea__promo {
+  background: var(--gradienteAcento);
+  color: var(--verdeMuyOscuro);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radio-chico);
+  margin-left: 0.3rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.sidebar-precio {
+  margin-top: 1rem;
+  padding: 1.1rem;
+  background: linear-gradient(135deg, rgba(66, 164, 66, 0.08), rgba(212, 255, 58, 0.08));
+  border-radius: var(--radio-mediano);
+  border: 1px solid rgba(66, 164, 66, 0.2);
+}
+
+.sidebar-precio__fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-precio__etiqueta {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--verdeMuyOscuro);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sidebar-precio__monto {
+  font-size: 2rem;
+  font-weight: 800;
+  background: var(--gradienteAcento);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-align: right;
+  line-height: 1.1;
+  text-shadow: 0 0 1rem var(--sombraVerde);
+}
+
+.sidebar-precio__moneda {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-texto-suave);
+  text-align: right;
+  margin-top: 0.15rem;
+  -webkit-text-fill-color: var(--c-texto-suave);
+}
+
+.sidebar-precio__sena {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed rgba(66, 164, 66, 0.3);
+  font-size: 0.85rem;
+  color: var(--c-texto-suave);
+  font-weight: 600;
+}
+
+.sidebar-precio__sena strong {
+  color: var(--verdeMuyOscuro);
+}
+
+.sidebar-precio__sin-comision {
+  font-weight: 700;
+  color: var(--c-verde-texto);
+}

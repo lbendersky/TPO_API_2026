@@ -1,0 +1,30 @@
+.volver-atras {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    justify-self: start;
+    width: fit-content;
+    gap: 0.5em;
+    margin-bottom: 1.2em;
+    padding: 0.5em 1em;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--verdeOscuro);
+    background: var(--c-verde-fondo);
+    border: none;
+    border-radius: var(--radio-pill);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.volver-atras:hover {
+    background: var(--gradienteAcento);
+    color: var(--verdeMuyOscuro);
+    transform: translateX(-0.15rem);
+}
+
+.volver-atras svg {
+    width: 1.1em;
+    height: 1.1em;
+}

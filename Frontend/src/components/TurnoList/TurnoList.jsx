@@ -1,73 +1,74 @@
 import './TurnoList.css';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Search } from 'lucide-react';
 import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
-import { API_URL } from '../../config';
+import { fetchTurnosFiltrados, setFiltros, fetchLocalidades } from '../../redux/turnosSlice';
+import { useBusqueda } from '../../context/useBusqueda';
 
 const TurnoList = () => {
-    const [turnos, setTurnos] = useState([]);
-    const [localidades, setLocalidades] = useState([]);
-    // Filtro en null por defecto
-    const [filtros, setFiltros] = useState({
-        texto: null,
-        localidad: null,
-        tipoFutbol: null,
-        precioMin: null,
-        precioMax: null,
-    });
+    const dispatch = useDispatch();
+    const { items: turnos, filtros, loading, error } = useSelector((state) => state.turnos);
+    const turnosFuturos = turnos.filter((value) => new Date(value.fechaHora) > new Date());
+    const localidades = useSelector((state) => state.turnos.localidades);
+    const { texto, setTexto } = useBusqueda();
 
     useEffect(() => {
-        fetch(`${API_URL}/localidades`)
-            .then((response) => response.json())
-            .then((data) => setLocalidades(data.map((l) => l.nombre)))
-            .catch((error) => console.error('Error al cargar localidades', error));
-    }, []);
+        if (localidades.length === 0) dispatch(fetchLocalidades());
+    }, [dispatch, localidades.length]);
 
     useEffect(() => {
-        let url = `${API_URL}/turnos/filtrar?`;
-        if (filtros.localidad) url = url + `localidad=${filtros.localidad}&`;
-        if (filtros.tipoFutbol) url = url + `tipoFutbol=${filtros.tipoFutbol}&`;
-        if (filtros.precioMin != null) url = url + `precioMin=${filtros.precioMin}&`;
-        if (filtros.precioMax != null) url = url + `precioMax=${filtros.precioMax}&`;
-        if (filtros.texto) url = url + `texto=${encodeURIComponent(filtros.texto)}&`;
-
-        fetch(url)
-            .then((response) => response.json())
-            .then((data) => setTurnos(data))
-            .catch((error) => console.error('Error al cargar turnos', error));
-    }, [filtros]);
+        dispatch(fetchTurnosFiltrados({ ...filtros, texto: texto?.trim() || null }));
+    }, [dispatch, filtros, texto]);
 
     return (
         <>
-            {}
-            <Filtros localidades={localidades} onFiltrar={setFiltros} />
+            <label className="turno-buscador">
+                <Search className="turno-buscador__icono" />
+                <input
+                    type="text"
+                    className="turno-buscador__input"
+                    placeholder="Buscar canchas..."
+                    value={texto}
+                    onChange={(e) => setTexto(e.target.value)}
+                />
+            </label>
 
-            {}
-            <section className="turno-list">
-                {/* Recorre el array filtrado y renderiza una TurnoCard por cada turno */}
-                {turnos.map((value) => (
-                    <TurnoCard
-                        key={value.idTurno}
-                        idTurno={value.idTurno}
-                        idCancha={value.idCancha}
-                        fechaHora={value.fechaHora}
-                        tipoFutbol={value.tipoFutbol}
-                        lugaresDisponibles={value.lugaresDisponibles}
-                        precioPorJugador={value.precioPorJugador}
-                        descripcion={value.descripcion}
-                        nombreCancha={value.nombreCancha}
-                        localidad={value.localidad}
-                        nombreOrganizador={value.nombreOrganizador}
-                        precioConDescuento={value.precioConDescuento}
-                        tieneOfertaActiva={value.tieneOfertaActiva}
-                    />
-                ))}
-                {}
-                {turnos.length === 0 && (
-                    <p className="turno-list__vacio">No hay turnos que coincidan con los filtros.</p>
-                )}
-            </section>
+            <div className="turno-list-layout">
+                <Filtros
+                    localidades={localidades.map((l) => l.nombre)}
+                    onFiltrar={(f) => dispatch(setFiltros(f))}
+                />
+
+                <section className="turno-list-contenido">
+                    <div className="turno-list">
+                        {loading && <p className="turno-list__vacio">Cargando turnos...</p>}
+                        {error && <p className="turno-list__vacio">No se pudieron cargar los turnos: {error}</p>}
+                        {turnosFuturos.map((value) => (
+                            <TurnoCard
+                                key={value.idTurno}
+                                idTurno={value.idTurno}
+                                idCancha={value.idCancha}
+                                fechaHora={value.fechaHora}
+                                tipoFutbol={value.tipoFutbol}
+                                lugaresDisponibles={value.lugaresDisponibles}
+                                precioPorJugador={value.precioPorJugador}
+                                descripcion={value.descripcion}
+                                nombreCancha={value.nombreCancha}
+                                localidad={value.localidad}
+                                nombreOrganizador={value.nombreOrganizador}
+                                precioConDescuento={value.precioConDescuento}
+                                tieneOfertaActiva={value.tieneOfertaActiva}
+                            />
+                        ))}
+                    </div>
+                    {!loading && !error && turnosFuturos.length === 0 && (
+                        <p className="turno-list__vacio">No hay turnos que coincidan con los filtros.</p>
+                    )}
+                </section>
+            </div>
         </>
     );
 };

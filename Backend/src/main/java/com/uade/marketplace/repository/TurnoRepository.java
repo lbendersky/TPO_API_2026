@@ -34,15 +34,15 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
     @Query("SELECT t FROM Turno t WHERE " +
        "t.estado = com.uade.marketplace.entity.enums.EstadoTurno.INCOMPLETO AND " +
        "t.cancha.activa = true AND " +
-       "(:tipoFutbol IS NULL OR t.tipoFutbol = :tipoFutbol) AND " +
+       "(:tipoFutbol IS NULL OR t.tipoFutbol IN :tipoFutbol) AND " +
        "(:precioMin IS NULL OR t.precioPorJugador >= :precioMin) AND " +
        "(:precioMax IS NULL OR t.precioPorJugador <= :precioMax) AND " +
-       "(:localidad IS NULL OR LOWER(t.cancha.localidad.nombre) = LOWER(:localidad)) AND " +
+       "(:localidad IS NULL OR LOWER(t.cancha.localidad.nombre) IN :localidad) AND " +
        "(:texto IS NULL OR LOWER(t.cancha.nombre) LIKE LOWER(CONCAT('%', :texto, '%')))")
-    List<Turno> filtrar(@Param("tipoFutbol") TipoFutbol tipoFutbol,
+    List<Turno> filtrar(@Param("tipoFutbol") List<TipoFutbol> tipoFutbol,
                     @Param("precioMin") Float precioMin,
                     @Param("precioMax") Float precioMax,
-                    @Param("localidad") String localidad,
+                    @Param("localidad") List<String> localidad,
                     @Param("texto") String texto);
                     
     @Lock(LockModeType.PESSIMISTIC_WRITE)

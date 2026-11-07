@@ -235,7 +235,21 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public List<TurnoResponse> filtrar(TipoFutbol tipoFutbol, Float precioMin, Float precioMax, String localidad, String texto) {
-        return mapear(turnoRepository.filtrar(tipoFutbol, precioMin, precioMax, localidad, texto));
+    public List<TurnoResponse> filtrar(List<TipoFutbol> tipoFutbol, Float precioMin, Float precioMax, List<String> localidad, String texto) {
+        List<String> localidadNormalizada = (localidad == null || localidad.isEmpty())
+                ? null
+                : localidad.stream().map(String::toLowerCase).toList();
+        List<TipoFutbol> tipoFutbolNormalizado = (tipoFutbol == null || tipoFutbol.isEmpty()) ? null : tipoFutbol;
+        return mapear(turnoRepository.filtrar(tipoFutbolNormalizado, precioMin, precioMax, localidadNormalizada, texto));
+    }
+
+    @Override
+    public List<String> getParticipantes(Long idTurno) throws RecursoNoEncontradoException {
+        if (!turnoRepository.existsById(idTurno))
+            throw new RecursoNoEncontradoException("No existe el turno " + idTurno);
+        return inscripcionRepository.findByTurno_IdTurno(idTurno).stream()
+                .map(i -> i.getUsuarioComprador() != null ? i.getUsuarioComprador().getNombreUsuario() : null)
+                .filter(n -> n != null)
+                .toList();
     }
 }

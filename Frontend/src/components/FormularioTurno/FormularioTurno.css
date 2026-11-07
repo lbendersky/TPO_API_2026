@@ -1,34 +1,35 @@
 .form-turno {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.8em 1.2em;
-    margin-top: 1.2em;
-    padding-top: 1.2em;
-    border-top: 0.1em dashed var(--verdeOscuro);
+    gap: 0.9rem 1.3rem;
+    margin-top: 1.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px dashed rgba(66, 164, 66, 0.5);
+    animation: form-turno-fade-in 0.5s ease-out both;
 }
 
 .form-turno label {
     display: flex;
     flex-direction: column;
-    gap: 0.3em;
-    font-size: 0.9rem;
+    gap: 0.35rem;
+    font-size: 0.95rem;
+    font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--verdeOscuro);
+    color: var(--verdeMuyOscuro);
 }
 
 .form-turno input {
-    padding: 0.5em 0.7em;
-    font-family: inherit;
-    font-size: 1rem;
-    border: 0.12em solid var(--verdeOscuro);
-    border-radius: 0.6em;
+    padding: 0.65rem 0.85rem;
+    font-family: var(--fuenteTexto);
+    font-size: 1.05rem;
+    color: var(--negro);
+    background: var(--blanco);
+    border: 0.125rem solid var(--verdeOscuro);
+    border-radius: var(--radio-mediano);
     outline: none;
-    padding: 0.5em;
-}
-
-.form-turno input:focus {
-    border-color: var(--verdeOscuro);
+    letter-spacing: 0.02em;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
 .form-turno__completo,
@@ -39,37 +40,22 @@
 .form-turno__botones {
     display: flex;
     justify-content: flex-end;
-    gap: 0.6em;
+    gap: 0.7rem;
 }
 
-.form-turno__botones button:hover {
-    background-color: var(--verdeMuyOscuro);
-    color: var(--blanco);
-}
-
-.form-turno__botones button {
-    padding: 0.5em 1.3em;
-    font-family: inherit;
-    font-size: 1rem;
-    border-radius: 2em;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.form-turno__cancelar {
-    color: var(--verdeOscuro);
-    background-color: var(--blanco);
-    border: 0.12em solid var(--verdeOscuro);
-}
-
-.form-turno__publicar {
-    color: var(--blanco);
-    background-color: var(--verdeOscuro);
-    border: 0.12em solid var(--verdeOscuro);
-}
-
-@media (max-width: 40em) {
+@media (max-width: 40rem) {
     .form-turno {
         grid-template-columns: 1fr;
+    }
+}
+
+@keyframes form-turno-fade-in {
+    from { opacity: 0; transform: translateY(0.6rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-turno {
+        animation: none;
     }
 }

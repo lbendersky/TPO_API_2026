@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { API_URL } from '../../config';
 import BuscadorModeracion from '../../components/BuscadorModeracion/BuscadorModeracion';
+import SelectorModeracion from '../../components/SelectorModeracion/SelectorModeracion';
 import FormularioOferta from '../../components/FormularioOferta/FormularioOferta';
 import { formatearFechaHora } from '../../utils/fecha';
+import VolverAtras from '../../components/VolverAtras/VolverAtras';
+
 import './Moderar.css';
 
 const Moderar = () => {
@@ -35,11 +38,14 @@ const Moderar = () => {
     const buscarUsuario = (email) => pedir(`${API_URL}/usuarios?email=${encodeURIComponent(email)}`);
     const eliminarUsuario = (u) => pedir(`${API_URL}/usuarios/${u.idUsuario}`, { method: 'DELETE' });
 
-    const buscarCancha = (id) => pedir(`${API_URL}/canchas/${encodeURIComponent(id)}`);
+    const listarCanchas = () => pedir(`${API_URL}/canchas`);
     const eliminarCancha = (c) => pedir(`${API_URL}/canchas/${c.idCancha}`, { method: 'DELETE' });
 
-    const buscarTurno = (id) => pedir(`${API_URL}/turnos/${encodeURIComponent(id)}`);
+    const listarTurnos = () => pedir(`${API_URL}/turnos`);
     const eliminarTurno = (t) => pedir(`${API_URL}/turnos/${t.idTurno}`, { method: 'DELETE' });
+
+    const listarInscripciones = () => pedir(`${API_URL}/inscripciones`);
+    const eliminarInscripcion = (i) => pedir(`${API_URL}/inscripciones/${i.idInscripcion}`, { method: 'DELETE' });
     const crearOferta = (body) => pedir(`${API_URL}/ofertas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,6 +54,7 @@ const Moderar = () => {
 
     return (
         <main className="moderar">
+            <VolverAtras/>
             <h1 className="moderar__titulo">Panel de moderación</h1>
             <BuscadorModeracion
                 titulo="Usuarios"
@@ -65,14 +72,15 @@ const Moderar = () => {
                 )}
             />
 
-            <BuscadorModeracion
+            <SelectorModeracion
                 titulo="Canchas"
-                placeholder="ID de la cancha"
-                onBuscar={buscarCancha}
+                placeholder="Seleccionar cancha"
+                onListar={listarCanchas}
                 onEliminar={eliminarCancha}
+                getKey={(c) => c.idCancha}
+                renderOpcion={(c) => `#${c.idCancha} · ${c.nombre} — ${c.localidad ?? 's/localidad'}${c.direccion ? ` (${c.direccion})` : ''}`}
                 renderResultado={(c) => (
                     <dl>
-                        <dt>ID</dt><dd>{c.idCancha}</dd>
                         <dt>Nombre</dt><dd>{c.nombre}</dd>
                         <dt>Dirección</dt><dd>{c.direccion ?? '-'}</dd>
                         <dt>Localidad</dt><dd>{c.localidad ?? '-'}</dd>
@@ -82,20 +90,41 @@ const Moderar = () => {
                 )}
             />
 
-            <BuscadorModeracion
+            <SelectorModeracion
                 titulo="Turnos"
-                placeholder="ID del turno"
-                onBuscar={buscarTurno}
+                placeholder="Seleccionar turno"
+                onListar={listarTurnos}
                 onEliminar={eliminarTurno}
+                getKey={(t) => t.idTurno}
+                renderOpcion={(t) => `#${t.idTurno} · ${t.nombreCancha ?? 'Cancha ?'} — ${formatearFechaHora(t.fechaHora)}${t.nombreOrganizador ? ` · ${t.nombreOrganizador}` : ''}`}
                 renderExtra={(t) => <FormularioOferta turno={t} onCrear={crearOferta} />}
                 renderResultado={(t) => (
                     <dl>
-                        <dt>ID</dt><dd>{t.idTurno}</dd>
                         <dt>Cancha</dt><dd>{t.nombreCancha ?? t.idCancha}</dd>
                         <dt>Fecha y hora</dt><dd>{formatearFechaHora(t.fechaHora)}</dd>
                         <dt>Organizador</dt><dd>{t.nombreOrganizador ?? '-'}</dd>
                         <dt>Estado</dt><dd>{t.estado}</dd>
                         <dt>Precio</dt><dd>{t.precioPorJugador}</dd>
+                    </dl>
+                )}
+            />
+
+            <SelectorModeracion
+                titulo="Inscripciones"
+                tituloSingular="esta inscripción"
+                placeholder="Seleccionar inscripción"
+                onListar={listarInscripciones}
+                onEliminar={eliminarInscripcion}
+                getKey={(i) => i.idInscripcion}
+                renderOpcion={(i) => `#${i.idInscripcion} · ${i.nombreComprador ?? 's/comprador'} → ${i.nombreCancha ?? `Turno ${i.idTurno}`} — ${formatearFechaHora(i.fechaHoraTurno)}`}
+                renderResultado={(i) => (
+                    <dl>
+                        <dt>Comprador</dt><dd>{i.nombreComprador ?? '-'}</dd>
+                        <dt>Cancha</dt><dd>{i.nombreCancha ?? i.idTurno}</dd>
+                        <dt>Fecha del turno</dt><dd>{formatearFechaHora(i.fechaHoraTurno)}</dd>
+                        <dt>Fecha de compra</dt><dd>{formatearFechaHora(i.fechaCompra)}</dd>
+                        <dt>Monto pagado</dt><dd>{i.montoPagado}</dd>
+                        <dt>Estado de pago</dt><dd>{i.estadoPago}</dd>
                     </dl>
                 )}
             />

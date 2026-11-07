@@ -1,5 +1,7 @@
 package com.uade.marketplace.entity;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -37,4 +39,7 @@ public class ItemCarrito {
 
     @Column(nullable = false)
     private Float precioUnitario;
+
+    @Column(name = "fecha_reserva", nullable = false)
+    private LocalDateTime fechaReserva;
 }

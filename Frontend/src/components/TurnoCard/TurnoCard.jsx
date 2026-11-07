@@ -5,6 +5,27 @@ import { formatearFechaHora } from '../../utils/fecha';
 import { useState, useEffect } from 'react';
 import { ImageOff } from 'lucide-react';
 
+// Varios turnos pueden compartir la misma cancha, y cada TurnoCard pedía
+// sus fotos por separado -> la misma cancha se bajaba 1 vez por cada
+// turno que aparecía en el catálogo. Esta caché (fuera del componente,
+// compartida entre todas las instancias) hace que las fotos de una
+// cancha se pidan una sola vez, sin importar cuántas tarjetas la usen.
+const cacheImagenesPorCancha = new Map();
+
+function pedirImagenesDeCancha(idCancha) {
+    if (!cacheImagenesPorCancha.has(idCancha)) {
+        const promesa = fetch(`${API_URL}/imagenes/cancha/${idCancha}`)
+            .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+            .then((data) => data.map((img) => img.file))
+            .catch((e) => {
+                cacheImagenesPorCancha.delete(idCancha); // si falla, que se pueda reintentar despues
+                throw e;
+            });
+        cacheImagenesPorCancha.set(idCancha, promesa);
+    }
+    return cacheImagenesPorCancha.get(idCancha);
+}
+
 const TurnoCard = ({
     idTurno,
     idCancha,
@@ -23,16 +44,18 @@ const TurnoCard = ({
     const [imagenes, setImagenes] = useState([]);
     const [indice, setIndice] = useState(0);
     
-    //Pide imagen/es a back
+    //Pide imagen/es a back (compartido entre tarjetas de la misma cancha)
     useEffect(() => {
         if (!idCancha) return;
-        fetch(`${API_URL}/imagenes/cancha/${idCancha}`)
-            .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
-            .then((data) => {
-                setImagenes(data.map((img) => img.file));
+        let cancelado = false;
+        pedirImagenesDeCancha(idCancha)
+            .then((archivos) => {
+                if (cancelado) return;
+                setImagenes(archivos);
                 setIndice(0);
             })
             .catch((e) => console.error('Error al cargar la imagen', e));
+        return () => { cancelado = true; };
     }, [idCancha]);
 
     const anterior = (e) => {
