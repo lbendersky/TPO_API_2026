@@ -40,17 +40,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/localidades/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/imagenes/**").permitAll()
 
-                        // Imagenes estaticas
-                        .requestMatchers(HttpMethod.GET, "/imagenes/**").permitAll()
-
-
                         // Solo ADMIN
+                        .requestMatchers(HttpMethod.POST, "/localidades/**").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers("/admin/**").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers("/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/inscripciones").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "/inscripciones/*/estado-pago").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "/inscripciones/**").hasAnyAuthority(Rol.ADMIN.name())
-                        
+
                         // Cualquier usuario autenticado (USUARIO o ADMIN)
                         .anyRequest().authenticated())
                         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

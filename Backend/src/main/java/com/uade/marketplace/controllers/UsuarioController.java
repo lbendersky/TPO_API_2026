@@ -30,7 +30,10 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("")
-    public List<UsuarioResponse> getAll() {
+    public List<UsuarioResponse> getAll(@AuthenticationPrincipal Usuario auth) {
+        if (auth.getRol() != Rol.ADMIN) {
+            throw new AccessDeniedException("Solo un administrador puede listar todos los usuarios");
+        }
         return usuarioService.getAll();
     }
 

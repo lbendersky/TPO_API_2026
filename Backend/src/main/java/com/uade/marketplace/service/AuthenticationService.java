@@ -53,10 +53,4 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().accessToken(jwtToken).build();
     }
-
-    public void resetPassword(String email, String nuevaContrasena) {
-        var user = repository.findByEmail(email).orElseThrow();
-        user.setContrasena(passwordEncoder.encode(nuevaContrasena));
-        repository.save(user);
-    }
 }

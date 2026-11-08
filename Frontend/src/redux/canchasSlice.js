@@ -10,15 +10,22 @@ export const fetchMisCanchas = createAsyncThunk('canchas/fetchMisCanchas', async
 });
 
 export const publicarCancha = createAsyncThunk('canchas/publicarCancha', async ({ datos, fotos, token }, { rejectWithValue }) => {
+    let data;
     try {
-        const { data } = await axios.post(`${API_URL}/canchas`, datos, conToken(token));
-        for (const idImagenPrecargada of fotos) {
-            await axios.post(`${API_URL}/imagenes/precargada`, { idCancha: data.idCancha, idImagenPrecargada }, conToken(token));
-        }
-        return data;
+        const respuesta = await axios.post(`${API_URL}/canchas`, datos, conToken(token));
+        data = respuesta.data;
     } catch (err) {
         return rejectWithValue(err.response?.status);
     }
+
+    for (const idImagenPrecargada of fotos) {
+        try {
+            await axios.post(`${API_URL}/imagenes/precargada`, { idCancha: data.idCancha, idImagenPrecargada }, conToken(token));
+        } catch (err) {
+            console.error('La cancha se publicó, pero fallaron algunas fotos', err);
+        }
+    }
+    return data;
 });
 
 export const editarCancha = createAsyncThunk('canchas/editarCancha', async ({ idCancha, datos, token }, { rejectWithValue }) => {

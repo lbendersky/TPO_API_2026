@@ -37,6 +37,12 @@ const Turno = () => {
     const guardadas = useSelector((state) => state.canchas.imagenesPorCancha[idCancha]);
     const imagenes = guardadas || [];
     const [indice, setIndice] = useState(0);
+    const [canchaDeIndice, setCanchaDeIndice] = useState(idCancha);
+
+    if (idCancha !== canchaDeIndice) {
+        setCanchaDeIndice(idCancha);
+        setIndice(0);
+    }
 
     const agregarAlCarrito = async () => {
         if (!estaLogueado) {
