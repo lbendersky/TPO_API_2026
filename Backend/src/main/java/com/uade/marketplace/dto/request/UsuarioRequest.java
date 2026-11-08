@@ -11,4 +11,5 @@ public class UsuarioRequest {
     private String email;
     private String telefono;
     private String contrasena;
+    private String contrasenaActual;
 }
