@@ -1,28 +1,22 @@
 import { useState, useEffect } from 'react';
-import { API_URL } from '../../config';
+import {useDispatch, useSelector} from "react-redux";
+import {fetchImagenesCancha} from "../../redux/canchasSlice";
 
 // Muestra las fotos de una cancha con flechas para pasar de una a otra
 const CarruselCancha = ({ idCancha, nombre }) => {
-    const [imagenes, setImagenes] = useState([]);
+    const dispatch = useDispatch();
+    const imagenes = useSelector((state) => state.canchas.imagenesPorCancha[idCancha]);
     const [indice, setIndice] = useState(0);
 
     useEffect(() => {
-        fetch(`${API_URL}/imagenes/cancha/${idCancha}`)
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudieron cargar las fotos');
-                return response.json();
-            })
-            .then((data) => {
-                setImagenes(data.map((img) => img.file));
-                setIndice(0);
-            })
-            .catch((error) => console.error('Error al cargar la imagen', error));
-    }, [idCancha]);
+        if (imagenes === undefined) dispatch(fetchImagenesCancha(idCancha));
+    }, [dispatch, idCancha, imagenes]);
 
+    const lista = imagenes || [];
     const anterior = () => setIndice(Math.max(indice - 1, 0));
-    const siguiente = () => setIndice(Math.min(indice + 1, imagenes.length - 1));
+    const siguiente = () => setIndice(Math.min(indice + 1, lista.length - 1));
 
-    if (imagenes.length === 0) return null;
+    if (lista.length === 0) return null;
 
     return (
         <div className="cancha-propia__carrusel">
