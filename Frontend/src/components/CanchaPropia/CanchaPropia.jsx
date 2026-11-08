@@ -2,46 +2,33 @@ import './CanchaPropia.css';
 
 import { useState} from 'react';
 import { useAuth } from '../../context/useAuth';
-import { API_URL } from '../../config';
 import CarruselCancha from '../CarruselCancha/CarruselCancha';
 import FormularioCancha from '../FormularioCancha/FormularioCancha';
 import TurnosDeCancha from '../TurnosDeCancha/TurnosDeCancha';
 import { Boton } from '../Boton/Boton';
+import {editarCancha, darDeBajaCancha} from "../../redux/canchasSlice";
+import {useDispatch} from "react-redux";
 
-const CanchaPropia = ({ cancha, onCambio }) => {
+const CanchaPropia = ({ cancha }) => {
     const { token } = useAuth();
+    const dispatch = useDispatch();
     const [editando, setEditando] = useState(false);
     const [error, setError] = useState('');
 
     const guardar = (form) => {
         setError('');
-        fetch(`${API_URL}/canchas/${cancha.idCancha}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify({ ...form, idLocalidad: Number(form.idLocalidad), precioUnitario: Number(form.precioUnitario) }),
-        })
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudieron guardar los cambios.');
-                return response.json();
-            })
-            .then((data) => {
-                onCambio(data);
-                setEditando(false);
-            })
-            .catch((err) => setError(err.message));
+        const datos = { ...form, idLocalidad: Number(form.idLocalidad), precioUnitario: Number(form.precioUnitario) };
+        dispatch(editarCancha({ idCancha: cancha.idCancha, datos, token }))
+            .unwrap()
+            .then(() => setEditando(false))
+            .catch(() => setError('No se pudieron guardar los cambios.'));
     };
 
     const darDeBaja = () => {
         setError('');
-        fetch(`${API_URL}/canchas/${cancha.idCancha}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` },
-        })
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudo dar de baja la cancha.');
-                onCambio({ ...cancha, activa: false });
-            })
-            .catch((err) => setError(err.message));
+        dispatch(darDeBajaCancha({ idCancha: cancha.idCancha, token }))
+            .unwrap()
+            .catch(() => setError('No se pudo dar de baja la cancha.'));
     };
 
     return (
