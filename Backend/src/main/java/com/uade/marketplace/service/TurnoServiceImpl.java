@@ -29,6 +29,9 @@ import com.uade.marketplace.repository.InscripcionRepository;
 import com.uade.marketplace.repository.ItemCarritoRepository;
 import com.uade.marketplace.repository.OfertaRepository;
 
+import com.uade.marketplace.exceptions.TurnoSinCuposException;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class TurnoServiceImpl implements TurnoService {
 
@@ -251,5 +254,29 @@ public class TurnoServiceImpl implements TurnoService {
                 .map(i -> i.getUsuarioComprador() != null ? i.getUsuarioComprador().getNombreUsuario() : null)
                 .filter(n -> n != null)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public Turno reservarLugares(Long idTurno, int cantidad) throws RecursoNoEncontradoException, TurnoSinCuposException {
+        Turno turno = turnoRepository.findByIdParaInscribir(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        if (turno.getLugaresDisponibles() == null || turno.getLugaresDisponibles() < cantidad)
+            throw new TurnoSinCuposException();
+        turno.setLugaresDisponibles(turno.getLugaresDisponibles() - cantidad);
+        if (turno.getLugaresDisponibles() == 0)
+            turno.setEstado(EstadoTurno.LLENO);
+        return turnoRepository.save(turno);
+    }
+
+    @Override
+    @Transactional
+    public Turno liberarLugares(Long idTurno, int cantidad) throws RecursoNoEncontradoException {
+        Turno turno = turnoRepository.findByIdParaInscribir(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
+        turno.setLugaresDisponibles(turno.getLugaresDisponibles() + cantidad);
+        if (turno.getEstado() == EstadoTurno.LLENO && turno.getLugaresDisponibles() > 0)
+            turno.setEstado(EstadoTurno.INCOMPLETO);
+        return turnoRepository.save(turno);
     }
 }

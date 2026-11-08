@@ -15,7 +15,6 @@ import com.uade.marketplace.entity.Inscripcion;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoPago;
-import com.uade.marketplace.entity.enums.EstadoTurno;
 import com.uade.marketplace.entity.enums.Rol;
 import com.uade.marketplace.exceptions.AccesoDenegadoException;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
@@ -79,19 +78,10 @@ public class InscripcionServiceImpl implements InscripcionService{
         if (request.getIdTurno() == null)
             throw new RecursoNoEncontradoException("Falta indicar el turno de la inscripcion");
 
-        Turno turno = turnoRepository.findByIdParaInscribir(request.getIdTurno())
-        .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + request.getIdTurno()));
-
         Usuario comprador = usuarioRepository.findById(actor.getIdUsuario())
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario " + actor.getIdUsuario()));
 
-        if (turno.getLugaresDisponibles() <= 0)
-            throw new TurnoSinCuposException();
-
-        turno.setLugaresDisponibles(turno.getLugaresDisponibles() - 1);
-        if (turno.getLugaresDisponibles() == 0)
-            turno.setEstado(EstadoTurno.LLENO);
-        turnoRepository.save(turno);
+        Turno turno = turnoService.reservarLugares(request.getIdTurno(), 1);
 
         Float precioFinal = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(), ofertaService.obtenerOfertaActivaPorTurno(turno.getIdTurno()).orElse(null));
 
@@ -119,15 +109,13 @@ public class InscripcionServiceImpl implements InscripcionService{
         Inscripcion inscripcion = inscripcionRepository.findById(idInscripcion)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe la inscripción " + idInscripcion));
 
-        Turno turno = inscripcion.getTurno();
-        turno.setLugaresDisponibles(turno.getLugaresDisponibles() + 1);
-        turno.setEstado(EstadoTurno.INCOMPLETO);
-        turnoRepository.save(turno);
+        Long idTurno = inscripcion.getTurno().getIdTurno();
+        turnoService.liberarLugares(idTurno, 1);
 
         inscripcionRepository.delete(inscripcion);
 
-        return turnoService.getTurnoById(turno.getIdTurno())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + turno.getIdTurno()));
+        return turnoService.getTurnoById(idTurno)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
     }
 
 
