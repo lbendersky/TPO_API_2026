@@ -86,9 +86,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     if (request.getNombre() != null) usuarioActualizado.setNombre(request.getNombre());
     if (request.getApellido() != null) usuarioActualizado.setApellido(request.getApellido());
     if (request.getEmail() != null) usuarioActualizado.setEmail(request.getEmail());
+
     if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
+        if (request.getContrasenaActual() == null
+                || !passwordEncoder.matches(request.getContrasenaActual(), usuarioActualizado.getContrasena())) {
+            throw new com.uade.marketplace.exceptions.SolicitudInvalidaException("La contraseña actual no es correcta");
+        }
         usuarioActualizado.setContrasena(passwordEncoder.encode(request.getContrasena()));
     }
+    
     if (request.getTelefono() != null) usuarioActualizado.setTelefono(request.getTelefono());
     return UsuarioResponse.from(usuarioRepository.save(usuarioActualizado));
     }

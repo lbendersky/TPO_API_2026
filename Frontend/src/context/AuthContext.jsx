@@ -63,7 +63,12 @@ export const AuthProvider = ({ children }) => {
             },
             body: JSON.stringify(datos),
         });
-        if (!response.ok) throw new Error('No se pudo actualizar el usuario');
+        if (!response.ok) {
+            if (response.status === 400) {
+                throw new Error('La contraseña actual no es correcta.');
+            }
+            throw new Error('No se pudo actualizar el usuario');
+        }
         const actualizado = await response.json();
         localStorage.setItem('usuario', JSON.stringify(actualizado));
         setUsuario(actualizado);

@@ -121,55 +121,6 @@
     animation: login-shake 0.4s ease-out;
 }
 
-.login__aviso {
-    color: var(--verdeMuyOscuro);
-    background: var(--gradienteAcento);
-    text-align: center;
-    margin: 0;
-    padding: 0.7rem 1rem;
-    border-radius: var(--radio-mediano);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    box-shadow: 0 0.3rem 0.8rem var(--sombraVerde);
-    animation: login-fade-in 0.4s ease-out;
-}
-
-.login__olvide {
-    align-self: center;
-    cursor: pointer;
-    color: var(--amarilloLima);
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    padding: 0.3rem 0.6rem;
-    border-radius: var(--radio-chico);
-    transition: color 0.25s ease, text-shadow 0.25s ease;
-    position: relative;
-}
-
-.login__olvide::after {
-    content: '';
-    position: absolute;
-    left: 0.6rem;
-    right: 0.6rem;
-    bottom: 0.2rem;
-    height: 1px;
-    background: var(--amarilloLima);
-    transform: scaleX(0.8);
-    transform-origin: center;
-    transition: transform 0.25s ease, background 0.25s ease;
-}
-
-.login__olvide:hover {
-    color: var(--blanco);
-    text-shadow: 0 0 0.6rem var(--amarilloLima);
-}
-
-.login__olvide:hover::after {
-    background: var(--blanco);
-    transform: scaleX(1);
-}
-
 @keyframes login-fade-in {
     from {
         opacity: 0;
@@ -197,8 +148,7 @@
 @media (prefers-reduced-motion: reduce) {
     .login,
     .login__form,
-    .login__error,
-    .login__aviso {
+    .login__error {
         animation: none;
     }
 }

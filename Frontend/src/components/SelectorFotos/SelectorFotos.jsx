@@ -1,18 +1,14 @@
-import { useState, useEffect } from 'react';
-import { API_URL } from '../../config';
+import {useEffect } from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {fetchFotosPrecargadas} from "../../redux/canchasSlice";
 
 const SelectorFotos = ({ elegidas, onCambiar }) => {
-    const [precargadas, setPrecargadas] = useState([]);
+    const dispatch = useDispatch();
+    const precargadas = useSelector((state) => state.canchas.precargadas);
 
     useEffect(() => {
-        fetch(`${API_URL}/imagenes/precargadas`)
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudieron cargar las fotos');
-                return response.json();
-            })
-            .then((data) => setPrecargadas(data))
-            .catch((error) => console.error('Error al cargar las fotos precargadas', error));
-    }, []);
+        if (precargadas.length === 0) dispatch(fetchFotosPrecargadas());
+    }, [dispatch, precargadas.length]);
 
     const toggleFoto = (id) => {
         if (elegidas.includes(id)) onCambiar(elegidas.filter((f) => f !== id));
