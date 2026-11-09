@@ -28,7 +28,6 @@ import com.uade.marketplace.entity.ItemCarrito;
 import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.EstadoPago;
-import com.uade.marketplace.entity.enums.EstadoTurno;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.SolicitudInvalidaException;
 import com.uade.marketplace.exceptions.TurnoSinCuposException;
@@ -59,6 +58,8 @@ public class CarritoServiceImpl implements CarritoService {
     private ImagenRepository imagenRepository;
     @Autowired
     private OfertaService ofertaService;
+    @Autowired
+    private TurnoService turnoService;
 
     private Carrito getOrCreateCarrito(Long idUsuario) throws RecursoNoEncontradoException {
         return carritoRepository.findByUsuario_IdUsuario(idUsuario)
@@ -78,25 +79,13 @@ public class CarritoServiceImpl implements CarritoService {
                 || item.getFechaReserva().plusMinutes(MINUTOS_RESERVA).isBefore(LocalDateTime.now());
     }
 
-    private void liberarLugares(ItemCarrito item) {
+    private void liberarLugares(ItemCarrito item) throws RecursoNoEncontradoException {
         Turno turno = item.getTurno();
         if (turno == null) return;
-        turno.setLugaresDisponibles(turno.getLugaresDisponibles() + item.getCantidad());
-        if (turno.getEstado() == EstadoTurno.LLENO && turno.getLugaresDisponibles() > 0)
-            turno.setEstado(EstadoTurno.INCOMPLETO);
-        turnoRepository.save(turno);
+        turnoService.liberarLugares(turno.getIdTurno(), item.getCantidad());
     }
 
-    private void reservarLugares(Turno turno, int cantidad) throws TurnoSinCuposException {
-        if (turno.getLugaresDisponibles() == null || turno.getLugaresDisponibles() < cantidad)
-            throw new TurnoSinCuposException();
-        turno.setLugaresDisponibles(turno.getLugaresDisponibles() - cantidad);
-        if (turno.getLugaresDisponibles() == 0)
-            turno.setEstado(EstadoTurno.LLENO);
-        turnoRepository.save(turno);
-    }
-
-    private void limpiarExpirados(Carrito carrito) {
+    private void limpiarExpirados(Carrito carrito) throws RecursoNoEncontradoException {
         Iterator<ItemCarrito> it = carrito.getItems().iterator();
         while (it.hasNext()) {
             ItemCarrito item = it.next();
@@ -165,20 +154,18 @@ public class CarritoServiceImpl implements CarritoService {
         Carrito carrito = getOrCreateCarrito(idUsuario);
         limpiarExpirados(carrito);
 
-        Turno turno = turnoRepository.findById(idTurno)
-                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + idTurno));
-
         ItemCarrito item = itemCarritoRepository
                 .findByCarrito_IdCarritoAndTurno_IdTurno(carrito.getIdCarrito(), idTurno)
                 .orElse(null);
 
-        Float precioActual = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(), ofertaService.obtenerOfertaActivaPorTurno(idTurno).orElse(null));
-
+        Turno turno;
         try {
-            reservarLugares(turno, cantidad);
+            turno = turnoService.reservarLugares(idTurno, cantidad);
         } catch (TurnoSinCuposException e) {
             throw new SolicitudInvalidaException(e.getMessage());
         }
+
+        Float precioActual = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(), ofertaService.obtenerOfertaActivaPorTurno(idTurno).orElse(null));
 
         if (item == null) {
             item = new ItemCarrito();
@@ -212,18 +199,15 @@ public class CarritoServiceImpl implements CarritoService {
             throw new RecursoNoEncontradoException("El item no pertenece al carrito del usuario");
 
         int delta = cantidad - item.getCantidad();
+        Long idTurnoItem = item.getTurno().getIdTurno();
         if (delta > 0) {
             try {
-                reservarLugares(item.getTurno(), delta);
+                turnoService.reservarLugares(idTurnoItem, delta);
             } catch (TurnoSinCuposException e) {
                 throw new SolicitudInvalidaException(e.getMessage());
             }
         } else if (delta < 0) {
-            Turno turno = item.getTurno();
-            turno.setLugaresDisponibles(turno.getLugaresDisponibles() + (-delta));
-            if (turno.getEstado() == EstadoTurno.LLENO && turno.getLugaresDisponibles() > 0)
-                turno.setEstado(EstadoTurno.INCOMPLETO);
-            turnoRepository.save(turno);
+            turnoService.liberarLugares(idTurnoItem, -delta);
         }
 
         item.setCantidad(cantidad);
@@ -299,7 +283,11 @@ public class CarritoServiceImpl implements CarritoService {
         LocalDateTime limite = LocalDateTime.now().minusMinutes(MINUTOS_RESERVA);
         List<ItemCarrito> expirados = itemCarritoRepository.findByFechaReservaBefore(limite);
         for (ItemCarrito item : expirados) {
-            liberarLugares(item);
+            try {
+                liberarLugares(item);
+            } catch (RecursoNoEncontradoException e) {
+                // el turno ya no existe (se borró por otro lado); de todas formas sacamos el item vencido del carrito
+            }
             Carrito carrito = item.getCarrito();
             if (carrito != null) carrito.getItems().removeIf(i -> i.getIdItem().equals(item.getIdItem()));
             itemCarritoRepository.delete(item);

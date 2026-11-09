@@ -1,21 +1,20 @@
 import './MisCanchas.css';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from '../../context/useAuth';
-import { API_URL } from '../../config';
+import { fetchMisCanchas } from '../../redux/canchasSlice';
+import { fetchMisTurnos } from '../../redux/turnosSlice';
 import CanchaPropia from '../../components/CanchaPropia/CanchaPropia';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
-import {useDispatch} from "react-redux";
-import {fetchMisTurnos} from "../../redux/turnosSlice";
 import { Boton } from '../../components/Boton/Boton';
 
 const MisCanchas = () => {
     const { estaLogueado, usuario } = useAuth();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [canchas, setCanchas] = useState([]);
-    const [cargando, setCargando] = useState(true);
+    const { misCanchas, loading, error } = useSelector((state) => state.canchas);
 
     useEffect(() => {
         if (!estaLogueado) {
@@ -25,23 +24,9 @@ const MisCanchas = () => {
 
     useEffect(() => {
         if (!usuario) return;
-        dispatch(fetchMisTurnos(usuario.idUsuario)); //Pide los turnos de las canchas del usuario
-        fetch(`${API_URL}/canchas/usuario/${usuario.idUsuario}`) //Fatla usar redux para esto 
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudieron cargar tus canchas');
-                return response.json();
-            })
-            .then((data) => {
-                setCanchas(data);
-                setCargando(false);
-            })
-            .catch((error) => {
-                console.error('Error al cargar las canchas', error);
-                setCargando(false);
-            });
+        dispatch(fetchMisCanchas(usuario.idUsuario));
+        dispatch(fetchMisTurnos(usuario.idUsuario));
     }, [usuario, dispatch]);
-
-    const actualizarCancha = (cambiada) => setCanchas(canchas.map((c) => (c.idCancha === cambiada.idCancha ? cambiada : c)));
 
     return (
         <main className="mis-canchas">
@@ -53,14 +38,15 @@ const MisCanchas = () => {
                 </Boton>
             </div>
 
-            {cargando && <p className="mis-canchas__aviso">Cargando tus canchas...</p>}
-            {!cargando && canchas.length === 0 && (
+            {loading && misCanchas.length === 0 && <p className="mis-canchas__aviso">Cargando tus canchas...</p>}
+            {error && <p className="mis-canchas__aviso">No se pudieron cargar tus canchas.</p>}
+            {!loading && !error && misCanchas.length === 0 && (
                 <p className="mis-canchas__aviso">Todavía no publicaste ninguna cancha.</p>
             )}
 
             <section className="mis-canchas__lista">
-                {canchas.map((cancha) => (
-                    <CanchaPropia key={cancha.idCancha} cancha={cancha} onCambio={actualizarCancha} />
+                {misCanchas.map((cancha) => (
+                    <CanchaPropia key={cancha.idCancha} cancha={cancha} />
                 ))}
             </section>
         </main>

@@ -5,10 +5,12 @@ import java.util.Optional;
 
 import com.uade.marketplace.dto.request.TurnoRequest;
 import com.uade.marketplace.dto.response.TurnoResponse;
+import com.uade.marketplace.entity.Turno;
 import com.uade.marketplace.entity.Usuario;
 import com.uade.marketplace.entity.enums.TipoFutbol;
 import com.uade.marketplace.exceptions.RecursoNoEncontradoException;
 import com.uade.marketplace.exceptions.TurnoDuplicateException;
+import com.uade.marketplace.exceptions.TurnoSinCuposException;
 
 public interface TurnoService {
 
@@ -33,4 +35,8 @@ public interface TurnoService {
     List<TurnoResponse> filtrar(List<TipoFutbol> tipoFutbol, Float precioMin, Float precioMax, List<String> localidad, String texto);
 
     List<String> getParticipantes(Long idTurno) throws RecursoNoEncontradoException;
+
+    Turno reservarLugares(Long idTurno, int cantidad) throws RecursoNoEncontradoException, TurnoSinCuposException;
+
+    Turno liberarLugares(Long idTurno, int cantidad) throws RecursoNoEncontradoException;
 }
