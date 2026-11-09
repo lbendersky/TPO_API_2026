@@ -79,13 +79,13 @@ public class CarritoServiceImpl implements CarritoService {
                 || item.getFechaReserva().plusMinutes(MINUTOS_RESERVA).isBefore(LocalDateTime.now());
     }
 
-    private void liberarLugares(ItemCarrito item) {
+    private void liberarLugares(ItemCarrito item) throws RecursoNoEncontradoException {
         Turno turno = item.getTurno();
         if (turno == null) return;
         turnoService.liberarLugares(turno.getIdTurno(), item.getCantidad());
     }
 
-    private void limpiarExpirados(Carrito carrito) {
+    private void limpiarExpirados(Carrito carrito) throws RecursoNoEncontradoException {
         Iterator<ItemCarrito> it = carrito.getItems().iterator();
         while (it.hasNext()) {
             ItemCarrito item = it.next();
@@ -283,7 +283,11 @@ public class CarritoServiceImpl implements CarritoService {
         LocalDateTime limite = LocalDateTime.now().minusMinutes(MINUTOS_RESERVA);
         List<ItemCarrito> expirados = itemCarritoRepository.findByFechaReservaBefore(limite);
         for (ItemCarrito item : expirados) {
-            liberarLugares(item);
+            try {
+                liberarLugares(item);
+            } catch (RecursoNoEncontradoException e) {
+                // el turno ya no existe (se borró por otro lado); de todas formas sacamos el item vencido del carrito
+            }
             Carrito carrito = item.getCarrito();
             if (carrito != null) carrito.getItems().removeIf(i -> i.getIdItem().equals(item.getIdItem()));
             itemCarritoRepository.delete(item);
