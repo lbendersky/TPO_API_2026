@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { API_URL } from '../../config'
-import { useAuth } from '../../context/useAuth'
 import VolverAtras from '../../components/VolverAtras/VolverAtras'
 import { BotonCheckout } from '../../components/Checkout/BotonCheckout'
 import { HeaderCarrito } from '../../components/Carrito/HeaderCarrito'
@@ -37,7 +37,7 @@ const validarTarjeta = ({ numero, titular, vencimiento, cvv }) => {
 }
 
 const Checkout = () => {
-  const { token } = useAuth()
+  const { token } = useSelector((state) => state.usuarios)
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [inscripciones, setInscripciones] = useState(null)

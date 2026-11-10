@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { PlusCircle } from 'lucide-react';
-import { useAuth } from '../../context/useAuth';
 import { Boton } from '../Boton/Boton';
 
 export const BotonPublicarCanchaNavBar = () => {
     const navigate = useNavigate();
-    const { estaLogueado } = useAuth();
+    const { estaLogueado } = useSelector((state) => state.usuarios);
 
     const handleClick = () => {
         navigate(estaLogueado ? '/publicar-cancha' : '/login');

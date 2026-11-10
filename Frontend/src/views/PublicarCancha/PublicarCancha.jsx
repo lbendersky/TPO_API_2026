@@ -2,7 +2,6 @@ import './PublicarCancha.css';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/useAuth';
 import FormularioCancha from '../../components/FormularioCancha/FormularioCancha';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import { Boton } from '../../components/Boton/Boton';
@@ -10,20 +9,18 @@ import {useDispatch, useSelector} from "react-redux";
 import {publicarCancha, limpiarPublicada} from "../../redux/canchasSlice";
 
 const PublicarCancha = () => {
-    const { estaLogueado, token } = useAuth();
+    const { estaLogueado, token } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const publicada = useSelector((state) => state.canchas.ultimaPublicada);
     const [error, setError] = useState('');
 
-    // Si no hay sesión, lo manda al login (igual que Perfil)
     useEffect(() => {
         if (!estaLogueado) {
             navigate('/login');
         }
     }, [estaLogueado, navigate]);
 
-    //al entarr a la pantalla de publicar borra la ultima cancha publicada para que aparezca form vacio
     useEffect(() => {
         dispatch(limpiarPublicada());
     }, [dispatch]);

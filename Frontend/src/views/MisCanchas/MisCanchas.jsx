@@ -3,7 +3,6 @@ import './MisCanchas.css';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAuth } from '../../context/useAuth';
 import { fetchMisCanchas } from '../../redux/canchasSlice';
 import { fetchMisTurnos } from '../../redux/turnosSlice';
 import CanchaPropia from '../../components/CanchaPropia/CanchaPropia';
@@ -11,7 +10,7 @@ import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import { Boton } from '../../components/Boton/Boton';
 
 const MisCanchas = () => {
-    const { estaLogueado, usuario } = useAuth();
+    const { estaLogueado, usuario } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { misCanchas, loading, error } = useSelector((state) => state.canchas);

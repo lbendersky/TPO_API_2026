@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useAuth } from "../../context/useAuth";
+import { useSelector } from "react-redux";
+import { API_URL } from "../../config";
 import VolverAtras from "../../components/VolverAtras/VolverAtras";
 
 import { HeaderCarrito } from "../../components/Carrito/HeaderCarrito";
@@ -44,7 +44,9 @@ const CountdownItem = ({ fechaExpiracion }) => {
 };
 
 const Carrito = () => {
-    const { token } = useAuth();
+    const [carrito, setCarrito] = useState({ items: [], total: 0 });
+    const [cargando, setCargando] = useState(true);
+    const { token } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 

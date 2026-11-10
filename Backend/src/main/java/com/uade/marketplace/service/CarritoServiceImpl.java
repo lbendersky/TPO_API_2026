@@ -286,7 +286,6 @@ public class CarritoServiceImpl implements CarritoService {
             try {
                 liberarLugares(item);
             } catch (RecursoNoEncontradoException e) {
-                // el turno ya no existe (se borró por otro lado); de todas formas sacamos el item vencido del carrito
             }
             Carrito carrito = item.getCarrito();
             if (carrito != null) carrito.getItems().removeIf(i -> i.getIdItem().equals(item.getIdItem()));

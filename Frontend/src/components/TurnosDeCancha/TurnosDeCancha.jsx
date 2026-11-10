@@ -2,14 +2,13 @@ import './TurnosDeCancha.css';
 
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAuth } from '../../context/useAuth';
 import { crearTurno } from '../../redux/turnosSlice';
 import FormularioTurno from '../FormularioTurno/FormularioTurno';
 import TurnoPropio from '../TurnoPropio/TurnoPropio';
 import { Boton } from '../Boton/Boton';
 
 const TurnosDeCancha = ({ cancha }) => {
-    const { token } = useAuth();
+    const { token } = useSelector((state) => state.usuarios);
     const dispatch = useDispatch();
     const todos = useSelector((state) => state.turnos.deMisCanchas);
     const turnos = todos.filter((t) => t.idCancha === cancha.idCancha);
