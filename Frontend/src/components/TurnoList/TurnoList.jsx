@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Search } from 'lucide-react';
 import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
-import { fetchTurnosFiltrados, setFiltros, fetchLocalidades } from '../../redux/turnosSlice';
+import { fetchTurnosFiltrados, setFiltros, fetchLocalidades } from '../../Redux/turnosSlice';
 import { useBusqueda } from '../../context/useBusqueda';
 
 const TurnoList = () => {
@@ -22,7 +22,6 @@ const TurnoList = () => {
     useEffect(() => {
         dispatch(fetchTurnosFiltrados({ ...filtros, texto: texto?.trim() || null }));
     }, [dispatch, filtros, texto]);
-
     return (
         <>
             <label className="turno-buscador">

@@ -11,7 +11,7 @@ import { CanchasSeleccionadas } from "../../components/Carrito/CanchasSelecciona
 import { ResumenDeCompraCarrito } from "../../components/Carrito/ResumenDeCompraCarrito";
 
 import "./Carrito.css";
-import { fetchCarrito, quitarItemCarrito, actualizarCantidad } from "../../Redux/carritoSlice";
+import { fetchCarrito } from "../../redux/carritoSlice";
 
 const formatearTiempoRestante = (ms) => {
     if (ms <= 0) return "00:00";
@@ -49,7 +49,6 @@ const Carrito = () => {
     const dispatch = useDispatch();
 
     const { items = [], error, loading } = useSelector((state) => state.carrito);
-
     const sinSesion = !token;
 
     useEffect(() => {
@@ -58,6 +57,7 @@ const Carrito = () => {
     }, [sinSesion, dispatch]);
 
     const proximaExpiracion = useMemo(() => {
+        if (!Array.isArray(items)) return null;
         const fechas = items
             .map((i) => i.fechaExpiracion)
             .filter(Boolean)
@@ -65,7 +65,6 @@ const Carrito = () => {
         return fechas.length ? Math.min(...fechas) : null;
     }, [items]);
 
-   
     const yaRefrescadoRef = useRef(null);
     useEffect(() => {
         if (!proximaExpiracion) return;
@@ -83,11 +82,6 @@ const Carrito = () => {
         navigate("/carrito/checkout");
     };
 
-    const manejarQuitar = (idItem) => dispatch(quitarItemCarrito(idItem));
-
-    const manejarCambiarCantidad = (idItem, cantidad) =>
-        dispatch(actualizarCantidad({ idItem, cantidad }));
-
     const mostrarContenido = !sinSesion && !loading && !error;
 
     return (
@@ -103,7 +97,10 @@ const Carrito = () => {
                         {mostrarContenido && items.some((i) => i.fechaExpiracion) && (
                             <div className="carrito-principal__countdowns">
                                 {items.map((item) => item.fechaExpiracion && (
-                                    <CountdownItem key={item.idItem} fechaExpiracion={item.fechaExpiracion} />
+                                    <CountdownItem 
+                                        key={item.idItem ?? item.id_item ?? item.id} 
+                                        fechaExpiracion={item.fechaExpiracion} 
+                                    />
                                 ))}
                             </div>
                         )}
@@ -126,21 +123,14 @@ const Carrito = () => {
                     )}
 
                     {mostrarContenido && items.map((item) => (
-                        <div key={item.idItem} className="carrito-item-con-contador">
-                            <TarjetaCarrito
-                                item={item}
-                                onQuitar={manejarQuitar}
-                                onCambiarCantidad={manejarCambiarCantidad}
-                            />
+                        <div key={item.idItem ?? item.id_item ?? item.id} className="carrito-item-con-contador">
+                            <TarjetaCarrito item={item} />
                         </div>
                     ))}
                 </section>
 
                 <aside className="carrito-sidebar">
-                    <ResumenDeCompraCarrito
-                        onConfirmarReserva={onConfirmarReserva}
-                        disabled={items.length === 0}
-                    />
+                    <ResumenDeCompraCarrito onConfirmarReserva={onConfirmarReserva} />
                 </aside>
             </div>
         </main>
