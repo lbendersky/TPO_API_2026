@@ -1,13 +1,13 @@
 import './MisInscripciones.css';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { API_URL } from '../../config';
+import { useDispatch, useSelector } from 'react-redux';
 import { formatearFechaHora } from '../../utils/fecha';
 import { formatearMoneda } from '../../utils/moneda';
 import { obtenerEstadosPago } from '../../utils/pagosLocales';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
+import { fetchInscripcionesUsuario } from '../../redux/carritoSlice';
 
 const ESTADO_LABEL = {
     PENDIENTE: 'Pendiente',
@@ -18,11 +18,15 @@ const ESTADO_LABEL = {
 };
 
 const MisInscripciones = () => {
-    const { estaLogueado, usuario, token } = useSelector((state) => state.usuarios);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [inscripciones, setInscripciones] = useState([]);
-    const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState('');
+
+    const { estaLogueado, usuario } = useSelector((state) => state.usuarios);
+    const { 
+        inscripciones = [], 
+        loadingInscripciones: cargando, 
+        errorInscripciones: error 
+    } = useSelector((state) => state.carrito);
 
     useEffect(() => {
         if (!estaLogueado) {
@@ -31,25 +35,15 @@ const MisInscripciones = () => {
     }, [estaLogueado, navigate]);
 
     useEffect(() => {
-        if (!usuario) return;
-        fetch(`${API_URL}/inscripciones/usuario/${usuario.idUsuario}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-            .then((response) => {
-                if (!response.ok) throw new Error('No se pudieron cargar tus inscripciones.');
-                return response.json();
-            })
-            .then((data) => setInscripciones(data))
-            .catch((err) => {
-                console.error('Error al cargar las inscripciones', err);
-                setError('No se pudieron cargar tus inscripciones.');
-            })
-            .finally(() => setCargando(false));
-    }, [usuario, token]);
+        const idUsuario = usuario?.idUsuario ?? usuario?.id_usuario;
+        if (estaLogueado && idUsuario) {
+            dispatch(fetchInscripcionesUsuario(idUsuario));
+        }
+    }, [dispatch, estaLogueado, usuario]);
 
     return (
         <main className="mis-inscripciones">
-            <VolverAtras/>
+            <VolverAtras />
             <div className="mis-inscripciones__header">
                 <h1 className="mis-inscripciones__titulo">Mis inscripciones</h1>
             </div>
@@ -64,15 +58,21 @@ const MisInscripciones = () => {
                 {(() => {
                     const estadosLocales = obtenerEstadosPago();
                     return inscripciones.map((i) => {
+                        const idInscripcion = i.idInscripcion ?? i.id_inscripcion;
                         const estadoEfectivo = i.estadoPago === 'PENDIENTE'
-                            ? (estadosLocales[i.idInscripcion] ?? i.estadoPago)
+                            ? (estadosLocales[idInscripcion] ?? i.estadoPago)
                             : i.estadoPago;
+
                         return (
-                            <article key={i.idInscripcion} className="tarjeta-inscripcion">
+                            <article key={idInscripcion} className="tarjeta-inscripcion">
                                 <div className="tarjeta-inscripcion__principal">
-                                    <h3 className="tarjeta-inscripcion__cancha">{i.nombreCancha ?? `Turno #${i.idTurno}`}</h3>
+                                    <h3 className="tarjeta-inscripcion__cancha">
+                                        {i.nombreCancha ?? `Turno #${i.idTurno ?? i.id_turno}`}
+                                    </h3>
                                     {i.localidad && <span className="tarjeta-inscripcion__localidad">{i.localidad}</span>}
-                                    <span className="tarjeta-inscripcion__fecha">{formatearFechaHora(i.fechaHoraTurno)}</span>
+                                    <span className="tarjeta-inscripcion__fecha">
+                                        {formatearFechaHora(i.fechaHoraTurno ?? i.fecha_hora_turno)}
+                                    </span>
                                     {i.tipoFutbol && <span className="tarjeta-inscripcion__tipo">{i.tipoFutbol}</span>}
                                 </div>
 
@@ -80,7 +80,9 @@ const MisInscripciones = () => {
                                     <span className={`tarjeta-inscripcion__estado tarjeta-inscripcion__estado--${estadoEfectivo?.toLowerCase()}`}>
                                         {ESTADO_LABEL[estadoEfectivo] ?? estadoEfectivo}
                                     </span>
-                                    <span className="tarjeta-inscripcion__monto">{formatearMoneda(i.montoPagado)}</span>
+                                    <span className="tarjeta-inscripcion__monto">
+                                        {formatearMoneda(i.montoPagado ?? i.monto_pagado)}
+                                    </span>
                                 </div>
                             </article>
                         );

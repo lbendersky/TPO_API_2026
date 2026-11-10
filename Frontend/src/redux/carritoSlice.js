@@ -7,8 +7,41 @@ const conToken = (token) => ({
 });
 
 const obtenerToken = (getState) => {
-  return getState().auth?.token || localStorage.getItem('token');
+  return getState().usuarios?.token || getState().auth?.token || localStorage.getItem('token');
 };
+
+const obtenerUsuario = (getState) => {
+  return getState().usuarios?.usuario || getState().auth?.usuario;
+};
+
+// --- Thunk refactorizado para Inscripciones ---
+export const fetchInscripcionesUsuario = createAsyncThunk(
+  'carrito/fetchInscripcionesUsuario',
+  async (idUsuarioParam, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const token = obtenerToken(() => state);
+      
+      // Usa el id pasado por parámetro o lo toma del usuario en el store
+      const usuario = obtenerUsuario(() => state);
+      const idUsuario = idUsuarioParam ?? usuario?.idUsuario ?? usuario?.id_usuario;
+
+      if (!idUsuario) {
+        return rejectWithValue('No se encontró el ID del usuario.');
+      }
+
+      const response = await axios.get(
+        `${API_URL}/inscripciones/usuario/${idUsuario}`,
+        conToken(token)
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || 'No se pudieron cargar tus inscripciones.'
+      );
+    }
+  }
+);
 
 export const fetchCarrito = createAsyncThunk(
   'carrito/fetchCarrito',
@@ -62,6 +95,10 @@ const carritoSlice = createSlice({
     items: [],
     loading: false,
     error: null,
+    // Estado para inscripciones
+    inscripciones: [],
+    loadingInscripciones: false,
+    errorInscripciones: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -96,7 +133,7 @@ const carritoSlice = createSlice({
         );
       })
 
-      // Actualizar Cantidad (reflejo inmediato)
+      // Actualizar Cantidad
       .addCase(actualizarCantidad.fulfilled, (state, action) => {
         if (Array.isArray(action.payload)) {
           state.items = action.payload;
@@ -121,6 +158,20 @@ const carritoSlice = createSlice({
             item.subTotal = precio * cantidad;
           }
         }
+      })
+
+      // --- Inscripciones ---
+      .addCase(fetchInscripcionesUsuario.pending, (state) => {
+        state.loadingInscripciones = true;
+        state.errorInscripciones = null;
+      })
+      .addCase(fetchInscripcionesUsuario.fulfilled, (state, action) => {
+        state.loadingInscripciones = false;
+        state.inscripciones = Array.isArray(action.payload) ? action.payload : [];
+      })
+      .addCase(fetchInscripcionesUsuario.rejected, (state, action) => {
+        state.loadingInscripciones = false;
+        state.errorInscripciones = action.payload || action.error.message;
       });
   },
 });
