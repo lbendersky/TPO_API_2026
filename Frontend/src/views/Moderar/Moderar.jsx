@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/useAuth';
+import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '../../config';
+import { buscarUsuarioPorEmail, eliminarUsuarioAdmin } from '../../redux/usuariosSlice';
 import BuscadorModeracion from '../../components/BuscadorModeracion/BuscadorModeracion';
 import SelectorModeracion from '../../components/SelectorModeracion/SelectorModeracion';
 import FormularioOferta from '../../components/FormularioOferta/FormularioOferta';
@@ -11,8 +12,9 @@ import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './Moderar.css';
 
 const Moderar = () => {
-    const { usuario, estaLogueado, token } = useAuth();
+    const { usuario, estaLogueado, token } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (!estaLogueado) {
@@ -35,8 +37,12 @@ const Moderar = () => {
         return response.status === 204 ? null : response.json().catch(() => null);
     };
 
-    const buscarUsuario = (email) => pedir(`${API_URL}/usuarios?email=${encodeURIComponent(email)}`);
-    const eliminarUsuario = (u) => pedir(`${API_URL}/usuarios/${u.idUsuario}`, { method: 'DELETE' });
+    const buscarUsuario = (email) =>
+        dispatch(buscarUsuarioPorEmail({ email, token })).unwrap()
+            .catch((mensaje) => { throw new Error(typeof mensaje === 'string' ? mensaje : 'No se pudo obtener el usuario'); });
+    const eliminarUsuario = (u) =>
+        dispatch(eliminarUsuarioAdmin({ idUsuario: u.idUsuario, token })).unwrap()
+            .catch((mensaje) => { throw new Error(typeof mensaje === 'string' ? mensaje : 'No se pudo eliminar el usuario'); });
 
     const listarCanchas = () => pedir(`${API_URL}/canchas`);
     const eliminarCancha = (c) => pedir(`${API_URL}/canchas/${c.idCancha}`, { method: 'DELETE' });

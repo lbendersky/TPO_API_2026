@@ -15,18 +15,15 @@ import QuienesSomos from './views/QuienesSomos/QuienesSomos';
 import Contacto from './views/Contacto/Contacto';
 import TerminosYCondiciones from './views/TerminosYCondiciones/TerminosYCondiciones';
 import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { BusquedaProvider } from './context/BusquedaContext';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 function App() {
     return (
-        <AuthProvider>
-            <BusquedaProvider>
-                <ScrollToTop/>
-                <NavBar/>
-                <main className="app-main">
-                    <Routes>
+        <>
+            <ScrollToTop/>
+            <NavBar/>
+            <main className="app-main">
+                <Routes>
                         <Route path="/" element={<Inicio />} />
                         <Route path="/inicio" element={<Inicio />} />
                         <Route path="/carrito" element={<Carrito />} />
@@ -41,11 +38,10 @@ function App() {
                         <Route path="/quienes-somos" element={<QuienesSomos/>} />
                         <Route path="/contacto" element={<Contacto/>} />
                         <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones/>} />
-                    </Routes>
-                </main>
-                <Footer/>
-            </BusquedaProvider>
-        </AuthProvider>
+                </Routes>
+            </main>
+            <Footer/>
+        </>
     );
 }
 

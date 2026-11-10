@@ -2,7 +2,7 @@ import './MisInscripciones.css';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/useAuth';
+import { useSelector } from 'react-redux';
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
 import { formatearMoneda } from '../../utils/moneda';
@@ -18,7 +18,7 @@ const ESTADO_LABEL = {
 };
 
 const MisInscripciones = () => {
-    const { estaLogueado, usuario, token } = useAuth();
+    const { estaLogueado, usuario, token } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
     const [inscripciones, setInscripciones] = useState([]);
     const [cargando, setCargando] = useState(true);

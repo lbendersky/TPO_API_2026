@@ -1,16 +1,15 @@
 import './CanchaPropia.css';
 
 import { useState} from 'react';
-import { useAuth } from '../../context/useAuth';
 import CarruselCancha from '../CarruselCancha/CarruselCancha';
 import FormularioCancha from '../FormularioCancha/FormularioCancha';
 import TurnosDeCancha from '../TurnosDeCancha/TurnosDeCancha';
 import { Boton } from '../Boton/Boton';
 import {editarCancha, darDeBajaCancha} from "../../redux/canchasSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const CanchaPropia = ({ cancha }) => {
-    const { token } = useAuth();
+    const { token } = useSelector((state) => state.usuarios);
     const dispatch = useDispatch();
     const [editando, setEditando] = useState(false);
     const [error, setError] = useState('');

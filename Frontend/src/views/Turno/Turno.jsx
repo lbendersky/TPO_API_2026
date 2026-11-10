@@ -14,7 +14,6 @@ import { Alerta } from '../../utils/alerta';
 // URL base del backend
 import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
-import { useAuth } from '../../context/useAuth';
 import ParticipantesTurno from '../../components/ParticipantesTurno/ParticipantesTurno';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import { Boton } from '../../components/Boton/Boton';
@@ -29,7 +28,7 @@ const TIPO_FUTBOL_LABEL = {
 const Turno = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { estaLogueado, token } = useAuth();
+    const { estaLogueado, token } = useSelector((state) => state.usuarios);
     const dispatch = useDispatch();
     const turno = useSelector((state) => state.turnos.seleccionado);
     const error = useSelector((state) => state.turnos.error);
@@ -70,7 +69,6 @@ const Turno = () => {
     dispatch(fetchTurnoPorId(id));
     }, [dispatch, id]);
 
-    // Pide las fotos de la cancha solo si todavía no están en el store
     useEffect(() => {
         if (idCancha && guardadas === undefined) dispatch(fetchImagenesCancha(idCancha));
     }, [dispatch, idCancha, guardadas]);
