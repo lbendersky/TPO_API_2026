@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { confirmarEliminar } from '../../utils/alerta';
-import { useAuth } from '../../context/useAuth';
+import { actualizarPerfil, eliminarCuenta as eliminarCuentaThunk, logout } from '../../redux/usuariosSlice';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './Perfil.css';
 import { Boton } from '../../components/Boton/Boton';
 
 const Perfil = () => {
-    const { usuario, estaLogueado, actualizar, logout, eliminarCuenta } = useAuth();
+    const dispatch = useDispatch();
+    const { usuario, token, estaLogueado } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState('');
@@ -33,7 +35,7 @@ const Perfil = () => {
         setDatos({ ...datos, [campo]: e.target.value });
     };
 
-    const handleGuardar = async (e) => {
+    const handleGuardar = (e) => {
         e.preventDefault();
         setMensaje('');
         setError('');
@@ -41,36 +43,34 @@ const Perfil = () => {
             setError('Ingresá tu contraseña actual para poder cambiarla.');
             return;
         }
-        try {
-            const payload = { ...datos };
-            if (!payload.contrasena) {
-                delete payload.contrasena;
-                delete payload.contrasenaActual;
-            }
-            
-            if (!payload.dni) delete payload.dni;
-            await actualizar(payload);
-            setMensaje('Datos actualizados');
-            setDatos({ ...datos, contrasena: '', contrasenaActual: '' });
-        } catch (err) {
-            setError(err.message);
+    const payload = { ...datos };
+        if (!payload.contrasena) {
+            delete payload.contrasena;
+            delete payload.contrasenaActual;
         }
+        if (!payload.dni) delete payload.dni;
+
+        dispatch(actualizarPerfil({ idUsuario: usuario.idUsuario, datos: payload, token }))
+            .unwrap()
+            .then(() => {
+                setMensaje('Datos actualizados');
+                setDatos({ ...datos, contrasena: '', contrasenaActual: '' });
+            })
+            .catch((mensaje) => setError(typeof mensaje === 'string' ? mensaje : 'No se pudo actualizar el usuario'));
     };
 
     const handleLogout = () => {
-        logout();
+        dispatch(logout());
         navigate('/');
     };
 
     const handleEliminar = async () => {
         const resultado = await confirmarEliminar('cuenta');
         if (!resultado.isConfirmed) return;
-        try {
-            await eliminarCuenta();
-            navigate('/');
-        } catch (err) {
-            setError(err.message);
-        }
+        dispatch(eliminarCuentaThunk({ idUsuario: usuario.idUsuario, token }))
+            .unwrap()
+            .then(() => navigate('/'))
+            .catch((mensaje) => setError(typeof mensaje === 'string' ? mensaje : 'No se pudo eliminar la cuenta'));
     };
 
     if (!usuario) return null;

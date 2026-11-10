@@ -1,15 +1,14 @@
 import './TurnoPropio.css';
 
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useAuth } from '../../context/useAuth';
+import { useDispatch, useSelector } from 'react-redux';
 import { editarTurno, borrarTurno } from '../../redux/turnosSlice';
 import { formatearFechaHora } from '../../utils/fecha';
 import { Boton } from '../Boton/Boton';
 import FormularioTurno from '../FormularioTurno/FormularioTurno';
 
 const TurnoPropio = ({ turno }) => {
-    const { token } = useAuth();
+    const { token } = useSelector((state) => state.usuarios);
     const dispatch = useDispatch();
     const [editando, setEditando] = useState(false);
     const [error, setError] = useState('');

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { API_URL } from "../../config";
-import { useAuth } from "../../context/useAuth";
 import VolverAtras from "../../components/VolverAtras/VolverAtras";
 
 
@@ -47,7 +47,7 @@ const Carrito = () => {
     const [carrito, setCarrito] = useState({ items: [], total: 0 });
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState("");
-    const { token } = useAuth();
+    const { token } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
 
     const cargarCarrito = useCallback(() => {

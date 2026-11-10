@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/useAuth';
+import { useDispatch } from 'react-redux';
+import { login, register } from '../../redux/usuariosSlice';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import './Login.css';
 import { Boton } from '../../components/Boton/Boton';
 
 const Login = () => {
-    const { login, register } = useAuth();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [modo, setModo] = useState('login');
     const [error, setError] = useState('');
@@ -23,26 +24,22 @@ const Login = () => {
         contrasena: '',
     });
 
-    const handleLogin = async (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
         setError('');
-        try {
-            await login(loginData.email, loginData.contrasena);
-            navigate(-1);
-        } catch (err) {
-            setError(err.message);
-        }
+        dispatch(login({ email: loginData.email, contrasena: loginData.contrasena }))
+            .unwrap()
+            .then(() => navigate(-1))
+            .catch((mensaje) => setError(typeof mensaje === 'string' ? mensaje : 'Credenciales inválidas'));
     };
 
-    const handleRegister = async (e) => {
+    const handleRegister = (e) => {
         e.preventDefault();
         setError('');
-        try {
-            await register(registerData);
-            navigate('/');
-        } catch (err) {
-            setError(err.message);
-        }
+        dispatch(register(registerData))
+            .unwrap()
+            .then(() => navigate('/'))
+            .catch((mensaje) => setError(typeof mensaje === 'string' ? mensaje : 'No se pudo registrar el usuario'));
     };
 
     return (
