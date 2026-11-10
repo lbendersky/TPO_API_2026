@@ -7,7 +7,7 @@ const conToken = (token) => ({
 });
 
 const obtenerToken = (getState) => {
-  return getState().usuarios?.token || getState().auth?.token || localStorage.getItem('token');
+  return getState().usuarios?.token || localStorage.getItem('token');
 };
 
 const obtenerUsuario = (getState) => {

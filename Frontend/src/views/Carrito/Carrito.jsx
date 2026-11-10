@@ -44,8 +44,6 @@ const CountdownItem = ({ fechaExpiracion }) => {
 };
 
 const Carrito = () => {
-    const [carrito, setCarrito] = useState({ items: [], total: 0 });
-    const [cargando, setCargando] = useState(true);
     const { token } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -95,15 +93,10 @@ const Carrito = () => {
             <div className="carrito-layout">
                 <section className="carrito-principal">
                     <div className="carrito-principal__encabezado">
-                        <CanchasSeleccionadas cantidad={items.length} />
-                        {mostrarContenido && items.some((i) => i.fechaExpiracion) && (
+                        <CanchasSeleccionadas/>
+                        {mostrarContenido && proximaExpiracion && (
                             <div className="carrito-principal__countdowns">
-                                {items.map((item) => item.fechaExpiracion && (
-                                    <CountdownItem 
-                                        key={item.idItem ?? item.id_item ?? item.id} 
-                                        fechaExpiracion={item.fechaExpiracion} 
-                                    />
-                                ))}
+                                <CountdownItem fechaExpiracion={proximaExpiracion} />
                             </div>
                         )}
                     </div>
