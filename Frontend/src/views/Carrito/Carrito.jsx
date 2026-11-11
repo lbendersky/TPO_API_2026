@@ -5,9 +5,7 @@ import { API_URL } from "../../config";
 import VolverAtras from "../../components/VolverAtras/VolverAtras";
 
 import { HeaderCarrito } from "../../components/Carrito/HeaderCarrito";
-import AvisoPrioridadBloqueada from "../../components/Carrito/AvisoPrioridadBloqueada";
 import { TarjetaCarrito } from "../../components/Carrito/TarjetaCarrito";
-import { CanchasSeleccionadas } from "../../components/Carrito/CanchasSeleccionadas";
 import { ResumenDeCompraCarrito } from "../../components/Carrito/ResumenDeCompraCarrito";
 
 import "./Carrito.css";
@@ -88,12 +86,27 @@ const Carrito = () => {
         <main className="carrito-page">
             <HeaderCarrito />
             <VolverAtras />
-            <AvisoPrioridadBloqueada />
+
+            <div className="aviso-prioridad">
+                <div className="aviso-prioridad__icono">🔒</div>
+                <div className="aviso-prioridad__texto">
+                    <h4 className="aviso-prioridad__titulo">Prioridad bloqueada</h4>
+                    <p>
+                        Tus turnos se mantienen en el carrito mientras completás la compra.
+                        El precio queda congelado al momento de agregarlos.
+                    </p>
+                </div>
+            </div>
 
             <div className="carrito-layout">
                 <section className="carrito-principal">
                     <div className="carrito-principal__encabezado">
-                        <CanchasSeleccionadas/>
+                        <div className="canchas-seleccionadas">
+                            <h2 className="canchas-seleccionadas__titulo">
+                                Canchas seleccionadas
+                                <p>{items.length}</p>
+                            </h2>
+                        </div>
                         {mostrarContenido && proximaExpiracion && (
                             <div className="carrito-principal__countdowns">
                                 <CountdownItem fechaExpiracion={proximaExpiracion} />
