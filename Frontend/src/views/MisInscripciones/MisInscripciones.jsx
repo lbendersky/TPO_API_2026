@@ -7,7 +7,7 @@ import { formatearFechaHora } from '../../utils/fecha';
 import { formatearMoneda } from '../../utils/moneda';
 import { obtenerEstadosPago } from '../../utils/pagosLocales';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
-import { fetchInscripcionesUsuario } from '../../redux/carritoSlice';
+import { fetchInscripcionesUsuario } from '../../redux/inscripcionesSlice';
 
 const ESTADO_LABEL = {
     PENDIENTE: 'Pendiente',
@@ -23,9 +23,9 @@ const MisInscripciones = () => {
 
     const estaLogueado = useSelector((state) => state.usuarios?.estaLogueado);
     const usuario = useSelector((state) => state.usuarios?.usuario);
-    const rawInscripciones = useSelector((state) => state.carrito?.inscripciones);
-    const cargando = useSelector((state) => state.carrito?.loadingInscripciones);
-    const error = useSelector((state) => state.carrito?.errorInscripciones);
+    const rawInscripciones = useSelector((state) => state.inscripciones?.items);
+    const cargando = useSelector((state) => state.inscripciones?.loading);
+    const error = useSelector((state) => state.inscripciones?.error);
 
     const inscripciones = useMemo(() => {
         const lista = rawInscripciones || [];

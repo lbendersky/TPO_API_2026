@@ -9,83 +9,37 @@ const obtenerUsuarioPorEmail = async (email, token) => {
     return data;
 };
 
-export const login = createAsyncThunk('usuarios/login', async ({ email, contrasena }, { rejectWithValue }) => {
-    let accessToken;
-    try {
-        const { data } = await axios.post(`${API_URL}/api/v1/auth/authenticate`, { email, contrasena });
-        accessToken = data.access_token;
-    } catch {
-        return rejectWithValue('Credenciales inválidas');
-    }
-
-    let usuario;
-    try {
-        usuario = await obtenerUsuarioPorEmail(email, accessToken);
-    } catch {
-        return rejectWithValue('No se pudo obtener el usuario');
-    }
-
+export const login = createAsyncThunk('usuarios/login', async ({ email, contrasena }) => {
+    const { data } = await axios.post(`${API_URL}/api/v1/auth/authenticate`, { email, contrasena });
+    const accessToken = data.access_token;
+    const usuario = await obtenerUsuarioPorEmail(email, accessToken);
     return { token: accessToken, usuario };
 });
 
-export const register = createAsyncThunk('usuarios/register', async (datos, { rejectWithValue }) => {
-    let accessToken;
-    try {
-        const { data } = await axios.post(`${API_URL}/api/v1/auth/register`, datos);
-        accessToken = data.access_token;
-    } catch (err) {
-        if (err.response?.status === 403) {
-            return rejectWithValue('Ese email ya está registrado. Iniciá sesión en vez de crear una cuenta nueva.');
-        }
-        return rejectWithValue('No se pudo registrar el usuario');
-    }
-
-    let usuario;
-    try {
-        usuario = await obtenerUsuarioPorEmail(datos.email, accessToken);
-    } catch {
-        return rejectWithValue('No se pudo obtener el usuario');
-    }
-
+export const register = createAsyncThunk('usuarios/register', async (datos) => {
+    const { data } = await axios.post(`${API_URL}/api/v1/auth/register`, datos);
+    const accessToken = data.access_token;
+    const usuario = await obtenerUsuarioPorEmail(datos.email, accessToken);
     return { token: accessToken, usuario };
 });
 
-export const actualizarPerfil = createAsyncThunk('usuarios/actualizarPerfil', async ({ idUsuario, datos, token }, { rejectWithValue }) => {
-    try {
-        const { data } = await axios.put(`${API_URL}/usuarios/${idUsuario}`, datos, conToken(token));
-        return data;
-    } catch (err) {
-        if (err.response?.status === 400) {
-            return rejectWithValue('La contraseña actual no es correcta.');
-        }
-        return rejectWithValue('No se pudo actualizar el usuario');
-    }
+export const actualizarPerfil = createAsyncThunk('usuarios/actualizarPerfil', async ({ idUsuario, datos, token }) => {
+    const { data } = await axios.put(`${API_URL}/usuarios/${idUsuario}`, datos, conToken(token));
+    return data;
 });
 
-export const eliminarCuenta = createAsyncThunk('usuarios/eliminarCuenta', async ({ idUsuario, token }, { rejectWithValue }) => {
-    try {
-        await axios.delete(`${API_URL}/usuarios/${idUsuario}`, conToken(token));
-    } catch {
-        return rejectWithValue('No se pudo eliminar la cuenta');
-    }
+export const eliminarCuenta = createAsyncThunk('usuarios/eliminarCuenta', async ({ idUsuario, token }) => {
+    await axios.delete(`${API_URL}/usuarios/${idUsuario}`, conToken(token));
     return null;
 });
 
-export const buscarUsuarioPorEmail = createAsyncThunk('usuarios/buscarUsuarioPorEmail', async ({ email, token }, { rejectWithValue }) => {
-    try {
-        return await obtenerUsuarioPorEmail(email, token);
-    } catch {
-        return rejectWithValue('No se pudo obtener el usuario');
-    }
+export const buscarUsuarioPorEmail = createAsyncThunk('usuarios/buscarUsuarioPorEmail', async ({ email, token }) => {
+    return await obtenerUsuarioPorEmail(email, token);
 });
 
-export const eliminarUsuarioAdmin = createAsyncThunk('usuarios/eliminarUsuarioAdmin', async ({ idUsuario, token }, { rejectWithValue }) => {
-    try {
-        await axios.delete(`${API_URL}/usuarios/${idUsuario}`, conToken(token));
-        return idUsuario;
-    } catch {
-        return rejectWithValue('No se pudo eliminar el usuario');
-    }
+export const eliminarUsuarioAdmin = createAsyncThunk('usuarios/eliminarUsuarioAdmin', async ({ idUsuario, token }) => {
+    await axios.delete(`${API_URL}/usuarios/${idUsuario}`, conToken(token));
+    return idUsuario;
 });
 
 const usuariosSlice = createSlice({
@@ -119,7 +73,7 @@ const usuariosSlice = createSlice({
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.error.message;
             })
             //register
             .addCase(register.pending, (state) => {
@@ -134,7 +88,7 @@ const usuariosSlice = createSlice({
             })
             .addCase(register.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.error.message;
             })
             //actualizar perfil propio
             .addCase(actualizarPerfil.pending, (state) => {
@@ -147,7 +101,7 @@ const usuariosSlice = createSlice({
             })
             .addCase(actualizarPerfil.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.error.message;
             })
             //eliminar cuenta propia
             .addCase(eliminarCuenta.fulfilled, (state) => {
@@ -156,14 +110,14 @@ const usuariosSlice = createSlice({
                 state.estaLogueado = false;
             })
             .addCase(eliminarCuenta.rejected, (state, action) => {
-                state.error = action.payload;
+                state.error = action.error.message;
             })
             //moderación (Moderar.jsx)
             .addCase(buscarUsuarioPorEmail.rejected, (state, action) => {
-                state.error = action.payload;
+                state.error = action.error.message;
             })
             .addCase(eliminarUsuarioAdmin.rejected, (state, action) => {
-                state.error = action.payload;
+                state.error = action.error.message;
             });
     },
 });

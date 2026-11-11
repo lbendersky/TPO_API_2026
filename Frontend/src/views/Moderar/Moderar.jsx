@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { API_URL } from '../../config';
 import { buscarUsuarioPorEmail, eliminarUsuarioAdmin } from '../../redux/usuariosSlice';
+import { crearOferta as crearOfertaThunk } from '../../redux/ofertasSlice';
+import { fetchTodasCanchas, darDeBajaCancha } from '../../redux/canchasSlice';
+import { fetchTodosTurnos, borrarTurno } from '../../redux/turnosSlice';
+import { fetchTodasInscripciones, eliminarInscripcion } from '../../redux/inscripcionesSlice';
 import BuscadorModeracion from '../../components/BuscadorModeracion/BuscadorModeracion';
 import SelectorModeracion from '../../components/SelectorModeracion/SelectorModeracion';
 import FormularioOferta from '../../components/FormularioOferta/FormularioOferta';
@@ -28,35 +31,31 @@ const Moderar = () => {
 
     if (!usuario || usuario.rol !== 'ADMIN') return null;
 
-    const headersAuth = { 'Authorization': `Bearer ${token}` };
-
-    const pedir = async (url, options = {}) => {
-        const response = await fetch(url, { ...options, headers: { ...headersAuth, ...(options.headers || {}) } });
-        if (response.status === 404) throw new Error('No se encontró el registro.');
-        if (!response.ok) throw new Error('Error en la operación.');
-        return response.status === 204 ? null : response.json().catch(() => null);
-    };
+    const conError = (promesa, mensajeFallback) =>
+        promesa.catch((mensaje) => { throw new Error(typeof mensaje === 'string' ? mensaje : mensajeFallback); });
 
     const buscarUsuario = (email) =>
-        dispatch(buscarUsuarioPorEmail({ email, token })).unwrap()
-            .catch((mensaje) => { throw new Error(typeof mensaje === 'string' ? mensaje : 'No se pudo obtener el usuario'); });
+        conError(dispatch(buscarUsuarioPorEmail({ email, token })).unwrap(), 'No se pudo obtener el usuario');
     const eliminarUsuario = (u) =>
-        dispatch(eliminarUsuarioAdmin({ idUsuario: u.idUsuario, token })).unwrap()
-            .catch((mensaje) => { throw new Error(typeof mensaje === 'string' ? mensaje : 'No se pudo eliminar el usuario'); });
+        conError(dispatch(eliminarUsuarioAdmin({ idUsuario: u.idUsuario, token })).unwrap(), 'No se pudo eliminar el usuario');
 
-    const listarCanchas = () => pedir(`${API_URL}/canchas`);
-    const eliminarCancha = (c) => pedir(`${API_URL}/canchas/${c.idCancha}`, { method: 'DELETE' });
+    const listarCanchas = () =>
+        conError(dispatch(fetchTodasCanchas(token)).unwrap(), 'No se pudieron listar las canchas');
+    const eliminarCancha = (c) =>
+        conError(dispatch(darDeBajaCancha({ idCancha: c.idCancha, token })).unwrap(), 'No se pudo eliminar la cancha');
 
-    const listarTurnos = () => pedir(`${API_URL}/turnos`);
-    const eliminarTurno = (t) => pedir(`${API_URL}/turnos/${t.idTurno}`, { method: 'DELETE' });
+    const listarTurnos = () =>
+        conError(dispatch(fetchTodosTurnos(token)).unwrap(), 'No se pudieron listar los turnos');
+    const eliminarTurno = (t) =>
+        conError(dispatch(borrarTurno({ idTurno: t.idTurno, token })).unwrap(), 'No se pudo eliminar el turno');
 
-    const listarInscripciones = () => pedir(`${API_URL}/inscripciones`);
-    const eliminarInscripcion = (i) => pedir(`${API_URL}/inscripciones/${i.idInscripcion}`, { method: 'DELETE' });
-    const crearOferta = (body) => pedir(`${API_URL}/ofertas`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-    });
+    const listarInscripciones = () =>
+        conError(dispatch(fetchTodasInscripciones(token)).unwrap(), 'No se pudieron listar las inscripciones');
+    const eliminarInscripcionItem = (i) =>
+        conError(dispatch(eliminarInscripcion({ idInscripcion: i.idInscripcion, token })).unwrap(), 'No se pudo eliminar la inscripción');
+
+    const crearOferta = (datos) =>
+        conError(dispatch(crearOfertaThunk({ datos, token })).unwrap(), 'No se pudo crear la oferta');
 
     return (
         <main className="moderar">
@@ -120,7 +119,7 @@ const Moderar = () => {
                 tituloSingular="esta inscripción"
                 placeholder="Seleccionar inscripción"
                 onListar={listarInscripciones}
-                onEliminar={eliminarInscripcion}
+                onEliminar={eliminarInscripcionItem}
                 getKey={(i) => i.idInscripcion}
                 renderOpcion={(i) => `#${i.idInscripcion} · ${i.nombreComprador ?? 's/comprador'} → ${i.nombreCancha ?? `Turno ${i.idTurno}`} — ${formatearFechaHora(i.fechaHoraTurno)}`}
                 renderResultado={(i) => (

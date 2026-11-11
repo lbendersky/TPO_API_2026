@@ -22,6 +22,11 @@ export const fetchMisTurnos = createAsyncThunk('turnos/fetchMisTurnos', async (i
     return data;
 });
 
+export const fetchTodosTurnos = createAsyncThunk('turnos/fetchTodosTurnos', async (token) => {
+    const { data } = await axios.get(`${API_URL}/turnos`, conToken(token));
+    return data;
+});
+
 export const fetchTurnoPorId = createAsyncThunk('turnos/fetchTurnoPorId', async (idTurno) => {
     const { data } = await axios.get(`${API_URL}/turnos/${idTurno}`);
     return data;
@@ -32,31 +37,19 @@ export const fetchParticipantes = createAsyncThunk('turnos/fetchParticipantes', 
     return data;
 });
 
-export const crearTurno = createAsyncThunk('turnos/crearTurno', async ({ datos, token }, { rejectWithValue }) => {
-    try {
-        const { data } = await axios.post(`${API_URL}/turnos`, datos, conToken(token));
-        return data;
-    } catch (err) {
-        return rejectWithValue(err.response?.status);
-    }
+export const crearTurno = createAsyncThunk('turnos/crearTurno', async ({ datos, token }) => {
+    const { data } = await axios.post(`${API_URL}/turnos`, datos, conToken(token));
+    return data;
 });
 
-export const editarTurno = createAsyncThunk('turnos/editarTurno', async ({ idTurno, datos, token }, { rejectWithValue }) => {
-    try {
-        const { data } = await axios.put(`${API_URL}/turnos/${idTurno}`, datos, conToken(token));
-        return data;
-    } catch (err) {
-        return rejectWithValue(err.response?.status);
-    }
+export const editarTurno = createAsyncThunk('turnos/editarTurno', async ({ idTurno, datos, token }) => {
+    const { data } = await axios.put(`${API_URL}/turnos/${idTurno}`, datos, conToken(token));
+    return data;
 });
 
-export const borrarTurno = createAsyncThunk('turnos/borrarTurno', async ({ idTurno, token }, { rejectWithValue }) => {
-    try {
-        await axios.delete(`${API_URL}/turnos/${idTurno}`, conToken(token));
-        return idTurno;
-    } catch (err) {
-        return rejectWithValue(err.response?.status);
-    }
+export const borrarTurno = createAsyncThunk('turnos/borrarTurno', async ({ idTurno, token }) => {
+    await axios.delete(`${API_URL}/turnos/${idTurno}`, conToken(token));
+    return idTurno;
 });
 
 const turnosSlice = createSlice({
@@ -68,6 +61,7 @@ const turnosSlice = createSlice({
     seleccionado: null,
     participantesPorId: {},
     deMisCanchas: [],
+    todos: [],
     loading: false,
     error: null,
   },
@@ -119,6 +113,20 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
+      //TODOS LOS TURNOS (admin)
+      .addCase(fetchTodosTurnos.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTodosTurnos.fulfilled, (state, action) => {
+        state.loading = false;
+        state.todos = action.payload;
+      })
+      .addCase(fetchTodosTurnos.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
       //CREAR TURNO
       .addCase(crearTurno.pending, (state) => {
         state.loading = true;
@@ -130,7 +138,7 @@ const turnosSlice = createSlice({
       })
       .addCase(crearTurno.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.error.message;
       })
 
       //EDITAR TURNO
@@ -145,7 +153,7 @@ const turnosSlice = createSlice({
       })
       .addCase(editarTurno.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.error.message;
       })
 
       //BORRAR TURNO
@@ -156,10 +164,11 @@ const turnosSlice = createSlice({
       .addCase(borrarTurno.fulfilled, (state, action) => {
         state.loading = false;
         state.deMisCanchas = state.deMisCanchas.filter((t) => t.idTurno !== action.payload);
+        state.todos = state.todos.filter((t) => t.idTurno !== action.payload);
       })
       .addCase(borrarTurno.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.error.message;
       })
       //Detalle tunro
       .addCase(fetchTurnoPorId.pending, (state) => {

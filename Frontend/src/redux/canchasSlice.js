@@ -9,41 +9,28 @@ export const fetchMisCanchas = createAsyncThunk('canchas/fetchMisCanchas', async
     return data;
 });
 
-export const publicarCancha = createAsyncThunk('canchas/publicarCancha', async ({ datos, fotos, token }, { rejectWithValue }) => {
-    let data;
-    try {
-        const respuesta = await axios.post(`${API_URL}/canchas`, datos, conToken(token));
-        data = respuesta.data;
-    } catch (err) {
-        return rejectWithValue(err.response?.status);
-    }
+export const fetchTodasCanchas = createAsyncThunk('canchas/fetchTodasCanchas', async (token) => {
+    const { data } = await axios.get(`${API_URL}/canchas`, conToken(token));
+    return data;
+});
+
+export const publicarCancha = createAsyncThunk('canchas/publicarCancha', async ({ datos, fotos, token }) => {
+    const { data } = await axios.post(`${API_URL}/canchas`, datos, conToken(token));
 
     for (const idImagenPrecargada of fotos) {
-        try {
-            await axios.post(`${API_URL}/imagenes/precargada`, { idCancha: data.idCancha, idImagenPrecargada }, conToken(token));
-        } catch (err) {
-            console.error('La cancha se publicó, pero fallaron algunas fotos', err);
-        }
+        await axios.post(`${API_URL}/imagenes/precargada`, { idCancha: data.idCancha, idImagenPrecargada }, conToken(token));
     }
     return data;
 });
 
-export const editarCancha = createAsyncThunk('canchas/editarCancha', async ({ idCancha, datos, token }, { rejectWithValue }) => {
-    try {
-        const { data } = await axios.put(`${API_URL}/canchas/${idCancha}`, datos, conToken(token));
-        return data;
-    } catch (err) {
-        return rejectWithValue(err.response?.status);
-    }
+export const editarCancha = createAsyncThunk('canchas/editarCancha', async ({ idCancha, datos, token }) => {
+    const { data } = await axios.put(`${API_URL}/canchas/${idCancha}`, datos, conToken(token));
+    return data;
 });
 
-export const darDeBajaCancha = createAsyncThunk('canchas/darDeBajaCancha', async ({ idCancha, token }, { rejectWithValue }) => {
-    try {
-        await axios.delete(`${API_URL}/canchas/${idCancha}`, conToken(token));
-        return idCancha;
-    } catch (err) {
-        return rejectWithValue(err.response?.status);
-    }
+export const darDeBajaCancha = createAsyncThunk('canchas/darDeBajaCancha', async ({ idCancha, token }) => {
+    await axios.delete(`${API_URL}/canchas/${idCancha}`, conToken(token));
+    return idCancha;
 });
 
 export const fetchFotosPrecargadas = createAsyncThunk('canchas/fetchFotosPrecargadas', async () => {
@@ -60,6 +47,7 @@ const canchasSlice = createSlice({
     name: 'canchas',
     initialState: {
         misCanchas: [],
+        todas: [],
         ultimaPublicada: null,
         precargadas: [],
         imagenesPorCancha: {},
@@ -87,6 +75,19 @@ const canchasSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         })
+        //todas las canchas (GET - admin)
+        .addCase(fetchTodasCanchas.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(fetchTodasCanchas.fulfilled, (state, action) => {
+            state.loading = false;
+            state.todas = action.payload;
+        })
+        .addCase(fetchTodasCanchas.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        })
         //publicar cancha (POST)
         .addCase(publicarCancha.pending, (state) => {
             state.loading = true;
@@ -99,7 +100,7 @@ const canchasSlice = createSlice({
         })
         .addCase(publicarCancha.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = action.error.message;
         })
         //editar cancha (PUT)
         .addCase(editarCancha.pending, (state) => {
@@ -115,7 +116,7 @@ const canchasSlice = createSlice({
         })
         .addCase(editarCancha.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = action.error.message;
         })
         //dar de baja cancha (DELETE)
         .addCase(darDeBajaCancha.pending, (state) => {
@@ -128,10 +129,11 @@ const canchasSlice = createSlice({
             if (index !== -1) {
                 state.misCanchas[index].activa = false;
             }
+            state.todas = state.todas.filter((c) => c.idCancha !== action.payload);
         })
         .addCase(darDeBajaCancha.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = action.error.message;
         })
         //fotos precargadas e imagenes de cancha
         .addCase(fetchFotosPrecargadas.pending, (state) => {
