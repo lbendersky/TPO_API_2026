@@ -1,6 +1,6 @@
 import './MisInscripciones.css';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatearFechaHora } from '../../utils/fecha';
@@ -21,12 +21,14 @@ const MisInscripciones = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { estaLogueado, usuario } = useSelector((state) => state.usuarios);
-    const { 
-        inscripciones = [], 
-        loadingInscripciones: cargando, 
-        errorInscripciones: error 
-    } = useSelector((state) => state.carrito);
+    const estaLogueado = useSelector((state) => state.usuarios?.estaLogueado);
+    const usuario = useSelector((state) => state.usuarios?.usuario);
+    const rawInscripciones = useSelector((state) => state.carrito?.inscripciones);
+    const cargando = useSelector((state) => state.carrito?.loadingInscripciones);
+    const error = useSelector((state) => state.carrito?.errorInscripciones);
+
+    const inscripciones = useMemo(() => rawInscripciones || [], [rawInscripciones]);
+    const estadosLocales = useMemo(() => obtenerEstadosPago(), []);
 
     useEffect(() => {
         if (!estaLogueado) {
@@ -55,39 +57,36 @@ const MisInscripciones = () => {
             )}
 
             <section className="mis-inscripciones__lista">
-                {(() => {
-                    const estadosLocales = obtenerEstadosPago();
-                    return inscripciones.map((i) => {
-                        const idInscripcion = i.idInscripcion ?? i.id_inscripcion;
-                        const estadoEfectivo = i.estadoPago === 'PENDIENTE'
-                            ? (estadosLocales[idInscripcion] ?? i.estadoPago)
-                            : i.estadoPago;
+                {inscripciones.map((i) => {
+                    const idInscripcion = i.idInscripcion ?? i.id_inscripcion;
+                    const estadoEfectivo = i.estadoPago === 'PENDIENTE'
+                        ? (estadosLocales[idInscripcion] ?? i.estadoPago)
+                        : i.estadoPago;
 
-                        return (
-                            <article key={idInscripcion} className="tarjeta-inscripcion">
-                                <div className="tarjeta-inscripcion__principal">
-                                    <h3 className="tarjeta-inscripcion__cancha">
-                                        {i.nombreCancha ?? `Turno #${i.idTurno ?? i.id_turno}`}
-                                    </h3>
-                                    {i.localidad && <span className="tarjeta-inscripcion__localidad">{i.localidad}</span>}
-                                    <span className="tarjeta-inscripcion__fecha">
-                                        {formatearFechaHora(i.fechaHoraTurno ?? i.fecha_hora_turno)}
-                                    </span>
-                                    {i.tipoFutbol && <span className="tarjeta-inscripcion__tipo">{i.tipoFutbol}</span>}
-                                </div>
+                    return (
+                        <article key={idInscripcion} className="tarjeta-inscripcion">
+                            <div className="tarjeta-inscripcion__principal">
+                                <h3 className="tarjeta-inscripcion__cancha">
+                                    {i.nombreCancha ?? `Turno #${i.idTurno ?? i.id_turno}`}
+                                </h3>
+                                {i.localidad && <span className="tarjeta-inscripcion__localidad">{i.localidad}</span>}
+                                <span className="tarjeta-inscripcion__fecha">
+                                    {formatearFechaHora(i.fechaHoraTurno ?? i.fecha_hora_turno)}
+                                </span>
+                                {i.tipoFutbol && <span className="tarjeta-inscripcion__tipo">{i.tipoFutbol}</span>}
+                            </div>
 
-                                <div className="tarjeta-inscripcion__secundaria">
-                                    <span className={`tarjeta-inscripcion__estado tarjeta-inscripcion__estado--${estadoEfectivo?.toLowerCase()}`}>
-                                        {ESTADO_LABEL[estadoEfectivo] ?? estadoEfectivo}
-                                    </span>
-                                    <span className="tarjeta-inscripcion__monto">
-                                        {formatearMoneda(i.montoPagado ?? i.monto_pagado)}
-                                    </span>
-                                </div>
-                            </article>
-                        );
-                    });
-                })()}
+                            <div className="tarjeta-inscripcion__secundaria">
+                                <span className={`tarjeta-inscripcion__estado tarjeta-inscripcion__estado--${estadoEfectivo?.toLowerCase()}`}>
+                                    {ESTADO_LABEL[estadoEfectivo] ?? estadoEfectivo}
+                                </span>
+                                <span className="tarjeta-inscripcion__monto">
+                                    {formatearMoneda(i.montoPagado ?? i.monto_pagado)}
+                                </span>
+                            </div>
+                        </article>
+                    );
+                })}
             </section>
         </main>
     );
