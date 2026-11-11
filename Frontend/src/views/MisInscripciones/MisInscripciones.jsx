@@ -27,7 +27,14 @@ const MisInscripciones = () => {
     const cargando = useSelector((state) => state.carrito?.loadingInscripciones);
     const error = useSelector((state) => state.carrito?.errorInscripciones);
 
-    const inscripciones = useMemo(() => rawInscripciones || [], [rawInscripciones]);
+    const inscripciones = useMemo(() => {
+        const lista = rawInscripciones || [];
+        return [...lista].sort((a, b) => {
+            const fa = new Date(a.fechaHoraTurno ?? a.fecha_hora_turno ?? 0).getTime();
+            const fb = new Date(b.fechaHoraTurno ?? b.fecha_hora_turno ?? 0).getTime();
+            return fb - fa;
+        });
+    }, [rawInscripciones]);
     const estadosLocales = useMemo(() => obtenerEstadosPago(), []);
 
     useEffect(() => {

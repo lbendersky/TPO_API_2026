@@ -11,7 +11,16 @@ const TurnosDeCancha = ({ cancha }) => {
     const { token } = useSelector((state) => state.usuarios);
     const dispatch = useDispatch();
     const todos = useSelector((state) => state.turnos.deMisCanchas);
-    const turnos = todos.filter((t) => t.idCancha === cancha.idCancha);
+    const inicioHoy = new Date();
+    inicioHoy.setHours(0, 0, 0, 0);
+    const turnos = todos
+        .filter((t) => t.idCancha === cancha.idCancha)
+        .filter((t) => {
+            if (!t.fechaHora) return false;
+            const fecha = new Date(t.fechaHora);
+            return !Number.isNaN(fecha.getTime()) && fecha >= inicioHoy;
+        })
+        .sort((a, b) => new Date(a.fechaHora).getTime() - new Date(b.fechaHora).getTime());
     const [abierto, setAbierto] = useState(false);
     const [error, setError] = useState('');
 
