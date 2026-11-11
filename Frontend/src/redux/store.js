@@ -1,10 +1,21 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import { 
+  persistStore, 
+  persistReducer, 
+  FLUSH, 
+  REHYDRATE, 
+  PAUSE, 
+  PERSIST, 
+  PURGE, 
+  REGISTER 
+} from 'redux-persist';
+
 import turnosReducer from './turnosSlice';
 import canchasReducer from './canchasSlice';
+import carritoReducer from './carritoSlice';
 import usuariosReducer from './usuariosSlice';
 
-
+// Adaptador de almacenamiento compatible con Promise para redux-persist
 const storage = {
   getItem(key) {
     return Promise.resolve(localStorage.getItem(key));
@@ -17,6 +28,7 @@ const storage = {
   },
 };
 
+// Configuración de persistencia solo para usuarios (sesión, token y estado de login)
 const persistConfigUsuarios = {
   key: 'usuarios',
   storage,
@@ -26,6 +38,7 @@ const persistConfigUsuarios = {
 const rootReducer = combineReducers({
   turnos: turnosReducer,
   canchas: canchasReducer,
+  carrito: carritoReducer,
   usuarios: persistReducer(persistConfigUsuarios, usuariosReducer),
 });
 

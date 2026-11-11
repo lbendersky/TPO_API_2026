@@ -78,6 +78,9 @@
 
 .carrito-sidebar {
   position: sticky;
+  width: 100%;
+  max-width: 22rem;
+  min-width: 18rem;
   top: 1em;
   display: flex;
   flex-direction: column;

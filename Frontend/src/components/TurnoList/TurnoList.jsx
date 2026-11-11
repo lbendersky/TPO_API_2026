@@ -21,7 +21,6 @@ const TurnoList = () => {
     useEffect(() => {
         dispatch(fetchTurnosFiltrados({ ...filtros, texto: texto?.trim() || null }));
     }, [dispatch, filtros, texto]);
-
     return (
         <>
             <label className="turno-buscador">

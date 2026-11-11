@@ -4,7 +4,7 @@ import { formatearFechaHora } from '../../utils/fecha';
 import { useState, useEffect } from 'react';
 import { ImageOff } from 'lucide-react';
 import {useDispatch, useSelector} from "react-redux";
-import {fetchImagenesCancha} from "../../redux/canchasSlice";
+import {fetchImagenesCancha} from "../../Redux/canchasSlice";
 
 
 

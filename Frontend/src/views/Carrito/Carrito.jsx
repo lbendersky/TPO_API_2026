@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { API_URL } from "../../config";
 import VolverAtras from "../../components/VolverAtras/VolverAtras";
-
 
 import { HeaderCarrito } from "../../components/Carrito/HeaderCarrito";
 import AvisoPrioridadBloqueada from "../../components/Carrito/AvisoPrioridadBloqueada";
@@ -12,6 +11,7 @@ import { CanchasSeleccionadas } from "../../components/Carrito/CanchasSelecciona
 import { ResumenDeCompraCarrito } from "../../components/Carrito/ResumenDeCompraCarrito";
 
 import "./Carrito.css";
+import { fetchCarrito } from "../../redux/carritoSlice";
 
 const formatearTiempoRestante = (ms) => {
     if (ms <= 0) return "00:00";
@@ -44,47 +44,26 @@ const CountdownItem = ({ fechaExpiracion }) => {
 };
 
 const Carrito = () => {
-    const [carrito, setCarrito] = useState({ items: [], total: 0 });
-    const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState("");
     const { token } = useSelector((state) => state.usuarios);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const cargarCarrito = useCallback(() => {
-        return fetch(`${API_URL}/carrito`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) throw new Error("Respuesta inválida del servidor");
-                return response.json();
-            })
-            .then((data) => setCarrito(data));
-    }, [token]);
+    const { items = [], error, loading } = useSelector((state) => state.carrito);
+    const sinSesion = !token;
 
     useEffect(() => {
-        if (!token) {
-            setError("Tenés que iniciar sesión para ver tu carrito.");
-            setCargando(false);
-            return;
-        }
-
-        cargarCarrito()
-            .catch((error) => {
-                console.error("Error al cargar el carrito:", error);
-                setError("No se pudo cargar el carrito.");
-            })
-            .finally(() => setCargando(false));
-    }, [token, cargarCarrito]);
+        if (sinSesion) return;
+        dispatch(fetchCarrito());
+    }, [sinSesion, dispatch]);
 
     const proximaExpiracion = useMemo(() => {
-        const fechas = (carrito.items || [])
+        if (!Array.isArray(items)) return null;
+        const fechas = items
             .map((i) => i.fechaExpiracion)
             .filter(Boolean)
             .map((f) => new Date(f).getTime());
         return fechas.length ? Math.min(...fechas) : null;
-    }, [carrito.items]);
+    }, [items]);
 
     const yaRefrescadoRef = useRef(null);
     useEffect(() => {
@@ -94,96 +73,59 @@ const Carrito = () => {
         const id = setTimeout(() => {
             if (yaRefrescadoRef.current === proximaExpiracion) return;
             yaRefrescadoRef.current = proximaExpiracion;
-            cargarCarrito().catch(() => {});
+            dispatch(fetchCarrito());
         }, msHastaVencer + 500);
         return () => clearTimeout(id);
-    }, [proximaExpiracion, cargarCarrito]);
+    }, [proximaExpiracion, dispatch]);
 
     const onConfirmarReserva = () => {
         navigate("/carrito/checkout");
     };
 
-    const quitarItem = (idItem) => {
-        fetch(`${API_URL}/carrito/items/${idItem}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) throw new Error("No se pudo quitar el turno del carrito.");
-                return response.json();
-            })
-            .then((data) => setCarrito(data))
-            .catch((error) => console.error("Error al quitar el item del carrito:", error));
-    };
-
-    const actualizarCantidad = (idItem, cantidad) => {
-        fetch(`${API_URL}/carrito/items/${idItem}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ cantidad }),
-        })
-            .then((response) => {
-                if (!response.ok) throw new Error("No se pudo actualizar la cantidad.");
-                return response.json();
-            })
-            .then((data) => setCarrito(data))
-            .catch((error) => console.error("Error al actualizar la cantidad del carrito:", error));
-    };
-
-    const items = carrito.items;
+    const mostrarContenido = !sinSesion && !loading && !error;
 
     return (
         <main className="carrito-page">
             <HeaderCarrito />
-            <VolverAtras/>
+            <VolverAtras />
             <AvisoPrioridadBloqueada />
 
             <div className="carrito-layout">
                 <section className="carrito-principal">
                     <div className="carrito-principal__encabezado">
-                        <CanchasSeleccionadas cantidad={items.length} />
-                        {!cargando && !error && items.some((i) => i.fechaExpiracion) && (
+                        <CanchasSeleccionadas/>
+                        {mostrarContenido && proximaExpiracion && (
                             <div className="carrito-principal__countdowns">
-                                {items.map((item) => item.fechaExpiracion && (
-                                    <CountdownItem key={item.idItem} fechaExpiracion={item.fechaExpiracion} />
-                                ))}
+                                <CountdownItem fechaExpiracion={proximaExpiracion} />
                             </div>
                         )}
                     </div>
 
-                    {cargando && <p className="carrito-mensaje">Cargando carrito...</p>}
+                    {sinSesion && (
+                        <p className="carrito-mensaje carrito-mensaje--error">
+                            Tenés que iniciar sesión para ver tu carrito.
+                        </p>
+                    )}
 
-                    {error && (
+                    {!sinSesion && loading && <p className="carrito-mensaje">Cargando carrito...</p>}
+
+                    {!sinSesion && error && (
                         <p className="carrito-mensaje carrito-mensaje--error">{error}</p>
                     )}
 
-                    {!cargando && !error && items.length === 0 && (
+                    {mostrarContenido && items.length === 0 && (
                         <p className="carrito-mensaje">Tu carrito está vacío.</p>
                     )}
 
-                    {!cargando && !error && items.map((item) => (
-                        <div key={item.idItem} className="carrito-item-con-contador">
-                            <TarjetaCarrito
-                                item={item}
-                                onQuitar={quitarItem}
-                                onCambiarCantidad={actualizarCantidad}
-                            />
+                    {mostrarContenido && items.map((item) => (
+                        <div key={item.idItem ?? item.id_item ?? item.id} className="carrito-item-con-contador">
+                            <TarjetaCarrito item={item} />
                         </div>
                     ))}
                 </section>
 
                 <aside className="carrito-sidebar">
-                    <ResumenDeCompraCarrito
-                        total={carrito.total}
-                        items={items}
-                        onConfirmarReserva={onConfirmarReserva}
-                        disabled={items.length === 0}
-                    />
+                    <ResumenDeCompraCarrito onConfirmarReserva={onConfirmarReserva} />
                 </aside>
             </div>
         </main>
