@@ -1,13 +1,20 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../config';
+import { agregarItemCarrito } from './carritoSlice';
 
 const conToken = (token) => ({ headers: { Authorization: `Bearer ${token}` } });
 
 export const fetchTurnosFiltrados = createAsyncThunk(
   'turnos/fetchTurnosFiltrados',
   async (filtros) => {
-    const { data } = await axios.get(`${API_URL}/turnos/filtrar`, { params: filtros });
+    const { localidades, tiposFutbol, ...resto } = filtros;
+    const params = {
+      ...resto,
+      localidad: localidades,
+      tipoFutbol: tiposFutbol,
+    };
+    const { data } = await axios.get(`${API_URL}/turnos/filtrar`, { params });
     return data;
   }
 );
@@ -195,6 +202,16 @@ const turnosSlice = createSlice({
       .addCase(fetchParticipantes.rejected, (state, action) => {
         state.participantesPorId[action.meta.arg] = [];
         state.error = action.error.message;
+      })
+
+      // Descuenta el cupo apenas se confirma que se agregó al carrito
+      .addCase(agregarItemCarrito.fulfilled, (state, action) => {
+        const { idTurno, cantidad } = action.meta.arg;
+        const turnoEnLista = state.items.find((t) => t.idTurno === idTurno);
+        if (turnoEnLista) turnoEnLista.lugaresDisponibles -= cantidad;
+        if (state.seleccionado?.idTurno === idTurno) {
+          state.seleccionado.lugaresDisponibles -= cantidad;
+        }
       });
   },
 });

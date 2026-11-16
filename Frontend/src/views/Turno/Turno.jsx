@@ -7,11 +7,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTurnoPorId } from '../../redux/turnosSlice';
+import { agregarItemCarrito } from '../../redux/carritoSlice';
 
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
 import { Alerta } from '../../utils/alerta';
-// URL base del backend
-import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
 import ParticipantesTurno from '../../components/ParticipantesTurno/ParticipantesTurno';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
@@ -27,10 +26,14 @@ const TIPO_FUTBOL_LABEL = {
 const Turno = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { estaLogueado, token } = useSelector((state) => state.usuarios);
+    const { estaLogueado } = useSelector((state) => state.usuarios);
     const dispatch = useDispatch();
-    const turno = useSelector((state) => state.turnos.seleccionado);
+    const items = useSelector((state) => state.turnos.items);
+    const seleccionado = useSelector((state) => state.turnos.seleccionado);
     const error = useSelector((state) => state.turnos.error);
+    // si ya está en la lista que se cargó en Inicio, lo usamos de ahí y no pedimos nada al back
+    const turnoEnLista = items.find((t) => String(t.idTurno) === id);
+    const turno = turnoEnLista ?? seleccionado;
     const idCancha = turno?.idCancha;
     const guardadas = useSelector((state) => state.canchas.imagenesPorCancha[idCancha]);
     const imagenes = guardadas || [];
@@ -42,31 +45,23 @@ const Turno = () => {
         setIndice(0);
     }
 
-    const agregarAlCarrito = async () => {
+    const agregarAlCarrito = () => {
         if (!estaLogueado) {
             navigate('/login');
             return;
         }
-        try {
-            const response = await fetch(`${API_URL}/carrito/items`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ idTurno: turno.idTurno, cantidad: 1 }),
+        dispatch(agregarItemCarrito({ idTurno: turno.idTurno, cantidad: 1 }))
+            .unwrap()
+            .then(() => navigate('/carrito'))
+            .catch((error) => {
+                console.error('Error al agregar al carrito', error);
+                Alerta.fire({ icon: 'error', title: 'Error', text: 'No se pudo agregar al carrito' });
             });
-            if (!response.ok) throw new Error('No se pudo agregar al carrito');
-            navigate('/carrito');
-        } catch (error) {
-            console.error('Error al agregar al carrito', error);
-            Alerta.fire({ icon: 'error', title: 'Error', text: 'No se pudo agregar al carrito' });
-        }
     };
 
     useEffect(() => {
-    dispatch(fetchTurnoPorId(id));
-    }, [dispatch, id]);
+    if (!turnoEnLista) dispatch(fetchTurnoPorId(id));
+    }, [dispatch, id, turnoEnLista]);
 
     const anterior = () => setIndice((i) => Math.max(i - 1, 0));
     const siguiente = () => setIndice((i) => Math.min(i + 1, imagenes.length - 1));
