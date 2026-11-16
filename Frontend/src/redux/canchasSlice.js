@@ -10,7 +10,7 @@ export const fetchMisCanchas = createAsyncThunk('canchas/fetchMisCanchas', async
 });
 
 export const fetchTodasCanchas = createAsyncThunk('canchas/fetchTodasCanchas', async (token) => {
-    const { data } = await axios.get(`${API_URL}/canchas`, conToken(token));
+    const { data } = await axios.get(`${API_URL}/admin/canchas`, conToken(token));
     return data;
 });
 
@@ -101,6 +101,12 @@ const canchasSlice = createSlice({
             state.loading = false;
             state.ultimaPublicada = action.payload;
             state.misCanchas = [...state.misCanchas, action.payload];
+
+            const idCancha = action.payload.idCancha;
+            const idsElegidos = action.meta.arg.fotos;
+            state.imagenesPorCancha[idCancha] = idsElegidos
+                .map((id) => state.precargadas.find((p) => p.id === id)?.file)
+                .filter(Boolean);
         })
         .addCase(publicarCancha.rejected, (state, action) => {
             state.loading = false;
@@ -133,7 +139,10 @@ const canchasSlice = createSlice({
             if (index !== -1) {
                 state.misCanchas[index].activa = false;
             }
-            state.todas = state.todas.filter((c) => c.idCancha !== action.payload);
+            const indexTodas = state.todas.findIndex((c) => c.idCancha === action.payload);
+            if (indexTodas !== -1) {
+                state.todas[indexTodas].activa = false;
+            }
         })
         .addCase(darDeBajaCancha.rejected, (state, action) => {
             state.loading = false;

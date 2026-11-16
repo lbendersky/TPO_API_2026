@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../config';
+import { checkout } from './inscripcionesSlice';
 
 const conToken = (token) => ({
   headers: { Authorization: `Bearer ${token}` }
@@ -15,6 +16,19 @@ export const fetchCarrito = createAsyncThunk(
   async (_, { getState }) => {
     const token = obtenerToken(getState);
     const { data } = await axios.get(`${API_URL}/carrito`, conToken(token));
+    return data;
+  }
+);
+
+export const agregarItemCarrito = createAsyncThunk(
+  'carrito/agregarItemCarrito',
+  async ({ idTurno, cantidad }, { getState }) => {
+    const token = obtenerToken(getState);
+    const { data } = await axios.post(
+      `${API_URL}/carrito/items`,
+      { idTurno, cantidad },
+      conToken(token)
+    );
     return data;
   }
 );
@@ -76,6 +90,17 @@ const carritoSlice = createSlice({
         state.error = action.error.message;
       })
 
+      // Agregar Item
+      .addCase(agregarItemCarrito.fulfilled, (state, action) => {
+        if (Array.isArray(action.payload)) {
+          state.items = action.payload;
+        } else if (action.payload && Array.isArray(action.payload.items)) {
+          state.items = action.payload.items;
+        } else if (action.payload && Array.isArray(action.payload.itemsCarrito)) {
+          state.items = action.payload.itemsCarrito;
+        }
+      })
+
       // Quitar Item
       .addCase(quitarItemCarrito.fulfilled, (state, action) => {
         const idEliminado = action.meta.arg;
@@ -109,6 +134,11 @@ const carritoSlice = createSlice({
             item.subTotal = precio * cantidad;
           }
         }
+      })
+
+      // Al confirmarse el checkout (en inscripcionesSlice), el carrito se vacía
+      .addCase(checkout.fulfilled, (state) => {
+        state.items = [];
       });
   },
 });

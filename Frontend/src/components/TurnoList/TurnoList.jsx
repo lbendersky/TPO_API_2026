@@ -19,8 +19,11 @@ const TurnoList = () => {
     }, [dispatch, localidades.length]);
 
     useEffect(() => {
+    const id = setTimeout(() => {
         dispatch(fetchTurnosFiltrados({ ...filtros, texto: texto?.trim() || null }));
-    }, [dispatch, filtros, texto]);
+    }, 400);
+    return () => clearTimeout(id);
+}, [dispatch, filtros, texto]);
     return (
         <>
             <label className="turno-buscador">

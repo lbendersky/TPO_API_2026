@@ -46,6 +46,19 @@ export const eliminarInscripcion = createAsyncThunk(
   }
 );
 
+export const checkout = createAsyncThunk(
+  'inscripciones/checkout',
+  async (metodoPago, { getState }) => {
+    const token = obtenerToken(getState);
+    const { data } = await axios.post(
+      `${API_URL}/carrito/checkout`,
+      {},
+      { ...conToken(token), params: { metodoPago } }
+    );
+    return data;
+  }
+);
+
 const inscripcionesSlice = createSlice({
   name: 'inscripciones',
   initialState: {
@@ -89,6 +102,11 @@ const inscripcionesSlice = createSlice({
       })
       .addCase(eliminarInscripcion.rejected, (state, action) => {
         state.error = action.error.message;
+      })
+
+      // Checkout del carrito -> se suman las inscripciones nuevas
+      .addCase(checkout.fulfilled, (state, action) => {
+        state.items = [...state.items, ...action.payload];
       });
   },
 });
