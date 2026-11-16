@@ -1,4 +1,6 @@
 import './App.css';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer/Footer';
 import Inicio from './views/Inicio/Inicio'
@@ -16,8 +18,15 @@ import Contacto from './views/Contacto/Contacto';
 import TerminosYCondiciones from './views/TerminosYCondiciones/TerminosYCondiciones';
 import { Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import { fetchTodasLasImagenes } from './redux/canchasSlice';
 
 function App() {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchTodasLasImagenes());
+    }, [dispatch]);
+
     return (
         <>
             <ScrollToTop/>

@@ -3,6 +3,7 @@ package com.uade.marketplace.service;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,4 +24,6 @@ public interface ImagenService {
             throws RecursoNoEncontradoException, AccesoDenegadoException, SQLException;
 
     void eliminar(Long idImagen, Usuario actor) throws RecursoNoEncontradoException, AccesoDenegadoException;
+
+    Map<Long, List<ImagenResponse>> buscarTodasAgrupadas() throws SQLException;
 }

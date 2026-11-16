@@ -3,11 +3,10 @@ import './Turno.css';
 // Importa el hook useParams de react-router-dom para leer parámetros de la URL
 import { useParams, useNavigate } from 'react-router-dom';
 // useState: para saber que foto de la galeria se esta viendo.
-// useEffect: para despachar los pedidos del turno y de las fotos al montarse.
+// useEffect: para despachar los pedidos del turno al montarse.
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTurnoPorId } from '../../redux/turnosSlice';
-import {fetchImagenesCancha} from "../../redux/canchasSlice";
 
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
 import { Alerta } from '../../utils/alerta';
@@ -68,10 +67,6 @@ const Turno = () => {
     useEffect(() => {
     dispatch(fetchTurnoPorId(id));
     }, [dispatch, id]);
-
-    useEffect(() => {
-        if (idCancha && guardadas === undefined) dispatch(fetchImagenesCancha(idCancha));
-    }, [dispatch, idCancha, guardadas]);
 
     const anterior = () => setIndice((i) => Math.max(i - 1, 0));
     const siguiente = () => setIndice((i) => Math.min(i + 1, imagenes.length - 1));

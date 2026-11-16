@@ -41,6 +41,11 @@ public class ImagenController {
         return ResponseEntity.ok(imagenService.buscarPorId(id));
     }
 
+    @GetMapping("/canchas")
+    public ResponseEntity<Map<Long, List<ImagenResponse>>> verImagenesDeTodasLasCanchas() throws SQLException {
+        return ResponseEntity.ok(imagenService.buscarTodasAgrupadas());
+    }
+
     @GetMapping("/cancha/{idCancha}")
     public ResponseEntity<List<ImagenResponse>> verImagenesDeCancha(@PathVariable Long idCancha)
             throws SQLException, IOException {

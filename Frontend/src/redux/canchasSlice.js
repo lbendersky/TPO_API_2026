@@ -38,9 +38,13 @@ export const fetchFotosPrecargadas = createAsyncThunk('canchas/fetchFotosPrecarg
     return data;
 });
 
-export const fetchImagenesCancha = createAsyncThunk('canchas/fetchImagenesCancha', async (idCancha) => {
-    const { data } = await axios.get(`${API_URL}/imagenes/cancha/${idCancha}`);
-    return { idCancha, imagenes: data.map((img) => img.file) };
+export const fetchTodasLasImagenes = createAsyncThunk('canchas/fetchTodasLasImagenes', async () => {
+    const { data } = await axios.get(`${API_URL}/imagenes/canchas`);
+    const imagenesPorCancha = {};
+    for (const idCancha of Object.keys(data)) {
+        imagenesPorCancha[idCancha] = data[idCancha].map((img) => img.file);
+    }
+    return imagenesPorCancha;
 });
 
 const canchasSlice = createSlice({
@@ -135,7 +139,7 @@ const canchasSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         })
-        //fotos precargadas e imagenes de cancha
+        //fotos precargadas e imagenes de todas las canchas
         .addCase(fetchFotosPrecargadas.pending, (state) => {
             state.error = null;
         })
@@ -145,14 +149,11 @@ const canchasSlice = createSlice({
         .addCase(fetchFotosPrecargadas.rejected, (state, action) => {
             state.error = action.error.message;
         })
-        .addCase(fetchImagenesCancha.pending, (state, action) => {
-            state.imagenesPorCancha[action.meta.arg] = [];
+        .addCase(fetchTodasLasImagenes.fulfilled, (state, action) => {
+            state.imagenesPorCancha = action.payload;
         })
-        .addCase(fetchImagenesCancha.fulfilled, (state, action) => {
-            state.imagenesPorCancha[action.payload.idCancha] = action.payload.imagenes;
-        })
-        .addCase(fetchImagenesCancha.rejected, (state, action) => {
-            delete state.imagenesPorCancha[action.meta.arg];
+        .addCase(fetchTodasLasImagenes.rejected, (state, action) => {
+            state.error = action.error.message;
         });
     },
 });
