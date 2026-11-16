@@ -10,24 +10,14 @@ const obtenerToken = (getState) => {
   return getState().usuarios?.token || localStorage.getItem('token');
 };
 
-const obtenerUsuario = (getState) => {
-  return getState().usuarios?.usuario || getState().auth?.usuario;
-};
-
 export const fetchInscripcionesUsuario = createAsyncThunk(
   'carrito/fetchInscripcionesUsuario',
-  async (idUsuarioParam, { getState, }) => {
-    const state = getState();
-    const token = obtenerToken(() => state);
-
-    const usuario = obtenerUsuario(() => state);
-    const idUsuario = idUsuarioParam ?? usuario?.idUsuario ?? usuario?.id_usuario;
-
+  async (idUsuario, { getState }) => {
+    const token = obtenerToken(getState);
     const response = await axios.get(
       `${API_URL}/inscripciones/usuario/${idUsuario}`,
       conToken(token)
     );
-
     return response.data;
   }
 );
@@ -45,11 +35,11 @@ export const quitarItemCarrito = createAsyncThunk(
   'carrito/quitarItemCarrito',
   async (idItem, { getState }) => {
     const token = obtenerToken(getState);
-    const { data } = await axios.delete(
+    const response = await axios.delete(
       `${API_URL}/carrito/items/${idItem}`,
       conToken(token)
     );
-    return data;
+    return response.data;
   }
 );
 
@@ -57,23 +47,25 @@ export const actualizarCantidad = createAsyncThunk(
   'carrito/actualizarCantidad',
   async ({ idItem, cantidad }, { getState }) => {
     const token = obtenerToken(getState);
-    const { data } = await axios.put(
+    const response = await axios.put(
       `${API_URL}/carrito/items/${idItem}`,
       { cantidad },
       conToken(token)
     );
-    return data;
+    return response.data;
   }
 );
 
 export const agregarAlCarrito = createAsyncThunk(
-  'carrito/items',
+  'carrito/agregarAlCarrito',
   async ({ idItem, cantidad }, { getState }) => {
-    const { data } = await axios.post(
+    const token = obtenerToken(getState);
+    const response = await axios.post(
       `${API_URL}/carrito/items/${idItem}`,
       { cantidad },
       conToken(token)
     );
+    return response.data;
   }
 );
 
@@ -100,31 +92,44 @@ const carritoSlice = createSlice({
         state.error = action.error.message;
       })
 
+      .addCase(quitarItemCarrito.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(quitarItemCarrito.fulfilled, (state, action) => {
-        const idEliminado = action.meta.arg;
-        state.items = state.items.filter(
-          (i) => (i.idItem ?? i.id_item ?? i.id) !== idEliminado
-        );
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(quitarItemCarrito.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       })
 
+      .addCase(actualizarCantidad.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(actualizarCantidad.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload;
       })
+      .addCase(actualizarCantidad.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
 
-      // --- Inscripciones ---
-      .addCase(fetchInscripcionesUsuario.pending, (state) => {
-        state.loadingInscripciones = true;
-        state.errorInscripciones = null;
+      .addCase(agregarAlCarrito.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-      .addCase(fetchInscripcionesUsuario.fulfilled, (state, action) => {
-        state.loadingInscripciones = false;
-        state.inscripciones = Array.isArray(action.payload) ? action.payload : [];
+      .addCase(agregarAlCarrito.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
       })
-      .addCase(fetchInscripcionesUsuario.rejected, (state, action) => {
-        state.loadingInscripciones = false;
-        state.errorInscripciones = action.payload || action.error.message;
-      });
+      .addCase(agregarAlCarrito.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
   },
 });
 
