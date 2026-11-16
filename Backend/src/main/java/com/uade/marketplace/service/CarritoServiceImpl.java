@@ -81,7 +81,8 @@ public class CarritoServiceImpl implements CarritoService {
 
     private void liberarLugares(ItemCarrito item) throws RecursoNoEncontradoException {
         Turno turno = item.getTurno();
-        if (turno == null) return;
+        if (turno == null)
+            return;
         turnoService.liberarLugares(turno.getIdTurno(), item.getCantidad());
     }
 
@@ -113,13 +114,15 @@ public class CarritoServiceImpl implements CarritoService {
         }
 
         String porDefecto = imagenPorDefecto();
-        for (Long id : idsCancha) imagenes.putIfAbsent(id, porDefecto);
+        for (Long id : idsCancha)
+            imagenes.putIfAbsent(id, porDefecto);
 
         return CarritoResponse.from(carrito, imagenes, MINUTOS_RESERVA);
     }
 
     private String aBase64Silencioso(Blob blob) {
-        if (blob == null) return null;
+        if (blob == null)
+            return null;
         try {
             byte[] bytes = blob.getBytes(1, (int) blob.length());
             return Base64.getEncoder().encodeToString(bytes);
@@ -147,7 +150,8 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public CarritoResponse agregarItem(Long idUsuario, Long idTurno, Integer cantidad) throws RecursoNoEncontradoException {
+    public CarritoResponse agregarItem(Long idUsuario, Long idTurno, Integer cantidad)
+            throws RecursoNoEncontradoException {
         if (cantidad == null || cantidad <= 0)
             throw new SolicitudInvalidaException("La cantidad debe ser mayor a 0");
 
@@ -165,7 +169,8 @@ public class CarritoServiceImpl implements CarritoService {
             throw new SolicitudInvalidaException(e.getMessage());
         }
 
-        Float precioActual = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(), ofertaService.obtenerOfertaActivaPorTurno(idTurno).orElse(null));
+        Float precioActual = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(),
+                ofertaService.obtenerOfertaActivaPorTurno(idTurno).orElse(null));
 
         if (item == null) {
             item = new ItemCarrito();
@@ -186,7 +191,8 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public CarritoResponse actualizarCantidad(Long idUsuario, Long idItem, Integer cantidad) throws RecursoNoEncontradoException {
+    public CarritoResponse actualizarCantidad(Long idUsuario, Long idItem, Integer cantidad)
+            throws RecursoNoEncontradoException {
         if (cantidad == null || cantidad <= 0)
             throw new SolicitudInvalidaException("La cantidad debe ser mayor a 0");
 
@@ -238,7 +244,8 @@ public class CarritoServiceImpl implements CarritoService {
     public void vaciar(Long idUsuario) throws RecursoNoEncontradoException {
         Carrito carrito = getOrCreateCarrito(idUsuario);
         for (ItemCarrito item : carrito.getItems()) {
-            if (!estaVencido(item)) liberarLugares(item);
+            if (!estaVencido(item))
+                liberarLugares(item);
         }
         carrito.getItems().clear();
         carritoRepository.save(carrito);
@@ -246,20 +253,25 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public List<InscripcionResponse> checkout(Long idUsuario) throws RecursoNoEncontradoException, TurnoSinCuposException {
+    public List<InscripcionResponse> checkout(Long idUsuario, String metodoPago)
+            throws RecursoNoEncontradoException, TurnoSinCuposException {
         Carrito carrito = getOrCreateCarrito(idUsuario);
         limpiarExpirados(carrito);
         if (carrito.getItems().isEmpty())
             throw new RecursoNoEncontradoException("El carrito esta vacio o la reserva expiro");
+
+        EstadoPago estadoInicial = "efectivo".equalsIgnoreCase(metodoPago) ? EstadoPago.EFECTIVO : EstadoPago.PAGADO;
 
         Usuario comprador = carrito.getUsuario();
         List<Inscripcion> inscripciones = new ArrayList<>();
 
         for (ItemCarrito item : carrito.getItems()) {
             Turno turno = turnoRepository.findByIdParaInscribir(item.getTurno().getIdTurno())
-                    .orElseThrow(() -> new RecursoNoEncontradoException("No existe el turno " + item.getTurno().getIdTurno()));
+                    .orElseThrow(() -> new RecursoNoEncontradoException(
+                            "No existe el turno " + item.getTurno().getIdTurno()));
 
-            Float precioFinal = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(), ofertaService.obtenerOfertaActivaPorTurno(turno.getIdTurno()).orElse(null));
+            Float precioFinal = ofertaService.calcularPrecioConDescuento(turno.getPrecioPorJugador(),
+                    ofertaService.obtenerOfertaActivaPorTurno(turno.getIdTurno()).orElse(null));
 
             for (int i = 0; i < item.getCantidad(); i++) {
                 Inscripcion inscripcion = new Inscripcion();
@@ -267,7 +279,7 @@ public class CarritoServiceImpl implements CarritoService {
                 inscripcion.setUsuarioComprador(comprador);
                 inscripcion.setFechaCompra(LocalDateTime.now());
                 inscripcion.setMontoPagado(precioFinal.doubleValue());
-                inscripcion.setEstadoPago(EstadoPago.PENDIENTE);
+                inscripcion.setEstadoPago(estadoInicial);
                 inscripciones.add(inscripcionRepository.save(inscripcion));
             }
         }
@@ -288,7 +300,8 @@ public class CarritoServiceImpl implements CarritoService {
             } catch (RecursoNoEncontradoException e) {
             }
             Carrito carrito = item.getCarrito();
-            if (carrito != null) carrito.getItems().removeIf(i -> i.getIdItem().equals(item.getIdItem()));
+            if (carrito != null)
+                carrito.getItems().removeIf(i -> i.getIdItem().equals(item.getIdItem()));
             itemCarritoRepository.delete(item);
         }
     }

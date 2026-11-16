@@ -13,5 +13,5 @@ public interface CarritoService {
     CarritoResponse actualizarCantidad(Long idUsuario, Long idItem, Integer cantidad) throws RecursoNoEncontradoException;
     CarritoResponse quitarItem(Long idUsuario, Long idItem) throws RecursoNoEncontradoException;
     void vaciar(Long idUsuario) throws RecursoNoEncontradoException;
-    List<InscripcionResponse> checkout(Long idUsuario) throws RecursoNoEncontradoException, TurnoSinCuposException;
+    List<InscripcionResponse> checkout(Long idUsuario, String metodoPago) throws RecursoNoEncontradoException, TurnoSinCuposException;
 }
