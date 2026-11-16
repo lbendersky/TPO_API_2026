@@ -5,7 +5,9 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.rowset.serial.SerialBlob;
 
@@ -45,7 +47,6 @@ public class ImagenServiceImpl implements ImagenService {
         if (archivos == null || archivos.isEmpty())
             throw new SolicitudInvalidaException("No se envió ninguna imagen");
 
-        // Primero se validan todos los archivos, así no se guarda ninguno si alguno está mal
         for (MultipartFile archivo : archivos) {
             if (archivo.isEmpty())
                 throw new SolicitudInvalidaException("Uno de los archivos está vacío");
@@ -79,7 +80,6 @@ public class ImagenServiceImpl implements ImagenService {
     public List<ImagenResponse> buscarPorCancha(Long idCancha) throws SQLException, IOException {
         List<Imagen> imagenes = imagenRepository.findByCancha_IdCancha(idCancha);
 
-        // Si la cancha no tiene fotos, devuelve solo la imagen por defecto
         if (imagenes.isEmpty())
             return List.of(imagenPorDefecto());
 
@@ -131,6 +131,21 @@ public class ImagenServiceImpl implements ImagenService {
         return imagenRepository.save(copia);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Long, List<ImagenResponse>> buscarTodasAgrupadas() throws SQLException {
+        List<Imagen> imagenes = imagenRepository.findAll();
+
+        Map<Long, List<ImagenResponse>> resultado = new HashMap<>();
+        for (Imagen imagen : imagenes) {
+            if (imagen.getCancha() == null)
+                continue; // es precargada, no pertenece a ninguna cancha todavía
+
+            Long idCancha = imagen.getCancha().getIdCancha();
+            resultado.computeIfAbsent(idCancha, k -> new ArrayList<>()).add(aResponse(imagen));
+        }
+        return resultado;
+    }
 
     private void validarDuenio(Cancha cancha, Usuario actor) throws AccesoDenegadoException {
         boolean esDuenio = cancha.getPublicador() != null

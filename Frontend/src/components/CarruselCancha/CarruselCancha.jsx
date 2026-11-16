@@ -1,16 +1,10 @@
-import { useState, useEffect } from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchImagenesCancha} from "../../redux/canchasSlice";
+import { useState } from 'react';
+import { useSelector } from "react-redux";
 
 // Muestra las fotos de una cancha con flechas para pasar de una a otra
 const CarruselCancha = ({ idCancha, nombre }) => {
-    const dispatch = useDispatch();
     const imagenes = useSelector((state) => state.canchas.imagenesPorCancha[idCancha]);
     const [indice, setIndice] = useState(0);
-
-    useEffect(() => {
-        if (imagenes === undefined) dispatch(fetchImagenesCancha(idCancha));
-    }, [dispatch, idCancha, imagenes]);
 
     const lista = imagenes || [];
     const anterior = () => setIndice(Math.max(indice - 1, 0));

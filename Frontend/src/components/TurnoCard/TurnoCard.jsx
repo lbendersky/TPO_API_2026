@@ -1,10 +1,9 @@
 import './TurnoCard.css';
 import { Link } from 'react-router-dom';
 import { formatearFechaHora } from '../../utils/fecha';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ImageOff } from 'lucide-react';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchImagenesCancha} from "../../Redux/canchasSlice";
+import { useSelector } from "react-redux";
 
 
 
@@ -23,15 +22,9 @@ const TurnoCard = ({
     tieneOfertaActiva,
 }) => {
 
-    const dispatch = useDispatch();
     const guardadas = useSelector((state) => state.canchas.imagenesPorCancha[idCancha]);
     const imagenes = guardadas || [];
     const [indice, setIndice] = useState(0);
-    
-    //Pide imagen/es a store(compartido entre tarjetas de la misma cancha)
-     useEffect(() => {
-        if (idCancha && guardadas === undefined) dispatch(fetchImagenesCancha(idCancha));
-    }, [dispatch, idCancha, guardadas]);
 
     const anterior = (e) => {
         e.preventDefault();
