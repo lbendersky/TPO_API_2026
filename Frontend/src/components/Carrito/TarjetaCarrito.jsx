@@ -11,12 +11,13 @@ export const TarjetaCarrito = ({ item }) => {
     const dispatch = useDispatch();
 
     const idItemReal = item.idItem ?? item.id_item ?? item.id;
-    const maxLugares = item.lugaresDisponibles 
+    const lugaresLibres = item.lugaresDisponibles 
         ?? item.turno?.lugaresDisponibles 
         ?? item.turno?.lugares_disponibles 
         ?? 10;
 
     const [cantidadSeleccionada, setCantidadSeleccionada] = useState(item.cantidad ?? 1);
+    const maxLugares = lugaresLibres + cantidadSeleccionada;
 
     useEffect(() => {
         if (item.cantidad !== undefined) {

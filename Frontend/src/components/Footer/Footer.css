@@ -20,7 +20,7 @@
 
 .footer__columnas {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
     max-width: 90rem;
     margin: 0 auto;
@@ -54,27 +54,6 @@
 .footer__columna a:hover {
     color: var(--verdeClaro);
     text-decoration: underline;
-}
-
-.footer__redes {
-    flex-direction: row !important;
-    gap: 0.8rem !important;
-}
-
-.footer__red-icono {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 50%;
-    background: var(--c-verde-fondo);
-    color: var(--verdeOscuro);
-}
-
-.footer__red-icono svg {
-    width: 1.1rem;
-    height: 1.1rem;
 }
 
 .footer__legal {
@@ -119,7 +98,7 @@
 
 @media (max-width: 64rem) {
     .footer__columnas {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -129,7 +108,6 @@
     }
 
     .footer__columnas {
-        grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
     }
 }

@@ -1,6 +1,6 @@
 import './Filtros.css';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FORMATOS } from '../../utils/opcionesCancha';
 
 const PRECIO_MIN_LIMITE = 0;
@@ -14,15 +14,27 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
     const [precioMin, setPrecioMin] = useState(PRECIO_MIN_LIMITE);
     const [precioMax, setPrecioMax] = useState(PRECIO_MAX_LIMITE);
 
-    // Cada vez que cambia algún filtro, se avisa al padre automáticamente (sin botón)
+    const esPrimerRender = useRef(true);
+
+    // Cada vez que cambia algún filtro, se avisa al padre automáticamente (sin botón).
+    // En el montaje no avisamos nada: el padre ya arranca con los filtros por defecto.
+    // Esperamos un toque (debounce) antes de avisar, para no disparar un pedido
+    // por cada paso que recorre el slider de precio mientras lo arrastrás.
     useEffect(() => {
-        onFiltrar({
-            localidades: localidadesSel.length ? localidadesSel : null,
-            tiposFutbol: tiposSel.length ? tiposSel : null,
-            precioMin: precioMin > PRECIO_MIN_LIMITE ? precioMin : null,
-            precioMax: precioMax < PRECIO_MAX_LIMITE ? precioMax : null,
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (esPrimerRender.current) {
+            esPrimerRender.current = false;
+            return;
+        }
+        const idTimeout = setTimeout(() => {
+            onFiltrar({
+                localidades: localidadesSel.length ? localidadesSel : null,
+                tiposFutbol: tiposSel.length ? tiposSel : null,
+                precioMin: precioMin > PRECIO_MIN_LIMITE ? precioMin : null,
+                precioMax: precioMax < PRECIO_MAX_LIMITE ? precioMax : null,
+            });
+        }, 400);
+
+        return () => clearTimeout(idTimeout);
     }, [localidadesSel, tiposSel, precioMin, precioMax]);
 
     const toggleLocalidad = (loc) => {
