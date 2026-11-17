@@ -41,7 +41,7 @@ export const eliminarInscripcion = createAsyncThunk(
 export const checkout = createAsyncThunk(
   'inscripciones/checkout',
   async (metodoPago, { getState }) => {
-    const token = getState().usuarios.token;
+    const token = getState().usuarios.token
     const { data } = await axios.post(
       `${API_URL}/carrito/checkout`,
       {},
@@ -86,7 +86,6 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-
       .addCase(eliminarInscripcion.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -100,8 +99,6 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-
-      // agregar inscripcion (checkout)
       .addCase(agregarInscripcion.pending, (state) => {
         state.loading = true;
         state.error = null;
