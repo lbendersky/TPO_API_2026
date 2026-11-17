@@ -18,6 +18,7 @@ const SelectorModeracion = ({
     getKey,
     etiquetaOcultos,
     esOculto,
+    mensajeExito,
 }) => {
     const [seccionAbierta, setSeccionAbierta] = useState(false);
     const [mostrarOcultos, setMostrarOcultos] = useState(false);
@@ -76,7 +77,7 @@ const SelectorModeracion = ({
         if (!confirm.isConfirmed) return;
         try {
             await onEliminar(seleccionado);
-            setMensaje('Eliminado correctamente.');
+            setMensaje(mensajeExito ?? 'Eliminado correctamente.');
             setSeleccionado(null);
             await cargar();
         } catch (err) {

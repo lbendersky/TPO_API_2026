@@ -33,6 +33,11 @@ const FormularioOferta = ({ turno, onCrear }) => {
             setError('Indicá fecha de inicio y de fin.');
             return;
         }
+        const hoy = new Date().toISOString().slice(0, 10);
+        if (form.fechaInicio < hoy) {
+            setError('La fecha de inicio no puede ser anterior a hoy.');
+            return;
+        }
         if (form.fechaInicio > form.fechaFin) {
             setError('La fecha de inicio no puede ser posterior a la de fin.');
             return;

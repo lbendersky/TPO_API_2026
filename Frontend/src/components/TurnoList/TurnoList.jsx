@@ -9,12 +9,56 @@ import { fetchTurnosFiltrados, setFiltros, fetchLocalidades } from '../../redux/
 
 const UMBRAL_REFETCH_MS = 10000;
 
+const COMPARADORES = {
+    'fecha-asc': (a, b) => new Date(a.fechaHora) - new Date(b.fechaHora),
+    'fecha-desc': (a, b) => new Date(b.fechaHora) - new Date(a.fechaHora),
+    'precio-asc': (a, b) => (a.precioConDescuento ?? a.precioPorJugador) - (b.precioConDescuento ?? b.precioPorJugador),
+    'precio-desc': (a, b) => (b.precioConDescuento ?? b.precioPorJugador) - (a.precioConDescuento ?? a.precioPorJugador),
+    az: (a, b) => (a.nombreCancha ?? '').localeCompare(b.nombreCancha ?? ''),
+    za: (a, b) => (b.nombreCancha ?? '').localeCompare(a.nombreCancha ?? ''),
+};
+
+const categoriaDe = (clave) => {
+    if (clave.startsWith('fecha')) return 'fecha';
+    if (clave.startsWith('precio')) return 'precio';
+    return 'nombre';
+};
+
+const alternarCriterio = (activos, clave) => {
+    if (activos.includes(clave)) {
+        return activos.filter((c) => c !== clave);
+    }
+    const categoria = categoriaDe(clave);
+    const indiceAnterior = activos.findIndex((c) => categoriaDe(c) === categoria);
+    const sinEsaCategoria = activos.filter((c) => categoriaDe(c) !== categoria);
+    if (indiceAnterior === -1) {
+        return [...sinEsaCategoria, clave];
+    }
+    const conNuevoCriterio = [...sinEsaCategoria];
+    conNuevoCriterio.splice(indiceAnterior, 0, clave);
+    return conNuevoCriterio;
+};
+
+const ordenarTurnos = (lista, activos) => {
+    const copia = [...lista];
+    if (!activos.length) return copia;
+    return copia.sort((a, b) => {
+        for (const clave of activos) {
+            const resultado = COMPARADORES[clave](a, b);
+            if (resultado !== 0) return resultado;
+        }
+        return 0;
+    });
+};
+
 const TurnoList = () => {
     const dispatch = useDispatch();
     const { items: turnos, filtros, loading, error, ultimaConsultaFiltrados } = useSelector((state) => state.turnos);
     const turnosFuturos = turnos.filter((value) => new Date(value.fechaHora) > new Date());
     const localidades = useSelector((state) => state.turnos.localidades);
     const [texto, setTexto] = useState('');
+    const [ordenes, setOrdenes] = useState(['fecha-asc']);
+    const turnosOrdenados = ordenarTurnos(turnosFuturos, ordenes);
 
     useEffect(() => {
         if (localidades.length === 0) dispatch(fetchLocalidades());
@@ -48,13 +92,15 @@ const TurnoList = () => {
                 <Filtros
                     localidades={localidades.map((l) => l.nombre)}
                     onFiltrar={(f) => dispatch(setFiltros(f))}
+                    ordenes={ordenes}
+                    onOrdenar={(clave) => setOrdenes((actuales) => alternarCriterio(actuales, clave))}
                 />
 
                 <section className="turno-list-contenido">
                     <div className="turno-list">
                         {loading && <p className="turno-list__vacio">Cargando turnos...</p>}
                         {error && <p className="turno-list__vacio">No se pudieron cargar los turnos: {error}</p>}
-                        {turnosFuturos.map((value) => (
+                        {turnosOrdenados.map((value) => (
                             <TurnoCard
                                 key={value.idTurno}
                                 idTurno={value.idTurno}
@@ -72,7 +118,7 @@ const TurnoList = () => {
                             />
                         ))}
                     </div>
-                    {!loading && !error && turnosFuturos.length === 0 && (
+                    {!loading && !error && turnosOrdenados.length === 0 && (
                         <p className="turno-list__vacio">No hay turnos que coincidan con los filtros.</p>
                     )}
                 </section>
