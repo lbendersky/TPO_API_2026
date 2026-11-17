@@ -42,6 +42,11 @@ export const eliminarUsuarioAdmin = createAsyncThunk('usuarios/eliminarUsuarioAd
     return idUsuario;
 });
 
+export const fetchTodosUsuarios = createAsyncThunk('usuarios/fetchTodosUsuarios', async (token) => {
+    const { data } = await axios.get(`${API_URL}/usuarios`, conToken(token));
+    return data;
+});
+
 const usuariosSlice = createSlice({
     name: 'usuarios',
     initialState: {
@@ -117,6 +122,9 @@ const usuariosSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(eliminarUsuarioAdmin.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(fetchTodosUsuarios.rejected, (state, action) => {
                 state.error = action.error.message;
             });
     },
