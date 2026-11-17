@@ -7,11 +7,11 @@ import { fetchTurnoPorId } from '../../redux/turnosSlice';
 import { agregarItemCarrito } from '../../redux/carritoSlice';
 
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
-import { Alerta } from '../../utils/alerta';
 import { formatearFechaHora } from '../../utils/fecha';
 import ParticipantesTurno from '../../components/ParticipantesTurno/ParticipantesTurno';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import { Boton } from '../../components/Boton/Boton';
+import { agregarAlCarrito } from '../../redux/carritoSlice';
 
 const TIPO_FUTBOL_LABEL = {
     F5: 'Fútbol 5',
@@ -41,18 +41,13 @@ const Turno = () => {
         setIndice(0);
     }
 
-    const agregarAlCarrito = () => {
+    const agregarCarrito = async () => {
         if (!estaLogueado) {
             navigate('/login');
             return;
         }
-        dispatch(agregarItemCarrito({ idTurno: turno.idTurno, cantidad: 1 }))
-            .unwrap()
-            .then(() => navigate('/carrito'))
-            .catch((error) => {
-                console.error('Error al agregar al carrito', error);
-                Alerta.fire({ icon: 'error', title: 'Error', text: 'No se pudo agregar al carrito' });
-            });
+        dispatch(agregarAlCarrito({ idTurno: turno.idTurno, cantidad: 1 }));
+        navigate('/carrito')
     };
 
     useEffect(() => {
@@ -163,7 +158,7 @@ const Turno = () => {
                         tamaño="grande"
                         ancho="completo"
                         type="button"
-                        onClick={agregarAlCarrito}
+                        onClick={agregarCarrito}
                         disabled={sinCupos}
                     >
                         {sinCupos ? 'Sin cupos disponibles' : 'Sumarme'}

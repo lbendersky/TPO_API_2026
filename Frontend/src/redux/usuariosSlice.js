@@ -10,14 +10,14 @@ const obtenerUsuarioPorEmail = async (email, token) => {
 };
 
 export const login = createAsyncThunk('usuarios/login', async ({ email, contrasena }) => {
-    const { data } = await axios.post(`${API_URL}/api/v1/auth/authenticate`, { email, contrasena });
+    const { data } = await axios.post(`${API_URL}/authenticate`, { email, contrasena });
     const accessToken = data.access_token;
     const usuario = await obtenerUsuarioPorEmail(email, accessToken);
     return { token: accessToken, usuario };
 });
 
 export const register = createAsyncThunk('usuarios/register', async (datos) => {
-    const { data } = await axios.post(`${API_URL}/api/v1/auth/register`, datos);
+    const { data } = await axios.post(`${API_URL}/register`, datos);
     const accessToken = data.access_token;
     const usuario = await obtenerUsuarioPorEmail(datos.email, accessToken);
     return { token: accessToken, usuario };

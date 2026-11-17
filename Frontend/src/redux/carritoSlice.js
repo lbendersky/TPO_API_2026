@@ -7,14 +7,10 @@ const conToken = (token) => ({
   headers: { Authorization: `Bearer ${token}` }
 });
 
-const obtenerToken = (getState) => {
-  return getState().usuarios?.token || localStorage.getItem('token');
-};
-
 export const fetchCarrito = createAsyncThunk(
   'carrito/fetchCarrito',
   async (_, { getState }) => {
-    const token = obtenerToken(getState);
+    const token = getState().usuarios.token;
     const { data } = await axios.get(`${API_URL}/carrito`, conToken(token));
     return data;
   }
@@ -35,8 +31,8 @@ export const agregarItemCarrito = createAsyncThunk(
 
 export const quitarItemCarrito = createAsyncThunk(
   'carrito/quitarItemCarrito',
-  async ({ idItem, idTurno, cantidad }, { getState }) => {
-    const token = obtenerToken(getState);
+  async (idItem, { getState }) => {
+    const token = getState().usuarios.token;
     const { data } = await axios.delete(
       `${API_URL}/carrito/items/${idItem}`,
       conToken(token)
@@ -48,8 +44,21 @@ export const quitarItemCarrito = createAsyncThunk(
 export const actualizarCantidad = createAsyncThunk(
   'carrito/actualizarCantidad',
   async ({ idItem, cantidad }, { getState }) => {
-    const token = obtenerToken(getState);
+    const token = getState().usuarios.token;
     const { data } = await axios.put(
+      `${API_URL}/carrito/items/${idItem}`,
+      { cantidad },
+      conToken(token)
+    );
+    return data;
+  }
+);
+
+export const agregarAlCarrito = createAsyncThunk(
+  'carrito/agregarAlCarrito',
+  async ({ idItem, cantidad }, { getState }) => {
+    const token = getState().usuarios.token;
+    const { data } = await axios.post(
       `${API_URL}/carrito/items/${idItem}`,
       { cantidad },
       conToken(token)
@@ -63,7 +72,7 @@ const carritoSlice = createSlice({
   initialState: {
     items: [],
     loading: false,
-    error: null,
+    error: null
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -74,66 +83,50 @@ const carritoSlice = createSlice({
       })
       .addCase(fetchCarrito.fulfilled, (state, action) => {
         state.loading = false;
-        if (Array.isArray(action.payload)) {
-          state.items = action.payload;
-        } else if (action.payload && Array.isArray(action.payload.items)) {
-          state.items = action.payload.items;
-        } else if (action.payload && Array.isArray(action.payload.itemsCarrito)) {
-          state.items = action.payload.itemsCarrito;
-        } else {
-          state.items = [];
-        }
+        state.items = action.payload;
       })
       .addCase(fetchCarrito.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
 
-      .addCase(agregarItemCarrito.fulfilled, (state, action) => {
-        if (Array.isArray(action.payload)) {
-          state.items = action.payload;
-        } else if (action.payload && Array.isArray(action.payload.items)) {
-          state.items = action.payload.items;
-        } else if (action.payload && Array.isArray(action.payload.itemsCarrito)) {
-          state.items = action.payload.itemsCarrito;
-        }
+      .addCase(quitarItemCarrito.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-
       .addCase(quitarItemCarrito.fulfilled, (state, action) => {
-        const { idItem: idEliminado } = action.meta.arg;
-        state.items = state.items.filter(
-          (i) => (i.idItem ?? i.id_item ?? i.id) !== idEliminado
-        );
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(quitarItemCarrito.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       })
 
+      .addCase(actualizarCantidad.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(actualizarCantidad.fulfilled, (state, action) => {
-        if (Array.isArray(action.payload)) {
-          state.items = action.payload;
-        } else if (action.payload?.items && Array.isArray(action.payload.items)) {
-          state.items = action.payload.items;
-        } else {
-          const { idItem, cantidad } = action.meta.arg;
-          const item = state.items.find(
-            (i) => (i.idItem ?? i.id_item ?? i.id) === idItem
-          );
-          if (item) {
-            item.cantidad = cantidad;
-            const precio = Number(
-              item.precioUnitario ??
-              item.precio_unitario ??
-              item.turno?.precioPorJugador ??
-              item.turno?.precio_por_jugador ??
-              item.precio ??
-              0
-            );
-            item.subtotal = precio * cantidad;
-            item.subTotal = precio * cantidad;
-          }
-        }
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(actualizarCantidad.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       })
 
-      .addCase(checkout.fulfilled, (state) => {
-        state.items = [];
+      .addCase(agregarAlCarrito.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(agregarAlCarrito.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(agregarAlCarrito.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });
