@@ -68,7 +68,6 @@ const carritoSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch Carrito
       .addCase(fetchCarrito.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -90,7 +89,6 @@ const carritoSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // Agregar Item
       .addCase(agregarItemCarrito.fulfilled, (state, action) => {
         if (Array.isArray(action.payload)) {
           state.items = action.payload;
@@ -101,7 +99,6 @@ const carritoSlice = createSlice({
         }
       })
 
-      // Quitar Item
       .addCase(quitarItemCarrito.fulfilled, (state, action) => {
         const { idItem: idEliminado } = action.meta.arg;
         state.items = state.items.filter(
@@ -109,7 +106,6 @@ const carritoSlice = createSlice({
         );
       })
 
-      // Actualizar Cantidad
       .addCase(actualizarCantidad.fulfilled, (state, action) => {
         if (Array.isArray(action.payload)) {
           state.items = action.payload;
@@ -136,7 +132,6 @@ const carritoSlice = createSlice({
         }
       })
 
-      // Al confirmarse el checkout (en inscripcionesSlice), el carrito se vacía
       .addCase(checkout.fulfilled, (state) => {
         state.items = [];
       });

@@ -59,14 +59,12 @@ const canchasSlice = createSlice({
         error: null,
     },
     reducers: {
-        //para limpiar la cancha publicada despues de mostrar el mensje de que se creo la cancha bien
         limpiarPublicada: (state) => {
             state.ultimaPublicada = null;
         },
     },
     extraReducers: (builder) => {
     builder
-        //mis canchas (GET)
         .addCase(fetchMisCanchas.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -79,7 +77,6 @@ const canchasSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         })
-        //todas las canchas (GET - admin)
         .addCase(fetchTodasCanchas.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -92,7 +89,6 @@ const canchasSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         })
-        //publicar cancha (POST)
         .addCase(publicarCancha.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -112,7 +108,6 @@ const canchasSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         })
-        //editar cancha (PUT)
         .addCase(editarCancha.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -128,7 +123,6 @@ const canchasSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         })
-        //dar de baja cancha (DELETE)
         .addCase(darDeBajaCancha.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -148,7 +142,6 @@ const canchasSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         })
-        //fotos precargadas e imagenes de todas las canchas
         .addCase(fetchFotosPrecargadas.pending, (state) => {
             state.error = null;
         })

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from "react-redux";
 
-// Muestra las fotos de una cancha con flechas para pasar de una a otra
 const CarruselCancha = ({ idCancha, nombre }) => {
     const imagenes = useSelector((state) => state.canchas.imagenesPorCancha[idCancha]);
     const [indice, setIndice] = useState(0);

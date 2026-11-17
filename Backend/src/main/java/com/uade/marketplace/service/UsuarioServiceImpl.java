@@ -105,21 +105,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (!usuarioRepository.existsById(idUsuario))
             throw new RecursoNoEncontradoException("No existe el usuario " + idUsuario);
 
-        // Borrar inscripciones del usuario como comprador
         inscripcionRepository.deleteAll(
                 inscripcionRepository.findByUsuarioComprador_IdUsuario(idUsuario));
 
-        // Borrar los turnos que organiza (con todas sus dependencias)
         for (Turno turno : turnoRepository.findByUsuario_IdUsuario(idUsuario)) {
             eliminarTurnoEnCascada(turno);
         }
 
-        // Borrar las canchas publicadas (con sus turnos e imagenes)
         for (Cancha cancha : canchaRepository.findByPublicador_IdUsuario(idUsuario)) {
             eliminarCanchaEnCascada(cancha);
         }
 
-        // Borrar el carrito del usuario (los items se borran por orphanRemoval)
         carritoRepository.findByUsuario_IdUsuario(idUsuario)
                 .ifPresent(carritoRepository::delete);
 

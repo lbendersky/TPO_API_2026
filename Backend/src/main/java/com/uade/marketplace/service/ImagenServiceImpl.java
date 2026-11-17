@@ -139,7 +139,7 @@ public class ImagenServiceImpl implements ImagenService {
         Map<Long, List<ImagenResponse>> resultado = new HashMap<>();
         for (Imagen imagen : imagenes) {
             if (imagen.getCancha() == null)
-                continue; // es precargada, no pertenece a ninguna cancha todavía
+                continue;
 
             Long idCancha = imagen.getCancha().getIdCancha();
             resultado.computeIfAbsent(idCancha, k -> new ArrayList<>()).add(aResponse(imagen));

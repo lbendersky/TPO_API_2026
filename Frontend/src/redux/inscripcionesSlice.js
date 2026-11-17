@@ -82,7 +82,6 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      // todas las inscripciones (admin)
       .addCase(fetchTodasInscripciones.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -95,7 +94,6 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      // eliminar inscripcion (admin)
       .addCase(eliminarInscripcion.fulfilled, (state, action) => {
         state.todas = state.todas.filter((i) => i.idInscripcion !== action.payload);
         state.items = state.items.filter((i) => i.idInscripcion !== action.payload);
@@ -104,7 +102,6 @@ const inscripcionesSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // Checkout del carrito -> se suman las inscripciones nuevas
       .addCase(checkout.fulfilled, (state, action) => {
         state.items = [...state.items, ...action.payload];
       });

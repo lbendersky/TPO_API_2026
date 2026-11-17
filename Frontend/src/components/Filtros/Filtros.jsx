@@ -7,7 +7,6 @@ const PRECIO_MIN_LIMITE = 0;
 const PRECIO_MAX_LIMITE = 10000;
 const PRECIO_PASO = 500;
 
-// Recibe por props una lista de localidades disponibles
 const Filtros = ({ localidades = [], onFiltrar }) => {
     const [localidadesSel, setLocalidadesSel] = useState([]);
     const [tiposSel, setTiposSel] = useState([]);
@@ -15,11 +14,6 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
     const [precioMax, setPrecioMax] = useState(PRECIO_MAX_LIMITE);
 
     const esPrimerRender = useRef(true);
-
-    // Cada vez que cambia algún filtro, se avisa al padre automáticamente (sin botón).
-    // En el montaje no avisamos nada: el padre ya arranca con los filtros por defecto.
-    // Esperamos un toque (debounce) antes de avisar, para no disparar un pedido
-    // por cada paso que recorre el slider de precio mientras lo arrastrás.
     useEffect(() => {
         if (esPrimerRender.current) {
             esPrimerRender.current = false;
@@ -49,11 +43,9 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
         );
     };
 
-    // Slider: arrastrar el pulgar
     const handleMinChange = (e) => setPrecioMin(Math.min(Number(e.target.value), precioMax));
     const handleMaxChange = (e) => setPrecioMax(Math.max(Number(e.target.value), precioMin));
 
-    // Inputs numéricos Mínimo / Máximo
     const handleMinInput = (e) => {
         const val = e.target.value === '' ? PRECIO_MIN_LIMITE : Number(e.target.value);
         if (val >= PRECIO_MIN_LIMITE && val <= precioMax) setPrecioMin(val);

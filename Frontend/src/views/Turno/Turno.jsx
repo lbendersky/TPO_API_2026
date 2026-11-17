@@ -1,9 +1,6 @@
 import './Turno.css';
 
-// Importa el hook useParams de react-router-dom para leer parámetros de la URL
 import { useParams, useNavigate } from 'react-router-dom';
-// useState: para saber que foto de la galeria se esta viendo.
-// useEffect: para despachar los pedidos del turno al montarse.
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTurnoPorId } from '../../redux/turnosSlice';
@@ -31,7 +28,6 @@ const Turno = () => {
     const items = useSelector((state) => state.turnos.items);
     const seleccionado = useSelector((state) => state.turnos.seleccionado);
     const error = useSelector((state) => state.turnos.error);
-    // si ya está en la lista que se cargó en Inicio, lo usamos de ahí y no pedimos nada al back
     const turnoEnLista = items.find((t) => String(t.idTurno) === id);
     const turno = turnoEnLista ?? seleccionado;
     const idCancha = turno?.idCancha;

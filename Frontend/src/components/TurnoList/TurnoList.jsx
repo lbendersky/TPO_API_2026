@@ -7,7 +7,6 @@ import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
 import { fetchTurnosFiltrados, setFiltros, fetchLocalidades } from '../../redux/turnosSlice';
 
-// Si volvés a pedir exactamente lo mismo antes de que pase este tiempo, no se repite el pedido.
 const UMBRAL_REFETCH_MS = 10000;
 
 const TurnoList = () => {
