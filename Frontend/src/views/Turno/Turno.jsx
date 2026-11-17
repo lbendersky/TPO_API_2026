@@ -1,21 +1,15 @@
 import './Turno.css';
-
-// Importa el hook useParams de react-router-dom para leer parámetros de la URL
 import { useParams, useNavigate } from 'react-router-dom';
-// useState: para saber que foto de la galeria se esta viendo.
-// useEffect: para despachar los pedidos del turno al montarse.
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTurnoPorId } from '../../redux/turnosSlice';
 
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
-import { Alerta } from '../../utils/alerta';
-// URL base del backend
-import { API_URL } from '../../config';
 import { formatearFechaHora } from '../../utils/fecha';
 import ParticipantesTurno from '../../components/ParticipantesTurno/ParticipantesTurno';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import { Boton } from '../../components/Boton/Boton';
+import { agregarAlCarrito } from '../../redux/carritoSlice';
 
 const TIPO_FUTBOL_LABEL = {
     F5: 'Fútbol 5',
@@ -27,7 +21,7 @@ const TIPO_FUTBOL_LABEL = {
 const Turno = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { estaLogueado, token } = useSelector((state) => state.usuarios);
+    const { estaLogueado } = useSelector((state) => state.usuarios);
     const dispatch = useDispatch();
     const turno = useSelector((state) => state.turnos.seleccionado);
     const error = useSelector((state) => state.turnos.error);
@@ -42,26 +36,13 @@ const Turno = () => {
         setIndice(0);
     }
 
-    const agregarAlCarrito = async () => {
+    const agregarCarrito = async () => {
         if (!estaLogueado) {
             navigate('/login');
             return;
         }
-        try {
-            const response = await fetch(`${API_URL}/carrito/items`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ idTurno: turno.idTurno, cantidad: 1 }),
-            });
-            if (!response.ok) throw new Error('No se pudo agregar al carrito');
-            navigate('/carrito');
-        } catch (error) {
-            console.error('Error al agregar al carrito', error);
-            Alerta.fire({ icon: 'error', title: 'Error', text: 'No se pudo agregar al carrito' });
-        }
+        dispatch(agregarAlCarrito({ idTurno: turno.idTurno, cantidad: 1 }));
+        navigate('/carrito')
     };
 
     useEffect(() => {
@@ -172,7 +153,7 @@ const Turno = () => {
                         tamaño="grande"
                         ancho="completo"
                         type="button"
-                        onClick={agregarAlCarrito}
+                        onClick={agregarCarrito}
                         disabled={sinCupos}
                     >
                         {sinCupos ? 'Sin cupos disponibles' : 'Sumarme'}

@@ -6,20 +6,10 @@ const conToken = (token) => ({
   headers: { Authorization: `Bearer ${token}` }
 });
 
-const obtenerToken = (getState) => {
-  return getState().usuarios?.token || localStorage.getItem('token');
-};
-
-const obtenerUsuario = (getState) => {
-  return getState().usuarios?.usuario || getState().auth?.usuario;
-};
-
 export const fetchInscripcionesUsuario = createAsyncThunk(
   'inscripciones/fetchInscripcionesUsuario',
   async (idUsuarioParam, { getState }) => {
-    const state = getState();
-    const token = obtenerToken(() => state);
-    const usuario = obtenerUsuario(() => state);
+    const { token, usuario } = getState().usuarios;
     const idUsuario = idUsuarioParam ?? usuario?.idUsuario ?? usuario?.id_usuario;
 
     const { data } = await axios.get(
@@ -32,7 +22,8 @@ export const fetchInscripcionesUsuario = createAsyncThunk(
 
 export const fetchTodasInscripciones = createAsyncThunk(
   'inscripciones/fetchTodasInscripciones',
-  async (token) => {
+  async (_, { getState }) => {
+    const token = getState().usuarios.token;
     const { data } = await axios.get(`${API_URL}/inscripciones`, conToken(token));
     return data;
   }
@@ -40,9 +31,23 @@ export const fetchTodasInscripciones = createAsyncThunk(
 
 export const eliminarInscripcion = createAsyncThunk(
   'inscripciones/eliminarInscripcion',
-  async ({ idInscripcion, token }) => {
+  async (idInscripcion, { getState }) => {
+    const token = getState().usuarios.token;
     await axios.delete(`${API_URL}/inscripciones/${idInscripcion}`, conToken(token));
     return idInscripcion;
+  }
+);
+
+export const agregarInscripcion = createAsyncThunk(
+  'inscripciones/agregarInscripcion',
+  async (_, { getState }) => {
+    const token = getState().usuarios.token;
+    const { data } = await axios.post(
+      `${API_URL}/carrito/checkout`,
+      {},
+      conToken(token)
+    );
+    return data;
   }
 );
 
@@ -69,6 +74,7 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+
       // todas las inscripciones (admin)
       .addCase(fetchTodasInscripciones.pending, (state) => {
         state.loading = true;
@@ -82,12 +88,37 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+
       // eliminar inscripcion (admin)
+      .addCase(eliminarInscripcion.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(eliminarInscripcion.fulfilled, (state, action) => {
+        state.loading = false;
         state.todas = state.todas.filter((i) => i.idInscripcion !== action.payload);
         state.items = state.items.filter((i) => i.idInscripcion !== action.payload);
       })
       .addCase(eliminarInscripcion.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      // agregar inscripcion (checkout)
+      .addCase(agregarInscripcion.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(agregarInscripcion.fulfilled, (state, action) => {
+        state.loading = false;
+        if (Array.isArray(action.payload)) {
+          state.items = [...state.items, ...action.payload];
+        } else if (action.payload) {
+          state.items.push(action.payload);
+        }
+      })
+      .addCase(agregarInscripcion.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.error.message;
       });
   },

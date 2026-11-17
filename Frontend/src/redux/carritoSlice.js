@@ -6,66 +6,50 @@ const conToken = (token) => ({
   headers: { Authorization: `Bearer ${token}` }
 });
 
-const obtenerToken = (getState) => {
-  return getState().usuarios?.token || localStorage.getItem('token');
-};
-
-export const fetchInscripcionesUsuario = createAsyncThunk(
-  'carrito/fetchInscripcionesUsuario',
-  async (idUsuario, { getState }) => {
-    const token = obtenerToken(getState);
-    const response = await axios.get(
-      `${API_URL}/inscripciones/usuario/${idUsuario}`,
-      conToken(token)
-    );
-    return response.data;
-  }
-);
-
 export const fetchCarrito = createAsyncThunk(
   'carrito/fetchCarrito',
   async (_, { getState }) => {
-    const token = obtenerToken(getState);
-    const response = await axios.get(`${API_URL}/carrito`, conToken(token));
-    return response.data;
+    const token = getState().usuarios.token;
+    const { data } = await axios.get(`${API_URL}/carrito`, conToken(token));
+    return data;
   }
 );
 
 export const quitarItemCarrito = createAsyncThunk(
   'carrito/quitarItemCarrito',
   async (idItem, { getState }) => {
-    const token = obtenerToken(getState);
-    const response = await axios.delete(
+    const token = getState().usuarios.token;
+    const { data } = await axios.delete(
       `${API_URL}/carrito/items/${idItem}`,
       conToken(token)
     );
-    return response.data;
+    return data;
   }
 );
 
 export const actualizarCantidad = createAsyncThunk(
   'carrito/actualizarCantidad',
   async ({ idItem, cantidad }, { getState }) => {
-    const token = obtenerToken(getState);
-    const response = await axios.put(
+    const token = getState().usuarios.token;
+    const { data } = await axios.put(
       `${API_URL}/carrito/items/${idItem}`,
       { cantidad },
       conToken(token)
     );
-    return response.data;
+    return data;
   }
 );
 
 export const agregarAlCarrito = createAsyncThunk(
   'carrito/agregarAlCarrito',
   async ({ idItem, cantidad }, { getState }) => {
-    const token = obtenerToken(getState);
-    const response = await axios.post(
+    const token = getState().usuarios.token;
+    const { data } = await axios.post(
       `${API_URL}/carrito/items/${idItem}`,
       { cantidad },
       conToken(token)
     );
-    return response.data;
+    return data;
   }
 );
 
@@ -129,7 +113,7 @@ const carritoSlice = createSlice({
       .addCase(agregarAlCarrito.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-      })
+      });
   },
 });
 
