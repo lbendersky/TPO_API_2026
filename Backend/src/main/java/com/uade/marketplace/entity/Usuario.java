@@ -22,10 +22,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data // Genera getters y setters automáticamente
-@NoArgsConstructor // para Hibernate
-@AllArgsConstructor // para crear un constructor con todos los atributos
-@Builder // para usar el patrón Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Usuario implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,8 @@
 import './SelectorModeracion.css';
 
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
-import { confirmarEliminar  } from '../../utils/alerta';
+import { ChevronDown, CornerDownLeft } from 'lucide-react';
+import { confirmarEliminar } from '../../utils/alerta';
 import { Boton } from '../Boton/Boton';
 
 const SelectorModeracion = ({
@@ -16,8 +16,14 @@ const SelectorModeracion = ({
     renderExtra,
     puedeEliminar,
     getKey,
+    etiquetaOcultos,
+    esOculto,
 }) => {
+    const [seccionAbierta, setSeccionAbierta] = useState(false);
+    const [mostrarOcultos, setMostrarOcultos] = useState(false);
     const [items, setItems] = useState([]);
+    const [filtro, setFiltro] = useState('');
+    const [terminoBuscado, setTerminoBuscado] = useState('');
     const [abierto, setAbierto] = useState(false);
     const [seleccionado, setSeleccionado] = useState(null);
     const [error, setError] = useState('');
@@ -78,66 +84,146 @@ const SelectorModeracion = ({
         }
     };
 
+    const buscar = () => {
+        setTerminoBuscado(filtro);
+        setAbierto(true);
+    };
+
+    const onKeyDownFiltro = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            buscar();
+        }
+    };
+
+    const onChangeFiltro = (e) => {
+        const valor = e.target.value;
+        setFiltro(valor);
+        if (!valor.trim()) {
+            setTerminoBuscado('');
+        }
+    };
+
+    const itemsVisibles = (etiquetaOcultos && esOculto && !mostrarOcultos)
+        ? items.filter((it) => !esOculto(it))
+        : items;
+
+    const itemsFiltrados = terminoBuscado.trim()
+        ? itemsVisibles.filter((it) => renderOpcion(it).toLowerCase().includes(terminoBuscado.trim().toLowerCase()))
+        : itemsVisibles;
+
     const bloqueado = seleccionado && puedeEliminar && !puedeEliminar(seleccionado);
 
     return (
         <section className="selector-moderacion">
-            <h2 className="selector-moderacion__titulo">{titulo}</h2>
-
-            <div className="selector-moderacion__dropdown" ref={contenedorRef}>
+                <div className="selector-moderacion__encabezado">
                 <button
                     type="button"
-                    className="selector-moderacion__trigger"
-                    onClick={() => setAbierto((v) => !v)}
-                    disabled={cargando}
+                    className="selector-moderacion__titulo-boton"
+                    onClick={() => setSeccionAbierta((v) => !v)}
                 >
-                    <span className="selector-moderacion__trigger-texto">
-                        {seleccionado
-                            ? renderOpcion(seleccionado)
-                            : (cargando ? 'Cargando...' : (placeholder ?? 'Seleccionar'))}
-                    </span>
-                    <ChevronDown size={18} />
+                    <h2 className="selector-moderacion__titulo">{titulo}</h2>
                 </button>
 
-                {abierto && (
-                    <div className="selector-moderacion__panel" role="listbox">
-                        <ul className="selector-moderacion__opciones">
-                            {items.length === 0 && (
-                                <li className="selector-moderacion__vacio">Sin resultados</li>
-                            )}
-                            {items.map((it) => (
-                                <li
-                                    key={getKey(it)}
-                                    role="option"
-                                    className="selector-moderacion__opcion"
-                                    onClick={() => elegir(it)}
-                                >
-                                    {renderOpcion(it)}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                {etiquetaOcultos && esOculto && (
+                    <button
+                        type="button"
+                        className={`selector-moderacion__toggle-ocultos ${mostrarOcultos ? 'selector-moderacion__toggle-ocultos--activo' : ''}`}
+                        onClick={() => setMostrarOcultos((v) => !v)}
+                    >
+                        {etiquetaOcultos}
+                    </button>
                 )}
+
+                <button
+                    type="button"
+                    className="selector-moderacion__chevron-boton"
+                    onClick={() => setSeccionAbierta((v) => !v)}
+                >
+                    <ChevronDown
+                        size={20}
+                        className={`selector-moderacion__chevron-seccion ${seccionAbierta ? 'selector-moderacion__chevron-seccion--abierto' : ''}`}
+                    />
+                </button>
             </div>
 
-            {error && <p className="selector-moderacion__error">{error}</p>}
-            {mensaje && <p className="selector-moderacion__ok">{mensaje}</p>}
-
-            {seleccionado && (
-                <div className="selector-moderacion__resultado">
-                    {renderResultado(seleccionado)}
-                    <div className="selector-moderacion__acciones">
-                        <Boton
-                            variante="peligro"
-                            onClick={eliminar}
-                            disabled={bloqueado}
-                            title={bloqueado ? 'No podés eliminar este registro' : ''}
+            {seccionAbierta && (
+                <>
+                    <div className="selector-moderacion__fila-filtro">
+                        <input
+                            type="text"
+                            className="selector-moderacion__filtro"
+                            placeholder={`Buscar en ${titulo.toLowerCase()}...`}
+                            value={filtro}
+                            onChange={onChangeFiltro}
+                            onKeyDown={onKeyDownFiltro}
+                        />
+                        <button
+                            type="button"
+                            className="selector-moderacion__boton-buscar"
+                            onClick={buscar}
+                            title="Buscar"
                         >
-                            Eliminar
-                        </Boton>
-                        {renderExtra && renderExtra(seleccionado)}
+                            <CornerDownLeft size={18} />
+                        </button>
                     </div>
-                </div>
+
+                    <div className="selector-moderacion__dropdown" ref={contenedorRef}>
+                        <button
+                            type="button"
+                            className="selector-moderacion__trigger"
+                            onClick={() => setAbierto((v) => !v)}
+                            disabled={cargando}
+                        >
+                            <span className="selector-moderacion__trigger-texto">
+                                {seleccionado
+                                    ? renderOpcion(seleccionado)
+                                    : (cargando ? 'Cargando...' : (placeholder ?? 'Seleccionar'))}
+                            </span>
+                            <ChevronDown size={18} />
+                        </button>
+
+                        {abierto && (
+                            <div className="selector-moderacion__panel" role="listbox">
+                                <ul className="selector-moderacion__opciones">
+                                    {itemsFiltrados.length === 0 && (
+                                        <li className="selector-moderacion__vacio">Sin resultados</li>
+                                    )}
+                                    {itemsFiltrados.map((it) => (
+                                        <li
+                                            key={getKey(it)}
+                                            role="option"
+                                            className="selector-moderacion__opcion"
+                                            onClick={() => elegir(it)}
+                                        >
+                                            {renderOpcion(it)}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+
+                    {error && <p className="selector-moderacion__error">{error}</p>}
+                    {mensaje && <p className="selector-moderacion__ok">{mensaje}</p>}
+
+                    {seleccionado && (
+                        <div className="selector-moderacion__resultado">
+                            {renderResultado(seleccionado)}
+                            <div className="selector-moderacion__acciones">
+                                <Boton
+                                    variante="peligro"
+                                    onClick={eliminar}
+                                    disabled={bloqueado}
+                                    title={bloqueado ? 'No podés eliminar este registro' : ''}
+                                >
+                                    Eliminar
+                                </Boton>
+                                {renderExtra && renderExtra(seleccionado)}
+                            </div>
+                        </div>
+                    )}
+                </>
             )}
         </section>
     );

@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { API_URL } from '../../config'
+import { useDispatch } from 'react-redux'
+import { checkout } from '../../redux/inscripcionesSlice'
 import VolverAtras from '../../components/VolverAtras/VolverAtras'
 import { BotonCheckout } from '../../components/Checkout/BotonCheckout'
 import { HeaderCarrito } from '../../components/Carrito/HeaderCarrito'
 import { formatearFechaHora } from '../../utils/fecha'
 import { formatearMoneda } from '../../utils/moneda'
-import { guardarEstadosPago } from '../../utils/pagosLocales'
 import { Boton } from '../../components/Boton/Boton'
 
 import '../Carrito/Carrito.css'
@@ -37,7 +36,7 @@ const validarTarjeta = ({ numero, titular, vencimiento, cvv }) => {
 }
 
 const Checkout = () => {
-  const { token } = useSelector((state) => state.usuarios)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [inscripciones, setInscripciones] = useState(null)
@@ -45,7 +44,7 @@ const Checkout = () => {
   const [metodoConfirmado, setMetodoConfirmado] = useState('tarjeta')
   const [tarjeta, setTarjeta] = useState({ numero: '', titular: '', vencimiento: '', cvv: '' })
 
-  const confirmarPago = async () => {
+  const confirmarPago = () => {
     setError('')
 
     if (metodoPago === 'tarjeta') {
@@ -56,27 +55,13 @@ const Checkout = () => {
       }
     }
 
-    try {
-      const response = await fetch(`${API_URL}/carrito/checkout`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+    dispatch(checkout(metodoPago))
+      .unwrap()
+      .then((data) => {
+        setMetodoConfirmado(metodoPago)
+        setInscripciones(data)
       })
-
-      if (response.status === 409) {
-        throw new Error('Alguno de los turnos ya no tiene cupos suficientes.')
-      }
-      if (!response.ok) {
-        throw new Error('No se pudo completar la compra.')
-      }
-
-      const data = await response.json()
-      const estadoLocal = metodoPago === 'tarjeta' ? 'PAGADO' : 'EFECTIVO'
-      guardarEstadosPago(data.map((i) => i.idInscripcion), estadoLocal)
-      setMetodoConfirmado(metodoPago)
-      setInscripciones(data)
-    } catch (e) {
-      setError(e.message)
-    }
+      .catch(() => setError('No se pudo completar la compra. Puede que alguno de los turnos se haya quedado sin cupo.'))
   }
 
   if (inscripciones) {

@@ -7,9 +7,11 @@ import TurnoCard from '../TurnoCard/TurnoCard';
 import Filtros from '../Filtros/Filtros';
 import { fetchTurnosFiltrados, setFiltros, fetchLocalidades } from '../../redux/turnosSlice';
 
+const UMBRAL_REFETCH_MS = 10000;
+
 const TurnoList = () => {
     const dispatch = useDispatch();
-    const { items: turnos, filtros, loading, error } = useSelector((state) => state.turnos);
+    const { items: turnos, filtros, loading, error, ultimaConsultaFiltrados } = useSelector((state) => state.turnos);
     const turnosFuturos = turnos.filter((value) => new Date(value.fechaHora) > new Date());
     const localidades = useSelector((state) => state.turnos.localidades);
     const [texto, setTexto] = useState('');
@@ -19,7 +21,15 @@ const TurnoList = () => {
     }, [dispatch, localidades.length]);
 
     useEffect(() => {
-        dispatch(fetchTurnosFiltrados({ ...filtros, texto: texto?.trim() || null }));
+        const id = setTimeout(() => {
+            const params = { ...filtros, texto: texto?.trim() || null };
+            const clave = JSON.stringify(params);
+            const yaEstaFresco = ultimaConsultaFiltrados?.clave === clave
+                && Date.now() - ultimaConsultaFiltrados.momento < UMBRAL_REFETCH_MS;
+            if (yaEstaFresco) return;
+            dispatch(fetchTurnosFiltrados(params));
+        }, 400);
+        return () => clearTimeout(id);
     }, [dispatch, filtros, texto]);
     return (
         <>

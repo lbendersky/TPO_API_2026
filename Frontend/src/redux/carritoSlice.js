@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../config';
+import { checkout } from './inscripcionesSlice';
 
 const conToken = (token) => ({
   headers: { Authorization: `Bearer ${token}` }
@@ -11,6 +12,19 @@ export const fetchCarrito = createAsyncThunk(
   async (_, { getState }) => {
     const token = getState().usuarios.token;
     const { data } = await axios.get(`${API_URL}/carrito`, conToken(token));
+    return data;
+  }
+);
+
+export const agregarItemCarrito = createAsyncThunk(
+  'carrito/agregarItemCarrito',
+  async ({ idTurno, cantidad }, { getState }) => {
+    const token = obtenerToken(getState);
+    const { data } = await axios.post(
+      `${API_URL}/carrito/items`,
+      { idTurno, cantidad },
+      conToken(token)
+    );
     return data;
   }
 );

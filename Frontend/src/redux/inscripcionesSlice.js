@@ -38,14 +38,14 @@ export const eliminarInscripcion = createAsyncThunk(
   }
 );
 
-export const agregarInscripcion = createAsyncThunk(
-  'inscripciones/agregarInscripcion',
-  async (_, { getState }) => {
-    const token = getState().usuarios.token;
+export const checkout = createAsyncThunk(
+  'inscripciones/checkout',
+  async (metodoPago, { getState }) => {
+    const token = getState().usuarios.token
     const { data } = await axios.post(
       `${API_URL}/carrito/checkout`,
       {},
-      conToken(token)
+      { ...conToken(token), params: { metodoPago } }
     );
     return data;
   }
@@ -74,8 +74,6 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-
-      // todas las inscripciones (admin)
       .addCase(fetchTodasInscripciones.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -88,8 +86,6 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-
-      // eliminar inscripcion (admin)
       .addCase(eliminarInscripcion.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -103,8 +99,6 @@ const inscripcionesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-
-      // agregar inscripcion (checkout)
       .addCase(agregarInscripcion.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -120,6 +114,10 @@ const inscripcionesSlice = createSlice({
       .addCase(agregarInscripcion.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+
+      .addCase(checkout.fulfilled, (state, action) => {
+        state.items = [...state.items, ...action.payload];
       });
   },
 });

@@ -1,6 +1,5 @@
 import './Footer.css';
 import { Link } from 'react-router-dom';
-import { AtSign, MessageCircle, Share2, Globe } from 'lucide-react';
 
 const ANIO_FUNDACION = 2026;
 
@@ -42,15 +41,6 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                <div className="footer__columna">
-                    <h4>Seguinos</h4>
-                    <ul className="footer__redes">
-                        <li><span className="footer__red-icono" aria-label="Instagram"><AtSign /></span></li>
-                        <li><span className="footer__red-icono" aria-label="Facebook"><MessageCircle /></span></li>
-                        <li><span className="footer__red-icono" aria-label="Twitter"><Share2 /></span></li>
-                        <li><span className="footer__red-icono" aria-label="Youtube"><Globe /></span></li>
-                    </ul>
-                </div>
             </div>
 
             <div className="footer__legal">

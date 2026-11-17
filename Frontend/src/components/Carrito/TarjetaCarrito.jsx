@@ -11,12 +11,13 @@ export const TarjetaCarrito = ({ item }) => {
     const dispatch = useDispatch();
 
     const idItemReal = item.idItem ?? item.id_item ?? item.id;
-    const maxLugares = item.lugaresDisponibles 
+    const lugaresLibres = item.lugaresDisponibles 
         ?? item.turno?.lugaresDisponibles 
         ?? item.turno?.lugares_disponibles 
         ?? 10;
 
     const [cantidadSeleccionada, setCantidadSeleccionada] = useState(item.cantidad ?? 1);
+    const maxLugares = lugaresLibres + cantidadSeleccionada;
 
     useEffect(() => {
         if (item.cantidad !== undefined) {
@@ -24,24 +25,28 @@ export const TarjetaCarrito = ({ item }) => {
         }
     }, [item.cantidad]);
 
+    const idTurnoReal = item.idTurno ?? item.turno?.idTurno;
+
     const aumentarCantidad = async () => {
         if (cantidadSeleccionada < maxLugares) {
             const nueva = cantidadSeleccionada + 1;
+            const anterior = cantidadSeleccionada;
             setCantidadSeleccionada(nueva);
-            await dispatch(actualizarCantidad({ idItem: idItemReal, cantidad: nueva }));
+            await dispatch(actualizarCantidad({ idItem: idItemReal, idTurno: idTurnoReal, cantidadAnterior: anterior, cantidad: nueva }));
         }
     };
 
     const sacarCantidad = async () => {
         if (cantidadSeleccionada > 1) {
             const nueva = cantidadSeleccionada - 1;
+            const anterior = cantidadSeleccionada;
             setCantidadSeleccionada(nueva);
-            await dispatch(actualizarCantidad({ idItem: idItemReal, cantidad: nueva }));
+            await dispatch(actualizarCantidad({ idItem: idItemReal, idTurno: idTurnoReal, cantidadAnterior: anterior, cantidad: nueva }));
         }
     };
 
     const handleQuitar = async () => {
-        await dispatch(quitarItemCarrito(idItemReal));
+        await dispatch(quitarItemCarrito({ idItem: idItemReal, idTurno: idTurnoReal, cantidad: cantidadSeleccionada }));
     };
 
     const tipoFutbol = FORMATOS.find((f) => f.valor === (item.tipoFutbol ?? item.turno?.tipoFutbol));
