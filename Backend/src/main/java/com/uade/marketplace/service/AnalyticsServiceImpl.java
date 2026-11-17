@@ -1,5 +1,7 @@
 package com.uade.marketplace.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,15 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public AnalyticsResponse getAnalytics() {
-        Double ingresos = inscripcionRepository.sumMontoPagadoByEstadoPago(EstadoPago.PAGADO);
+        LocalDateTime ahora = LocalDateTime.now();
+
+        Double ingresosTarjetaRaw = inscripcionRepository.sumMontoPagadoByEstadoPago(EstadoPago.PAGADO);
+        Double ingresosEfectivoRaw = inscripcionRepository.sumMontoPagadoByEstadoPagoYFechaHasta(EstadoPago.EFECTIVO, ahora);
+        Double ingresosEfectivoFuturosRaw = inscripcionRepository.sumMontoPagadoByEstadoPagoYFechaDesde(EstadoPago.EFECTIVO, ahora);
+
+        double ingresosTarjeta = ingresosTarjetaRaw != null ? ingresosTarjetaRaw : 0.0;
+        double ingresosEfectivo = ingresosEfectivoRaw != null ? ingresosEfectivoRaw : 0.0;
+        double ingresosEfectivoFuturos = ingresosEfectivoFuturosRaw != null ? ingresosEfectivoFuturosRaw : 0.0;
 
         return new AnalyticsResponse(
                 usuarioRepository.count(),
@@ -40,7 +50,10 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 inscripcionRepository.countByEstadoPago(EstadoPago.CANCELADO),
                 inscripcionRepository.countByEstadoPago(EstadoPago.REEMBOLSADO),
                 inscripcionRepository.countByEstadoPago(EstadoPago.EFECTIVO),
-                ingresos != null ? ingresos : 0.0
+                ingresosTarjeta,
+                ingresosEfectivo,
+                ingresosEfectivoFuturos,
+                ingresosTarjeta + ingresosEfectivo
         );
     }
 }

@@ -101,6 +101,9 @@ const carritoSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      .addCase(quitarItemCarrito.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
 
       .addCase(actualizarCantidad.pending, (state) => {
         state.loading = true;

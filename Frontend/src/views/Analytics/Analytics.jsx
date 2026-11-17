@@ -81,6 +81,17 @@ const Analytics = () => {
                     <section className="analytics__tarjeta analytics__tarjeta--destacada">
                         <h2>Ingresos totales</h2>
                         <p className="analytics__ingresos">{formatearMoneda(datos.ingresosTotales)}</p>
+                        <dl>
+                            <dt>Tarjeta</dt><dd>{formatearMoneda(datos.ingresosTarjeta)}</dd>
+                            <dt>Efectivo</dt><dd>{formatearMoneda(datos.ingresosEfectivo)}</dd>
+                        </dl>
+                    </section>
+
+                    <section className="analytics__tarjeta">
+                        <h2>Efectivo pendiente de cobrar</h2>
+                        <dl>
+                            <dt>Turnos futuros</dt><dd>{formatearMoneda(datos.ingresosEfectivoFuturos)}</dd>
+                        </dl>
                     </section>
                 </div>
             )}
