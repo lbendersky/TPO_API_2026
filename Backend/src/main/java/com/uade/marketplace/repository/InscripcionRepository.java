@@ -1,4 +1,5 @@
 package com.uade.marketplace.repository;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,10 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Long>{
 
     @Query("SELECT COALESCE(SUM(i.montoPagado), 0) FROM Inscripcion i WHERE i.estadoPago = :estadoPago")
     Double sumMontoPagadoByEstadoPago(@Param("estadoPago") EstadoPago estadoPago);
+
+    @Query("SELECT COALESCE(SUM(i.montoPagado), 0) FROM Inscripcion i WHERE i.estadoPago = :estadoPago AND i.turno.fechaHora <= :ahora")
+    Double sumMontoPagadoByEstadoPagoYFechaHasta(@Param("estadoPago") EstadoPago estadoPago, @Param("ahora") LocalDateTime ahora);
+
+    @Query("SELECT COALESCE(SUM(i.montoPagado), 0) FROM Inscripcion i WHERE i.estadoPago = :estadoPago AND i.turno.fechaHora > :ahora")
+    Double sumMontoPagadoByEstadoPagoYFechaDesde(@Param("estadoPago") EstadoPago estadoPago, @Param("ahora") LocalDateTime ahora);
 }

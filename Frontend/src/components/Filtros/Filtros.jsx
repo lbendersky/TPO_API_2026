@@ -1,13 +1,14 @@
 import './Filtros.css';
 
 import { useEffect, useRef, useState } from 'react';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 import { FORMATOS } from '../../utils/opcionesCancha';
 
 const PRECIO_MIN_LIMITE = 0;
 const PRECIO_MAX_LIMITE = 10000;
 const PRECIO_PASO = 500;
 
-const Filtros = ({ localidades = [], onFiltrar }) => {
+const Filtros = ({ localidades = [], onFiltrar, ordenes = [], onOrdenar }) => {
     const [localidadesSel, setLocalidadesSel] = useState([]);
     const [tiposSel, setTiposSel] = useState([]);
     const [precioMin, setPrecioMin] = useState(PRECIO_MIN_LIMITE);
@@ -61,6 +62,70 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
 
     return (
         <aside className="filtros-panel">
+            <div className="filtros-panel__seccion">
+                <h3 className="filtros-panel__titulo">Ordenar por</h3>
+
+                <div className="filtros-panel__orden-fila">
+                    <span className="filtros-panel__orden-etiqueta">Más recientes</span>
+                    <button
+                        type="button"
+                        className={`filtros-panel__orden-boton ${ordenes.includes('fecha-asc') ? 'filtros-panel__orden-boton--activo' : ''}`}
+                        onClick={() => onOrdenar('fecha-asc')}
+                        title="Más próximos primero"
+                    >
+                        <ArrowUp size={16} />
+                    </button>
+                    <button
+                        type="button"
+                        className={`filtros-panel__orden-boton ${ordenes.includes('fecha-desc') ? 'filtros-panel__orden-boton--activo' : ''}`}
+                        onClick={() => onOrdenar('fecha-desc')}
+                        title="Más lejanos primero"
+                    >
+                        <ArrowDown size={16} />
+                    </button>
+                </div>
+
+                <div className="filtros-panel__orden-fila">
+                    <span className="filtros-panel__orden-etiqueta">Precio</span>
+                    <button
+                        type="button"
+                        className={`filtros-panel__orden-boton ${ordenes.includes('precio-asc') ? 'filtros-panel__orden-boton--activo' : ''}`}
+                        onClick={() => onOrdenar('precio-asc')}
+                        title="Menor a mayor"
+                    >
+                        <ArrowUp size={16} />
+                    </button>
+                    <button
+                        type="button"
+                        className={`filtros-panel__orden-boton ${ordenes.includes('precio-desc') ? 'filtros-panel__orden-boton--activo' : ''}`}
+                        onClick={() => onOrdenar('precio-desc')}
+                        title="Mayor a menor"
+                    >
+                        <ArrowDown size={16} />
+                    </button>
+                </div>
+
+                <div className="filtros-panel__orden-fila">
+                    <span className="filtros-panel__orden-etiqueta">Nombre</span>
+                    <button
+                        type="button"
+                        className={`filtros-panel__orden-boton ${ordenes.includes('az') ? 'filtros-panel__orden-boton--activo' : ''}`}
+                        onClick={() => onOrdenar('az')}
+                        title="A-Z"
+                    >
+                        A-Z
+                    </button>
+                    <button
+                        type="button"
+                        className={`filtros-panel__orden-boton ${ordenes.includes('za') ? 'filtros-panel__orden-boton--activo' : ''}`}
+                        onClick={() => onOrdenar('za')}
+                        title="Z-A"
+                    >
+                        Z-A
+                    </button>
+                </div>
+            </div>
+
             <div className="filtros-panel__seccion">
                 <h3 className="filtros-panel__titulo">Barrio</h3>
                 <ul className="filtros-panel__lista">

@@ -61,6 +61,46 @@
     color: var(--verdeOscuro);
 }
 
+.filtros-panel__orden-fila {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+}
+
+.filtros-panel__orden-etiqueta {
+    flex: 1;
+    font-size: 1.3em;
+    font-family: var(--fuenteTexto);
+    color: var(--negro);
+}
+
+.filtros-panel__orden-boton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.2em;
+    height: 2.2em;
+    padding: 0 0.5em;
+    border: 0.125rem solid var(--verdeOscuro);
+    background: var(--blanco);
+    color: var(--verdeOscuro);
+    border-radius: var(--radio-chico);
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: 700;
+    font-family: var(--fuenteTexto);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.filtros-panel__orden-boton:hover {
+    background: var(--verdeMuyClaro);
+}
+
+.filtros-panel__orden-boton--activo {
+    background: var(--verdeOscuro);
+    color: var(--blanco);
+}
+
 .filtros-panel__precios {
     display: flex;
     align-items: center;

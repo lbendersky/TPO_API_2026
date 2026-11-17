@@ -83,6 +83,7 @@ const Moderar = () => {
                 placeholder="Seleccionar cancha"
                 onListar={listarCanchas}
                 onEliminar={eliminarCancha}
+                mensajeExito="Dada de baja correctamente."
                 etiquetaOcultos="Dadas de baja"
                 esOculto={(c) => !c.activa}
                 getKey={(c) => c.idCancha}
@@ -107,7 +108,11 @@ const Moderar = () => {
                 esOculto={(t) => new Date(t.fechaHora) < new Date()}
                 getKey={(t) => t.idTurno}
                 renderOpcion={(t) => `#${t.idTurno} · ${t.nombreCancha ?? 'Cancha ?'} — ${formatearFechaHora(t.fechaHora)}${t.nombreOrganizador ? ` · ${t.nombreOrganizador}` : ''}`}
-                renderExtra={(t) => <FormularioOferta turno={t} onCrear={crearOferta} />}
+                renderExtra={(t) => (
+                    <>
+                        <FormularioOferta turno={t} onCrear={crearOferta} />
+                    </>
+                )}
                 renderResultado={(t) => (
                     <dl>
                         <dt>Cancha</dt><dd>{t.nombreCancha ?? t.idCancha}</dd>

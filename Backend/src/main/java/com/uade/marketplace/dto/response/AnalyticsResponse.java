@@ -18,5 +18,8 @@ public class AnalyticsResponse {
     private long inscripcionesCanceladas;
     private long inscripcionesReembolsadas;
     private long inscripcionesEfectivo;
+    private double ingresosTarjeta;
+    private double ingresosEfectivo;
+    private double ingresosEfectivoFuturos;
     private double ingresosTotales;
 }

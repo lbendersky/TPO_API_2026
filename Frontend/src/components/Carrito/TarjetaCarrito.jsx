@@ -32,7 +32,11 @@ export const TarjetaCarrito = ({ item }) => {
             const nueva = cantidadSeleccionada + 1;
             const anterior = cantidadSeleccionada;
             setCantidadSeleccionada(nueva);
-            await dispatch(actualizarCantidad({ idItem: idItemReal, idTurno: idTurnoReal, cantidadAnterior: anterior, cantidad: nueva }));
+            try {
+                await dispatch(actualizarCantidad({ idItem: idItemReal, idTurno: idTurnoReal, cantidadAnterior: anterior, cantidad: nueva })).unwrap();
+            } catch {
+                setCantidadSeleccionada(anterior);
+            }
         }
     };
 
@@ -41,7 +45,11 @@ export const TarjetaCarrito = ({ item }) => {
             const nueva = cantidadSeleccionada - 1;
             const anterior = cantidadSeleccionada;
             setCantidadSeleccionada(nueva);
-            await dispatch(actualizarCantidad({ idItem: idItemReal, idTurno: idTurnoReal, cantidadAnterior: anterior, cantidad: nueva }));
+            try {
+                await dispatch(actualizarCantidad({ idItem: idItemReal, idTurno: idTurnoReal, cantidadAnterior: anterior, cantidad: nueva })).unwrap();
+            } catch {
+                setCantidadSeleccionada(anterior);
+            }
         }
     };
 
