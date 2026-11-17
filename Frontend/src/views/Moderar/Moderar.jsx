@@ -130,7 +130,7 @@ const Moderar = () => {
                 placeholder="Seleccionar inscripción"
                 onListar={listarInscripciones}
                 onEliminar={eliminarInscripcionItem}
-                etiquetaOcultos="Expirados"
+                etiquetaOcultos="Expiradas"
                 esOculto={(i) => new Date(i.fechaHoraTurno) < new Date()}
                 getKey={(i) => i.idInscripcion}
                 renderOpcion={(i) => `#${i.idInscripcion} · ${i.nombreComprador ?? 's/comprador'} → ${i.nombreCancha ?? `Turno ${i.idTurno}`} — ${formatearFechaHora(i.fechaHoraTurno)}`}
