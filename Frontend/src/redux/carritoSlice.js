@@ -15,6 +15,19 @@ export const fetchCarrito = createAsyncThunk(
   }
 );
 
+export const agregarItemCarrito = createAsyncThunk(
+  'carrito/agregarItemCarrito',
+  async ({ idTurno, cantidad }, { getState }) => {
+    const token = obtenerToken(getState);
+    const { data } = await axios.post(
+      `${API_URL}/carrito/items`,
+      { idTurno, cantidad },
+      conToken(token)
+    );
+    return data;
+  }
+);
+
 export const quitarItemCarrito = createAsyncThunk(
   'carrito/quitarItemCarrito',
   async (idItem, { getState }) => {

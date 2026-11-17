@@ -1,28 +1,34 @@
 import './Filtros.css';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FORMATOS } from '../../utils/opcionesCancha';
 
 const PRECIO_MIN_LIMITE = 0;
 const PRECIO_MAX_LIMITE = 10000;
 const PRECIO_PASO = 500;
 
-// Recibe por props una lista de localidades disponibles
 const Filtros = ({ localidades = [], onFiltrar }) => {
     const [localidadesSel, setLocalidadesSel] = useState([]);
     const [tiposSel, setTiposSel] = useState([]);
     const [precioMin, setPrecioMin] = useState(PRECIO_MIN_LIMITE);
     const [precioMax, setPrecioMax] = useState(PRECIO_MAX_LIMITE);
 
-    // Cada vez que cambia algún filtro, se avisa al padre automáticamente (sin botón)
+    const esPrimerRender = useRef(true);
     useEffect(() => {
-        onFiltrar({
-            localidades: localidadesSel.length ? localidadesSel : null,
-            tiposFutbol: tiposSel.length ? tiposSel : null,
-            precioMin: precioMin > PRECIO_MIN_LIMITE ? precioMin : null,
-            precioMax: precioMax < PRECIO_MAX_LIMITE ? precioMax : null,
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (esPrimerRender.current) {
+            esPrimerRender.current = false;
+            return;
+        }
+        const idTimeout = setTimeout(() => {
+            onFiltrar({
+                localidades: localidadesSel.length ? localidadesSel : null,
+                tiposFutbol: tiposSel.length ? tiposSel : null,
+                precioMin: precioMin > PRECIO_MIN_LIMITE ? precioMin : null,
+                precioMax: precioMax < PRECIO_MAX_LIMITE ? precioMax : null,
+            });
+        }, 400);
+
+        return () => clearTimeout(idTimeout);
     }, [localidadesSel, tiposSel, precioMin, precioMax]);
 
     const toggleLocalidad = (loc) => {
@@ -37,11 +43,9 @@ const Filtros = ({ localidades = [], onFiltrar }) => {
         );
     };
 
-    // Slider: arrastrar el pulgar
     const handleMinChange = (e) => setPrecioMin(Math.min(Number(e.target.value), precioMax));
     const handleMaxChange = (e) => setPrecioMax(Math.max(Number(e.target.value), precioMin));
 
-    // Inputs numéricos Mínimo / Máximo
     const handleMinInput = (e) => {
         const val = e.target.value === '' ? PRECIO_MIN_LIMITE : Number(e.target.value);
         if (val >= PRECIO_MIN_LIMITE && val <= precioMax) setPrecioMin(val);

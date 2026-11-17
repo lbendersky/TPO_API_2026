@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatearFechaHora } from '../../utils/fecha';
 import { formatearMoneda } from '../../utils/moneda';
-import { obtenerEstadosPago } from '../../utils/pagosLocales';
 import VolverAtras from '../../components/VolverAtras/VolverAtras';
 import { fetchInscripcionesUsuario } from '../../redux/inscripcionesSlice';
 
@@ -30,12 +29,11 @@ const MisInscripciones = () => {
     const inscripciones = useMemo(() => {
         const lista = rawInscripciones || [];
         return [...lista].sort((a, b) => {
-            const fa = new Date(a.fechaHoraTurno ?? a.fecha_hora_turno ?? 0).getTime();
-            const fb = new Date(b.fechaHoraTurno ?? b.fecha_hora_turno ?? 0).getTime();
+            const fa = new Date(a.fechaCompra ?? a.fecha_compra ?? 0).getTime();
+            const fb = new Date(b.fechaCompra ?? b.fecha_compra ?? 0).getTime();
             return fb - fa;
         });
     }, [rawInscripciones]);
-    const estadosLocales = useMemo(() => obtenerEstadosPago(), []);
 
     useEffect(() => {
         if (!estaLogueado) {
@@ -66,9 +64,7 @@ const MisInscripciones = () => {
             <section className="mis-inscripciones__lista">
                 {inscripciones.map((i) => {
                     const idInscripcion = i.idInscripcion ?? i.id_inscripcion;
-                    const estadoEfectivo = i.estadoPago === 'PENDIENTE'
-                        ? (estadosLocales[idInscripcion] ?? i.estadoPago)
-                        : i.estadoPago;
+                    const estadoEfectivo = i.estadoPago;
 
                     return (
                         <article key={idInscripcion} className="tarjeta-inscripcion">

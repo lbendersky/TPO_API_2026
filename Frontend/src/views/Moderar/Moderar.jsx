@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { buscarUsuarioPorEmail, eliminarUsuarioAdmin } from '../../redux/usuariosSlice';
+import { buscarUsuarioPorEmail, eliminarUsuarioAdmin, fetchTodosUsuarios } from '../../redux/usuariosSlice';
 import { crearOferta as crearOfertaThunk } from '../../redux/ofertasSlice';
 import { fetchTodasCanchas, darDeBajaCancha } from '../../redux/canchasSlice';
 import { fetchTodosTurnos, borrarTurno } from '../../redux/turnosSlice';
 import { fetchTodasInscripciones, eliminarInscripcion } from '../../redux/inscripcionesSlice';
-import BuscadorModeracion from '../../components/BuscadorModeracion/BuscadorModeracion';
 import SelectorModeracion from '../../components/SelectorModeracion/SelectorModeracion';
 import FormularioOferta from '../../components/FormularioOferta/FormularioOferta';
 import { formatearFechaHora } from '../../utils/fecha';
@@ -34,8 +33,8 @@ const Moderar = () => {
     const conError = (promesa, mensajeFallback) =>
         promesa.catch((mensaje) => { throw new Error(typeof mensaje === 'string' ? mensaje : mensajeFallback); });
 
-    const buscarUsuario = (email) =>
-        conError(dispatch(buscarUsuarioPorEmail({ email, token })).unwrap(), 'No se pudo obtener el usuario');
+    const listarUsuarios = () =>
+        conError(dispatch(fetchTodosUsuarios(token)).unwrap(), 'No se pudieron listar los usuarios');
     const eliminarUsuario = (u) =>
         conError(dispatch(eliminarUsuarioAdmin({ idUsuario: u.idUsuario, token })).unwrap(), 'No se pudo eliminar el usuario');
 
@@ -61,11 +60,13 @@ const Moderar = () => {
         <main className="moderar">
             <VolverAtras/>
             <h1 className="moderar__titulo">Panel de moderación</h1>
-            <BuscadorModeracion
+            <SelectorModeracion
                 titulo="Usuarios"
-                placeholder="Email del usuario"
-                onBuscar={buscarUsuario}
+                placeholder="Seleccionar usuario"
+                onListar={listarUsuarios}
                 onEliminar={eliminarUsuario}
+                getKey={(u) => u.idUsuario}
+                renderOpcion={(u) => `#${u.idUsuario} · ${u.nombre} ${u.apellido} — ${u.email}`}
                 puedeEliminar={(u) => u.idUsuario !== usuario.idUsuario}
                 renderResultado={(u) => (
                     <dl>
@@ -82,6 +83,8 @@ const Moderar = () => {
                 placeholder="Seleccionar cancha"
                 onListar={listarCanchas}
                 onEliminar={eliminarCancha}
+                etiquetaOcultos="Dadas de baja"
+                esOculto={(c) => !c.activa}
                 getKey={(c) => c.idCancha}
                 renderOpcion={(c) => `#${c.idCancha} · ${c.nombre} — ${c.localidad ?? 's/localidad'}${c.direccion ? ` (${c.direccion})` : ''}`}
                 renderResultado={(c) => (
@@ -100,6 +103,8 @@ const Moderar = () => {
                 placeholder="Seleccionar turno"
                 onListar={listarTurnos}
                 onEliminar={eliminarTurno}
+                etiquetaOcultos="Expirados"
+                esOculto={(t) => new Date(t.fechaHora) < new Date()}
                 getKey={(t) => t.idTurno}
                 renderOpcion={(t) => `#${t.idTurno} · ${t.nombreCancha ?? 'Cancha ?'} — ${formatearFechaHora(t.fechaHora)}${t.nombreOrganizador ? ` · ${t.nombreOrganizador}` : ''}`}
                 renderExtra={(t) => <FormularioOferta turno={t} onCrear={crearOferta} />}
@@ -120,6 +125,8 @@ const Moderar = () => {
                 placeholder="Seleccionar inscripción"
                 onListar={listarInscripciones}
                 onEliminar={eliminarInscripcionItem}
+                etiquetaOcultos="Expirados"
+                esOculto={(i) => new Date(i.fechaHoraTurno) < new Date()}
                 getKey={(i) => i.idInscripcion}
                 renderOpcion={(i) => `#${i.idInscripcion} · ${i.nombreComprador ?? 's/comprador'} → ${i.nombreCancha ?? `Turno ${i.idTurno}`} — ${formatearFechaHora(i.fechaHoraTurno)}`}
                 renderResultado={(i) => (

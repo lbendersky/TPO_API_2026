@@ -108,8 +108,13 @@
     animation: perfil-shake 0.4s ease-out;
 }
 
+.perfil__fila-admin {
+    display: flex;
+    gap: 0.8rem;
+}
+
 .perfil__moderar {
-    width: 100%;
+    flex: 1;
     padding: 0.9rem;
     border: 1px solid var(--brilloBlanco);
     border-radius: var(--radio-mediano);

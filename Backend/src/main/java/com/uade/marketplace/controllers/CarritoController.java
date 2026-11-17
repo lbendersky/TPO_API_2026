@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.marketplace.dto.request.ItemCarritoRequest;
@@ -61,8 +62,9 @@ public class CarritoController {
     }
 
     @PostMapping("/checkout")
-    public List<InscripcionResponse> checkout(@AuthenticationPrincipal Usuario usuario)
+    public List<InscripcionResponse> checkout(@AuthenticationPrincipal Usuario usuario,
+                                               @RequestParam(required = false) String metodoPago)
             throws RecursoNoEncontradoException, TurnoSinCuposException {
-        return carritoService.checkout(usuario.getIdUsuario());
+        return carritoService.checkout(usuario.getIdUsuario(), metodoPago);
     }
 }

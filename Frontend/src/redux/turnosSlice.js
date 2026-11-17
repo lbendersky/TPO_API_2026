@@ -1,13 +1,20 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../config';
+import { agregarItemCarrito, quitarItemCarrito, actualizarCantidad } from './carritoSlice';
 
 const conToken = (token) => ({ headers: { Authorization: `Bearer ${token}` } });
 
 export const fetchTurnosFiltrados = createAsyncThunk(
   'turnos/fetchTurnosFiltrados',
   async (filtros) => {
-    const { data } = await axios.get(`${API_URL}/turnos/filtrar`, { params: filtros });
+    const { localidades, tiposFutbol, ...resto } = filtros;
+    const params = {
+      ...resto,
+      localidad: localidades,
+      tipoFutbol: tiposFutbol,
+    };
+    const { data } = await axios.get(`${API_URL}/turnos/filtrar`, { params });
     return data;
   }
 );
@@ -55,27 +62,28 @@ export const borrarTurno = createAsyncThunk('turnos/borrarTurno', async ({ idTur
 const turnosSlice = createSlice({
   name: 'turnos',
   initialState: {
-    items: [], // la lista del catálogo
-    filtros: { texto: null, localidades: null, tiposFutbol: null, precioMin: null, precioMax: null }, // por defecto, no hay filtros aplicados
-    localidades: [], // lista de localidades
+    items: [],
+    filtros: { texto: null, localidades: null, tiposFutbol: null, precioMin: null, precioMax: null },
+    localidades: [],
     seleccionado: null,
     participantesPorId: {},
     deMisCanchas: [],
     todos: [],
     loading: false,
     error: null,
+    ultimaConsultaFiltrados: null,
   },
   reducers: {
-    // solo guarda los filtros elegidos en el estado global
     setFiltros: (state, action) => {
       state.filtros = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTurnosFiltrados.pending, (state) => {
+      .addCase(fetchTurnosFiltrados.pending, (state, action) => {
         state.loading = true;
         state.error = null;
+        state.ultimaConsultaFiltrados = { clave: JSON.stringify(action.meta.arg), momento: Date.now() };
       })
       .addCase(fetchTurnosFiltrados.fulfilled, (state, action) => {
         state.loading = false;
@@ -85,7 +93,6 @@ const turnosSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      //LOCALIDADES
       .addCase(fetchLocalidades.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -99,7 +106,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //GET DE TURNOS
       .addCase(fetchMisTurnos.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -113,7 +119,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //TODOS LOS TURNOS (admin)
       .addCase(fetchTodosTurnos.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -127,7 +132,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //CREAR TURNO
       .addCase(crearTurno.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -141,7 +145,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //EDITAR TURNO
       .addCase(editarTurno.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -156,7 +159,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //BORRAR TURNO
       .addCase(borrarTurno.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -170,7 +172,6 @@ const turnosSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      //Detalle tunro
       .addCase(fetchTurnoPorId.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -185,7 +186,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // Anotados
       .addCase(fetchParticipantes.pending, (state, action) => {
         state.participantesPorId[action.meta.arg] = [];
       })
@@ -195,6 +195,35 @@ const turnosSlice = createSlice({
       .addCase(fetchParticipantes.rejected, (state, action) => {
         state.participantesPorId[action.meta.arg] = [];
         state.error = action.error.message;
+      })
+
+      .addCase(agregarItemCarrito.fulfilled, (state, action) => {
+        const { idTurno, cantidad } = action.meta.arg;
+        const turnoEnLista = state.items.find((t) => t.idTurno === idTurno);
+        if (turnoEnLista) turnoEnLista.lugaresDisponibles -= cantidad;
+        if (state.seleccionado?.idTurno === idTurno) {
+          state.seleccionado.lugaresDisponibles -= cantidad;
+        }
+      })
+
+      .addCase(quitarItemCarrito.fulfilled, (state, action) => {
+        const { idTurno, cantidad } = action.meta.arg;
+        const turnoEnLista = state.items.find((t) => t.idTurno === idTurno);
+        if (turnoEnLista) turnoEnLista.lugaresDisponibles += cantidad;
+        if (state.seleccionado?.idTurno === idTurno) {
+          state.seleccionado.lugaresDisponibles += cantidad;
+        }
+      })
+
+      .addCase(actualizarCantidad.fulfilled, (state, action) => {
+        const { idTurno, cantidadAnterior, cantidad } = action.meta.arg;
+        const delta = cantidad - cantidadAnterior;
+        if (!delta) return;
+        const turnoEnLista = state.items.find((t) => t.idTurno === idTurno);
+        if (turnoEnLista) turnoEnLista.lugaresDisponibles -= delta;
+        if (state.seleccionado?.idTurno === idTurno) {
+          state.seleccionado.lugaresDisponibles -= delta;
+        }
       });
   },
 });

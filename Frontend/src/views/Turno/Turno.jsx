@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTurnoPorId } from '../../redux/turnosSlice';
+import { agregarItemCarrito } from '../../redux/carritoSlice';
 
 import { MapPin, Calendar, Users, User, Tag } from 'lucide-react';
 import { formatearFechaHora } from '../../utils/fecha';
@@ -23,8 +24,11 @@ const Turno = () => {
     const navigate = useNavigate();
     const { estaLogueado } = useSelector((state) => state.usuarios);
     const dispatch = useDispatch();
-    const turno = useSelector((state) => state.turnos.seleccionado);
+    const items = useSelector((state) => state.turnos.items);
+    const seleccionado = useSelector((state) => state.turnos.seleccionado);
     const error = useSelector((state) => state.turnos.error);
+    const turnoEnLista = items.find((t) => String(t.idTurno) === id);
+    const turno = turnoEnLista ?? seleccionado;
     const idCancha = turno?.idCancha;
     const guardadas = useSelector((state) => state.canchas.imagenesPorCancha[idCancha]);
     const imagenes = guardadas || [];
@@ -46,8 +50,8 @@ const Turno = () => {
     };
 
     useEffect(() => {
-    dispatch(fetchTurnoPorId(id));
-    }, [dispatch, id]);
+    if (!turnoEnLista) dispatch(fetchTurnoPorId(id));
+    }, [dispatch, id, turnoEnLista]);
 
     const anterior = () => setIndice((i) => Math.max(i - 1, 0));
     const siguiente = () => setIndice((i) => Math.min(i + 1, imagenes.length - 1));
