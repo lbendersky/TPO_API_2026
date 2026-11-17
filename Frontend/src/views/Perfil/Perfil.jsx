@@ -79,13 +79,22 @@ const Perfil = () => {
         <main className="perfil">
             <VolverAtras/>
             {usuario.rol === 'ADMIN' && (
-                <button
-                    type="button"
-                    className="perfil__moderar"
-                    onClick={() => navigate('/moderar')}
-                >
-                    Moderar
-                </button>
+                <div className="perfil__fila-admin">
+                    <button
+                        type="button"
+                        className="perfil__moderar"
+                        onClick={() => navigate('/moderar')}
+                    >
+                        Moderar
+                    </button>
+                                        <button
+                        type="button"
+                        className="perfil__moderar"
+                        onClick={() => navigate('/analytics')}
+                    >
+                        Analítica
+                    </button>
+                </div>
             )}
             <div className="perfil__encabezado">
                 <h1 className="perfil__titulo">Mi perfil</h1>

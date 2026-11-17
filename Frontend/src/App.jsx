@@ -11,6 +11,7 @@ import Perfil from './views/Perfil/Perfil';
 import PublicarCancha from './views/PublicarCancha/PublicarCancha'; 
 import MisCanchas from './views/MisCanchas/MisCanchas';
 import Moderar from './views/Moderar/Moderar';
+import Analytics from './views/Analytics/Analytics';
 import Checkout from './views/Checkout/Checkout'
 import MisInscripciones from './views/MisInscripciones/MisInscripciones';
 import QuienesSomos from './views/QuienesSomos/QuienesSomos';
@@ -42,6 +43,7 @@ function App() {
                         <Route path="/publicar-cancha" element={<PublicarCancha />} />
                         <Route path="/mis-canchas" element={<MisCanchas />} />
                         <Route path="/moderar" element={<Moderar />} />
+                        <Route path="/analytics" element={<Analytics />} />
                         <Route path="/carrito/checkout" element={<Checkout/>} />
                         <Route path="/mis-inscripciones" element={<MisInscripciones/>} />
                         <Route path="/quienes-somos" element={<QuienesSomos/>} />

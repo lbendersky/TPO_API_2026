@@ -39,6 +39,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 inscripcionRepository.countByEstadoPago(EstadoPago.PAGADO),
                 inscripcionRepository.countByEstadoPago(EstadoPago.CANCELADO),
                 inscripcionRepository.countByEstadoPago(EstadoPago.REEMBOLSADO),
+                inscripcionRepository.countByEstadoPago(EstadoPago.EFECTIVO),
                 ingresos != null ? ingresos : 0.0
         );
     }
