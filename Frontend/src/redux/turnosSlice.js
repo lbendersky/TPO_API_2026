@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../config';
-import { agregarItemCarrito } from './carritoSlice';
+import { agregarItemCarrito, quitarItemCarrito, actualizarCantidad } from './carritoSlice';
 
 const conToken = (token) => ({ headers: { Authorization: `Bearer ${token}` } });
 
@@ -71,6 +71,7 @@ const turnosSlice = createSlice({
     todos: [],
     loading: false,
     error: null,
+    ultimaConsultaFiltrados: null, // { clave, momento } del último pedido real a /turnos/filtrar, para no repetirlo si volvés muy rápido
   },
   reducers: {
     // solo guarda los filtros elegidos en el estado global
@@ -80,9 +81,10 @@ const turnosSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTurnosFiltrados.pending, (state) => {
+      .addCase(fetchTurnosFiltrados.pending, (state, action) => {
         state.loading = true;
         state.error = null;
+        state.ultimaConsultaFiltrados = { clave: JSON.stringify(action.meta.arg), momento: Date.now() };
       })
       .addCase(fetchTurnosFiltrados.fulfilled, (state, action) => {
         state.loading = false;
@@ -211,6 +213,28 @@ const turnosSlice = createSlice({
         if (turnoEnLista) turnoEnLista.lugaresDisponibles -= cantidad;
         if (state.seleccionado?.idTurno === idTurno) {
           state.seleccionado.lugaresDisponibles -= cantidad;
+        }
+      })
+
+      // Devuelve el cupo cuando se saca el item entero del carrito
+      .addCase(quitarItemCarrito.fulfilled, (state, action) => {
+        const { idTurno, cantidad } = action.meta.arg;
+        const turnoEnLista = state.items.find((t) => t.idTurno === idTurno);
+        if (turnoEnLista) turnoEnLista.lugaresDisponibles += cantidad;
+        if (state.seleccionado?.idTurno === idTurno) {
+          state.seleccionado.lugaresDisponibles += cantidad;
+        }
+      })
+
+      // Ajusta el cupo cuando cambia la cantidad de turnos reservados en el carrito
+      .addCase(actualizarCantidad.fulfilled, (state, action) => {
+        const { idTurno, cantidadAnterior, cantidad } = action.meta.arg;
+        const delta = cantidad - cantidadAnterior;
+        if (!delta) return;
+        const turnoEnLista = state.items.find((t) => t.idTurno === idTurno);
+        if (turnoEnLista) turnoEnLista.lugaresDisponibles -= delta;
+        if (state.seleccionado?.idTurno === idTurno) {
+          state.seleccionado.lugaresDisponibles -= delta;
         }
       });
   },

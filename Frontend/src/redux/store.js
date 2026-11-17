@@ -16,6 +16,7 @@ import carritoReducer from './carritoSlice';
 import inscripcionesReducer from './inscripcionesSlice';
 import usuariosReducer from './usuariosSlice';
 import ofertasReducer from './ofertasSlice';
+import analyticsReducer from './analyticsSlice';
 
 // Adaptador de almacenamiento compatible con Promise para redux-persist
 const storage = {
@@ -44,6 +45,7 @@ const rootReducer = combineReducers({
   inscripciones: inscripcionesReducer,
   usuarios: persistReducer(persistConfigUsuarios, usuariosReducer),
   ofertas: ofertasReducer,
+  analytics: analyticsReducer,
 });
 
 export const store = configureStore({
