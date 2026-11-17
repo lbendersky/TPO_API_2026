@@ -98,6 +98,9 @@ const carritoSlice = createSlice({
           state.items = action.payload.itemsCarrito;
         }
       })
+      .addCase(agregarItemCarrito.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
 
       .addCase(quitarItemCarrito.fulfilled, (state, action) => {
         const { idItem: idEliminado } = action.meta.arg;
@@ -105,7 +108,13 @@ const carritoSlice = createSlice({
           (i) => (i.idItem ?? i.id_item ?? i.id) !== idEliminado
         );
       })
+      .addCase(quitarItemCarrito.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
 
+      .addCase(actualizarCantidad.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
       .addCase(actualizarCantidad.fulfilled, (state, action) => {
         if (Array.isArray(action.payload)) {
           state.items = action.payload;
