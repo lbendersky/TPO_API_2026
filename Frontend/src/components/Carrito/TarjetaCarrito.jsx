@@ -25,24 +25,28 @@ export const TarjetaCarrito = ({ item }) => {
         }
     }, [item.cantidad]);
 
+    const idTurnoReal = item.idTurno ?? item.turno?.idTurno;
+
     const aumentarCantidad = async () => {
         if (cantidadSeleccionada < maxLugares) {
             const nueva = cantidadSeleccionada + 1;
+            const anterior = cantidadSeleccionada;
             setCantidadSeleccionada(nueva);
-            await dispatch(actualizarCantidad({ idItem: idItemReal, cantidad: nueva }));
+            await dispatch(actualizarCantidad({ idItem: idItemReal, idTurno: idTurnoReal, cantidadAnterior: anterior, cantidad: nueva }));
         }
     };
 
     const sacarCantidad = async () => {
         if (cantidadSeleccionada > 1) {
             const nueva = cantidadSeleccionada - 1;
+            const anterior = cantidadSeleccionada;
             setCantidadSeleccionada(nueva);
-            await dispatch(actualizarCantidad({ idItem: idItemReal, cantidad: nueva }));
+            await dispatch(actualizarCantidad({ idItem: idItemReal, idTurno: idTurnoReal, cantidadAnterior: anterior, cantidad: nueva }));
         }
     };
 
     const handleQuitar = async () => {
-        await dispatch(quitarItemCarrito(idItemReal));
+        await dispatch(quitarItemCarrito({ idItem: idItemReal, idTurno: idTurnoReal, cantidad: cantidadSeleccionada }));
     };
 
     const tipoFutbol = FORMATOS.find((f) => f.valor === (item.tipoFutbol ?? item.turno?.tipoFutbol));

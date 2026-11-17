@@ -35,7 +35,7 @@ export const agregarItemCarrito = createAsyncThunk(
 
 export const quitarItemCarrito = createAsyncThunk(
   'carrito/quitarItemCarrito',
-  async (idItem, { getState }) => {
+  async ({ idItem, idTurno, cantidad }, { getState }) => {
     const token = obtenerToken(getState);
     const { data } = await axios.delete(
       `${API_URL}/carrito/items/${idItem}`,
@@ -103,7 +103,7 @@ const carritoSlice = createSlice({
 
       // Quitar Item
       .addCase(quitarItemCarrito.fulfilled, (state, action) => {
-        const idEliminado = action.meta.arg;
+        const { idItem: idEliminado } = action.meta.arg;
         state.items = state.items.filter(
           (i) => (i.idItem ?? i.id_item ?? i.id) !== idEliminado
         );
