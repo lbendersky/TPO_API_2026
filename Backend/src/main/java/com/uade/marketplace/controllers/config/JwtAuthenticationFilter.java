@@ -53,10 +53,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            // Token vencido, corrupto o inválido: no autenticamos, pero no rompemos el
-            // request.
-            // Spring Security decide más abajo si la ruta necesita login y devuelve 401/403
-            // solo.
         }
         filterChain.doFilter(request, response);
     }

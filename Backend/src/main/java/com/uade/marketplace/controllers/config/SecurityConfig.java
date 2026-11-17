@@ -29,18 +29,15 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        // Auth y errores
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/error/**").permitAll()
 
-                        // Navegar el catalogo sin loguearse
                         .requestMatchers(HttpMethod.GET, "/turnos/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/canchas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/ofertas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/localidades/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/imagenes/**").permitAll()
 
-                        // Solo ADMIN
                         .requestMatchers(HttpMethod.POST, "/localidades/**").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers("/admin/**").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers("/ofertas/**").hasAnyAuthority(Rol.ADMIN.name())
@@ -48,7 +45,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/inscripciones/*/estado-pago").hasAnyAuthority(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "/inscripciones/**").hasAnyAuthority(Rol.ADMIN.name())
 
-                        // Cualquier usuario autenticado (USUARIO o ADMIN)
                         .anyRequest().authenticated())
                         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                         .authenticationProvider(authenticationProvider)

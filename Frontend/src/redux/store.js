@@ -18,7 +18,6 @@ import usuariosReducer from './usuariosSlice';
 import ofertasReducer from './ofertasSlice';
 import analyticsReducer from './analyticsSlice';
 
-// Adaptador de almacenamiento compatible con Promise para redux-persist
 const storage = {
   getItem(key) {
     return Promise.resolve(localStorage.getItem(key));
@@ -31,7 +30,6 @@ const storage = {
   },
 };
 
-// Configuración de persistencia solo para usuarios (sesión, token y estado de login)
 const persistConfigUsuarios = {
   key: 'usuarios',
   storage,

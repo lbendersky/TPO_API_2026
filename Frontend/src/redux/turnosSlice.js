@@ -62,19 +62,18 @@ export const borrarTurno = createAsyncThunk('turnos/borrarTurno', async ({ idTur
 const turnosSlice = createSlice({
   name: 'turnos',
   initialState: {
-    items: [], // la lista del catálogo
-    filtros: { texto: null, localidades: null, tiposFutbol: null, precioMin: null, precioMax: null }, // por defecto, no hay filtros aplicados
-    localidades: [], // lista de localidades
+    items: [],
+    filtros: { texto: null, localidades: null, tiposFutbol: null, precioMin: null, precioMax: null },
+    localidades: [],
     seleccionado: null,
     participantesPorId: {},
     deMisCanchas: [],
     todos: [],
     loading: false,
     error: null,
-    ultimaConsultaFiltrados: null, // { clave, momento } del último pedido real a /turnos/filtrar, para no repetirlo si volvés muy rápido
+    ultimaConsultaFiltrados: null,
   },
   reducers: {
-    // solo guarda los filtros elegidos en el estado global
     setFiltros: (state, action) => {
       state.filtros = action.payload;
     },
@@ -94,7 +93,6 @@ const turnosSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      //LOCALIDADES
       .addCase(fetchLocalidades.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -108,7 +106,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //GET DE TURNOS
       .addCase(fetchMisTurnos.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -122,7 +119,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //TODOS LOS TURNOS (admin)
       .addCase(fetchTodosTurnos.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -136,7 +132,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //CREAR TURNO
       .addCase(crearTurno.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -150,7 +145,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //EDITAR TURNO
       .addCase(editarTurno.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -165,7 +159,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      //BORRAR TURNO
       .addCase(borrarTurno.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -179,7 +172,6 @@ const turnosSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      //Detalle tunro
       .addCase(fetchTurnoPorId.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -194,7 +186,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // Anotados
       .addCase(fetchParticipantes.pending, (state, action) => {
         state.participantesPorId[action.meta.arg] = [];
       })
@@ -206,7 +197,6 @@ const turnosSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // Descuenta el cupo apenas se confirma que se agregó al carrito
       .addCase(agregarItemCarrito.fulfilled, (state, action) => {
         const { idTurno, cantidad } = action.meta.arg;
         const turnoEnLista = state.items.find((t) => t.idTurno === idTurno);
@@ -216,7 +206,6 @@ const turnosSlice = createSlice({
         }
       })
 
-      // Devuelve el cupo cuando se saca el item entero del carrito
       .addCase(quitarItemCarrito.fulfilled, (state, action) => {
         const { idTurno, cantidad } = action.meta.arg;
         const turnoEnLista = state.items.find((t) => t.idTurno === idTurno);
@@ -226,7 +215,6 @@ const turnosSlice = createSlice({
         }
       })
 
-      // Ajusta el cupo cuando cambia la cantidad de turnos reservados en el carrito
       .addCase(actualizarCantidad.fulfilled, (state, action) => {
         const { idTurno, cantidadAnterior, cantidad } = action.meta.arg;
         const delta = cantidad - cantidadAnterior;

@@ -65,7 +65,6 @@ const usuariosSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            //login
             .addCase(login.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -80,7 +79,6 @@ const usuariosSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
             })
-            //register
             .addCase(register.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -95,7 +93,6 @@ const usuariosSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
             })
-            //actualizar perfil propio
             .addCase(actualizarPerfil.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -108,7 +105,6 @@ const usuariosSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
             })
-            //eliminar cuenta propia
             .addCase(eliminarCuenta.fulfilled, (state) => {
                 state.token = null;
                 state.usuario = null;
@@ -117,7 +113,6 @@ const usuariosSlice = createSlice({
             .addCase(eliminarCuenta.rejected, (state, action) => {
                 state.error = action.error.message;
             })
-            //moderación (Moderar.jsx)
             .addCase(buscarUsuarioPorEmail.rejected, (state, action) => {
                 state.error = action.error.message;
             })

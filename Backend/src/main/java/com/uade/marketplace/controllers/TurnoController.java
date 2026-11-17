@@ -30,8 +30,6 @@ public class TurnoController {
 
     @Autowired
     private TurnoService turnoService;
-
-    // Los GET consumen directo del servicio porque ya devuelven el TurnoResponse con descuento
     @GetMapping
     public List<TurnoResponse> getTurnos() {
         return turnoService.getTurnos();
