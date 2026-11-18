@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { buscarUsuarioPorEmail, eliminarUsuarioAdmin, fetchTodosUsuarios } from '../../redux/usuariosSlice';
+import { eliminarUsuarioAdmin, fetchTodosUsuarios } from '../../redux/usuariosSlice';
 import { crearOferta as crearOfertaThunk } from '../../redux/ofertasSlice';
 import { fetchTodasCanchas, darDeBajaCancha } from '../../redux/canchasSlice';
 import { fetchTodosTurnos, borrarTurno } from '../../redux/turnosSlice';

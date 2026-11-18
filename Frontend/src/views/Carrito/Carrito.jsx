@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { API_URL } from "../../config";
 import VolverAtras from "../../components/VolverAtras/VolverAtras";
 
 import { HeaderCarrito } from "../../components/Carrito/HeaderCarrito";
