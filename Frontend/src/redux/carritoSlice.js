@@ -105,7 +105,7 @@ const carritoSlice = createSlice({
       .addCase(quitarItemCarrito.fulfilled, (state, action) => {
         const { idItem: idEliminado } = action.meta.arg;
         state.items = state.items.filter(
-          (i) => (i.idItem ?? i.id_item ?? i.id) !== idEliminado
+          (i) => i.idItem !== idEliminado
         );
       })
       .addCase(quitarItemCarrito.rejected, (state, action) => {
@@ -123,18 +123,11 @@ const carritoSlice = createSlice({
         } else {
           const { idItem, cantidad } = action.meta.arg;
           const item = state.items.find(
-            (i) => (i.idItem ?? i.id_item ?? i.id) === idItem
+            (i) => i.idItem === idItem
           );
           if (item) {
             item.cantidad = cantidad;
-            const precio = Number(
-              item.precioUnitario ??
-              item.precio_unitario ??
-              item.turno?.precioPorJugador ??
-              item.turno?.precio_por_jugador ??
-              item.precio ??
-              0
-            );
+            const precio = Number(item.precioUnitario ?? 0);
             item.subtotal = precio * cantidad;
             item.subTotal = precio * cantidad;
           }

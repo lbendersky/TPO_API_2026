@@ -131,7 +131,7 @@ const Carrito = () => {
                     )}
 
                     {mostrarContenido && items.map((item) => (
-                        <div key={item.idItem ?? item.id_item ?? item.id} className="carrito-item-con-contador">
+                        <div key={item.idItem} className="carrito-item-con-contador">
                             <TarjetaCarrito item={item} />
                         </div>
                     ))}

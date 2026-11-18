@@ -10,11 +10,8 @@ const capitalizar = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 export const TarjetaCarrito = ({ item }) => {
     const dispatch = useDispatch();
 
-    const idItemReal = item.idItem ?? item.id_item ?? item.id;
-    const lugaresLibres = item.lugaresDisponibles 
-        ?? item.turno?.lugaresDisponibles 
-        ?? item.turno?.lugares_disponibles 
-        ?? 10;
+    const idItemReal = item.idItem;
+    const lugaresLibres = item.lugaresDisponibles ?? 10;
 
     const [cantidadSeleccionada, setCantidadSeleccionada] = useState(item.cantidad ?? 1);
     const maxLugares = lugaresLibres + cantidadSeleccionada;
@@ -69,14 +66,8 @@ export const TarjetaCarrito = ({ item }) => {
         ? fecha.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false })
         : null;
 
-    const precioUnitario = Number(
-        item.precioUnitario ?? 
-        item.precio_unitario ?? 
-        item.turno?.precioPorJugador ?? 
-        item.turno?.precio_por_jugador ?? 
-        item.precio ?? 
-        0
-    );
+    const precioUnitario = Number(item.precioUnitario ?? 0);
+    
     const subtotalMostrar = item.subtotal ?? item.subTotal ?? (precioUnitario * cantidadSeleccionada);
 
     return (
