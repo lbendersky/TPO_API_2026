@@ -20,7 +20,7 @@ export const fetchInscripcionesUsuario = createAsyncThunk(
     const state = getState();
     const token = obtenerToken(() => state);
     const usuario = obtenerUsuario(() => state);
-    const idUsuario = idUsuarioParam ?? usuario?.idUsuario ?? usuario?.id_usuario;
+    const idUsuario = idUsuarioParam ?? usuario?.idUsuario;
 
     const { data } = await axios.get(
       `${API_URL}/inscripciones/usuario/${idUsuario}`,

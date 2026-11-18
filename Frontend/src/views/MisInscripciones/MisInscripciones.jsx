@@ -29,8 +29,8 @@ const MisInscripciones = () => {
     const inscripciones = useMemo(() => {
         const lista = rawInscripciones || [];
         return [...lista].sort((a, b) => {
-            const fa = new Date(a.fechaCompra ?? a.fecha_compra ?? 0).getTime();
-            const fb = new Date(b.fechaCompra ?? b.fecha_compra ?? 0).getTime();
+            const fa = new Date(a.fechaCompra ?? 0).getTime();
+            const fb = new Date(b.fechaCompra ?? 0).getTime();
             return fb - fa;
         });
     }, [rawInscripciones]);
@@ -42,7 +42,7 @@ const MisInscripciones = () => {
     }, [estaLogueado, navigate]);
 
     useEffect(() => {
-        const idUsuario = usuario?.idUsuario ?? usuario?.id_usuario;
+        const idUsuario = usuario?.idUsuario;
         if (estaLogueado && idUsuario) {
             dispatch(fetchInscripcionesUsuario(idUsuario));
         }
@@ -63,18 +63,18 @@ const MisInscripciones = () => {
 
             <section className="mis-inscripciones__lista">
                 {inscripciones.map((i) => {
-                    const idInscripcion = i.idInscripcion ?? i.id_inscripcion;
+                    const idInscripcion = i.idInscripcion;
                     const estadoEfectivo = i.estadoPago;
 
                     return (
                         <article key={idInscripcion} className="tarjeta-inscripcion">
                             <div className="tarjeta-inscripcion__principal">
                                 <h3 className="tarjeta-inscripcion__cancha">
-                                    {i.nombreCancha ?? `Turno #${i.idTurno ?? i.id_turno}`}
+                                    {i.nombreCancha ?? `Turno #${i.idTurno}`}
                                 </h3>
                                 {i.localidad && <span className="tarjeta-inscripcion__localidad">{i.localidad}</span>}
                                 <span className="tarjeta-inscripcion__fecha">
-                                    {formatearFechaHora(i.fechaHoraTurno ?? i.fecha_hora_turno)}
+                                    {formatearFechaHora(i.fechaHoraTurno)}
                                 </span>
                                 {i.tipoFutbol && <span className="tarjeta-inscripcion__tipo">{i.tipoFutbol}</span>}
                             </div>
@@ -84,7 +84,7 @@ const MisInscripciones = () => {
                                     {ESTADO_LABEL[estadoEfectivo] ?? estadoEfectivo}
                                 </span>
                                 <span className="tarjeta-inscripcion__monto">
-                                    {formatearMoneda(i.montoPagado ?? i.monto_pagado)}
+                                    {formatearMoneda(i.montoPagado)}
                                 </span>
                             </div>
                         </article>

@@ -10,14 +10,7 @@ export const ResumenDeCompraCarrito = ({ onConfirmarReserva }) => {
     const total = useMemo(() => {
         if (!Array.isArray(items)) return 0;
         return items.reduce((acc, item) => {
-            const precio = Number(
-                item.precioUnitario ||
-                item.precio_unitario ||
-                item.turno?.precioPorJugador ||
-                item.turno?.precio_por_jugador ||
-                item.precio ||
-                0
-            );
+            const precio = Number(item.precioUnitario || 0);
             const cantidad = Number(item.cantidad || 1);
             const subtotal = item.subtotal ?? item.subTotal ?? (precio * cantidad);
             return acc + Number(subtotal);
@@ -33,14 +26,8 @@ export const ResumenDeCompraCarrito = ({ onConfirmarReserva }) => {
 
             <div className="resumen-compra__lineas">
                 {items.map((item) => {
-                    const id = item.idItem ?? item.id_item ?? item.id;
-                    const precio = Number(
-                        item.precioUnitario ||
-                        item.precio_unitario ||
-                        item.turno?.precioPorJugador ||
-                        item.precio ||
-                        0
-                    );
+                    const id = item.idItem;
+                    const precio = Number(item.precioUnitario || 0);
                     const cantidad = Number(item.cantidad || 1);
                     const subtotal = item.subtotal ?? item.subTotal ?? (precio * cantidad);
 
